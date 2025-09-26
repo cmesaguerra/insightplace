@@ -59,6 +59,15 @@ function App() {
                 {t.services}
               </button>
               <button 
+                onClick={() => scrollToSection('casos-exito')}
+                className="text-gray-700 transition-colors"
+                style={{'&:hover': {color: '#BF0004'}}}
+                onMouseEnter={(e) => e.target.style.color = '#BF0004'}
+                onMouseLeave={(e) => e.target.style.color = '#374151'}
+              >
+                {language === 'es' ? 'Casos de Éxito' : 'Success Cases'}
+              </button>
+              <button 
                 onClick={() => scrollToSection('platform')}
                 className="text-gray-700 transition-colors"
                 style={{'&:hover': {color: '#BF0004'}}}
