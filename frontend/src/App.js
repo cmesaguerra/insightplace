@@ -80,15 +80,21 @@ function App() {
         <NetworkBackground className="opacity-20" showSymbol={true} />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
-            {/* Large hero symbol */}
+            {/* Large hero logo */}
             <div className="flex justify-center mb-8">
               <div className="relative">
-                <img 
-                  src="/symbol.png" 
-                  alt="InsightPlace" 
-                  className="w-24 h-24 lg:w-32 lg:h-32 opacity-90 hover:opacity-100 transition-opacity duration-300"
-                />
-                <div className="absolute inset-0 bg-red-600 rounded-full opacity-20 animate-ping"></div>
+                <div className="flex items-center space-x-4">
+                  <img 
+                    src="/symbol.png" 
+                    alt="InsightPlace" 
+                    className="w-16 h-16 lg:w-20 lg:h-20 opacity-90"
+                  />
+                  <div className="text-4xl lg:text-6xl font-bold">
+                    <span className="text-gray-900">Insight</span>
+                    <span className="text-red-600">Place</span>
+                  </div>
+                </div>
+                <div className="absolute inset-0 bg-red-600 rounded-full opacity-10 animate-ping"></div>
               </div>
             </div>
             <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 mb-8 leading-tight">
