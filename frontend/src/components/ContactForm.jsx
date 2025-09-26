@@ -83,8 +83,8 @@ export const ContactForm = ({ translations, language }) => {
             <Card className="p-8 border-0 shadow-lg">
               <CardContent className="p-0">
                 <div className="flex items-center space-x-4 mb-6">
-                  <div className="bg-red-100 p-3 rounded-full">
-                    <Mail className="w-6 h-6 text-red-600" />
+                  <div className="p-3 rounded-full" style={{backgroundColor: '#FEF2F2'}}>
+                    <Mail className="w-6 h-6" style={{color: '#BF0004'}} />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">Email</h3>
@@ -93,8 +93,8 @@ export const ContactForm = ({ translations, language }) => {
                 </div>
                 
                 <div className="flex items-center space-x-4">
-                  <div className="bg-red-100 p-3 rounded-full">
-                    <MapPin className="w-6 h-6 text-red-600" />
+                  <div className="p-3 rounded-full" style={{backgroundColor: '#FEF2F2'}}>
+                    <MapPin className="w-6 h-6" style={{color: '#BF0004'}} />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">
@@ -106,26 +106,45 @@ export const ContactForm = ({ translations, language }) => {
               </CardContent>
             </Card>
             
-            {/* Dynamic Visualization CTA */}
-            <Card className="p-8 border-0 shadow-lg bg-gradient-to-r from-red-600 to-red-700 text-white">
+            {/* Case Studies Preview CTA */}
+            <Card className="p-8 border-0 shadow-lg text-white" style={{background: 'linear-gradient(to right, #BF0004, #9A0003)'}}>
               <CardContent className="p-0">
                 <h3 className="text-xl font-bold mb-4">
                   {language === 'es' 
-                    ? 'Visualizaciones Dinámicas' 
-                    : 'Dynamic Visualizations'
+                    ? 'Casos de Estudio' 
+                    : 'Case Studies'
                   }
                 </h3>
-                <p className="text-red-100 mb-6">
+                <p className="mb-6" style={{color: '#FEF2F2'}}>
                   {language === 'es' 
-                    ? 'Explora nuestras capacidades de visualización de datos interactivas y descubre insights únicos.' 
-                    : 'Explore our interactive data visualization capabilities and discover unique insights.'
+                    ? 'Explora nuestros proyectos en sectores como salud, análisis electoral y más.' 
+                    : 'Explore our projects in sectors like health, electoral analysis, and more.'
                   }
                 </p>
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="bg-white bg-opacity-20 p-3 rounded-lg">
+                    <h4 className="font-semibold text-sm mb-1">
+                      {language === 'es' ? 'Sector Salud' : 'Health Sector'}
+                    </h4>
+                    <p className="text-xs opacity-90">
+                      {language === 'es' ? 'Análisis de riesgos y acceso' : 'Risk analysis & access'}
+                    </p>
+                  </div>
+                  <div className="bg-white bg-opacity-20 p-3 rounded-lg">
+                    <h4 className="font-semibold text-sm mb-1">
+                      {language === 'es' ? 'Electoral' : 'Electoral'}
+                    </h4>
+                    <p className="text-xs opacity-90">
+                      {language === 'es' ? 'Predicción y segmentación' : 'Prediction & segmentation'}
+                    </p>
+                  </div>
+                </div>
                 <Button 
                   variant="secondary" 
-                  className="bg-white text-red-600 hover:bg-gray-100"
+                  className="bg-white hover:bg-gray-100"
+                  style={{color: '#BF0004'}}
                 >
-                  {language === 'es' ? 'Ver Demos' : 'View Demos'}
+                  {language === 'es' ? 'Ver Casos de Estudio' : 'View Case Studies'}
                 </Button>
               </CardContent>
             </Card>
@@ -144,7 +163,8 @@ export const ContactForm = ({ translations, language }) => {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      className="border-gray-300 focus:border-red-500 focus:ring-red-500"
+                      className="border-gray-300"
+                      style={{'&:focus': {borderColor: '#BF0004', boxShadow: '0 0 0 1px #BF0004'}}}
                     />
                   </div>
                   <div>
@@ -155,7 +175,8 @@ export const ContactForm = ({ translations, language }) => {
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="border-gray-300 focus:border-red-500 focus:ring-red-500"
+                      className="border-gray-300"
+                      style={{'&:focus': {borderColor: '#BF0004', boxShadow: '0 0 0 1px #BF0004'}}}
                     />
                   </div>
                 </div>
@@ -167,7 +188,8 @@ export const ContactForm = ({ translations, language }) => {
                     placeholder={t.contactFormCompany}
                     value={formData.company}
                     onChange={handleChange}
-                    className="border-gray-300 focus:border-red-500 focus:ring-red-500"
+                    className="border-gray-300"
+                    style={{'&:focus': {borderColor: '#BF0004', boxShadow: '0 0 0 1px #BF0004'}}}
                   />
                 </div>
                 
@@ -179,14 +201,16 @@ export const ContactForm = ({ translations, language }) => {
                     onChange={handleChange}
                     required
                     rows={5}
-                    className="border-gray-300 focus:border-red-500 focus:ring-red-500"
+                    className="border-gray-300"
+                    style={{'&:focus': {borderColor: '#BF0004', boxShadow: '0 0 0 1px #BF0004'}}}
                   />
                 </div>
                 
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white py-3"
+                  className="w-full text-white py-3"
+                  style={{backgroundColor: '#BF0004', '&:hover': {backgroundColor: '#9A0003'}}}
                 >
                   {isSubmitting ? (
                     <div className="flex items-center space-x-2">

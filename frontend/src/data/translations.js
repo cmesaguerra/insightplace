@@ -8,7 +8,7 @@ export const translations = {
     // Hero Section
     heroTitle: 'Analítica de Datos y Consultoría Económica',
     heroSubtitle: 'Combinamos analítica de datos, sistemas de información geográfica y análisis económico para ayudar a nuestros clientes a tomar decisiones más informadas.',
-    heroCtaPrimary: 'Explorar Visualizaciones',
+    heroCtaPrimary: 'Ver Casos de Estudio',
     heroCtaSecondary: 'Conocer WONK',
     
     // Services Section
@@ -66,7 +66,7 @@ export const translations = {
     // Hero Section
     heroTitle: 'Data Analytics and Economic Consulting',
     heroSubtitle: 'We combine data analytics, geographic information systems, and economic analysis to help our clients make more informed decisions.',
-    heroCtaPrimary: 'Explore Visualizations',
+    heroCtaPrimary: 'View Case Studies',
     heroCtaSecondary: 'Discover WONK',
     
     // Services Section

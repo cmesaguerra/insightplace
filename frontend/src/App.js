@@ -5,6 +5,7 @@ import { Card, CardContent } from './components/ui/card';
 import { LanguageToggle } from './components/LanguageToggle';
 import { NetworkBackground } from './components/NetworkBackground';
 import { ContactForm } from './components/ContactForm';
+import { DTAModel } from './components/DTAModel';
 import { Toaster } from './components/ui/sonner';
 import { translations } from './data/translations';
 import { 
@@ -49,19 +50,28 @@ function App() {
             <nav className="hidden md:flex items-center space-x-8">
               <button 
                 onClick={() => scrollToSection('services')}
-                className="text-gray-700 hover:text-red-600 transition-colors"
+                className="text-gray-700 transition-colors"
+                style={{'&:hover': {color: '#BF0004'}}}
+                onMouseEnter={(e) => e.target.style.color = '#BF0004'}
+                onMouseLeave={(e) => e.target.style.color = '#374151'}
               >
                 {t.services}
               </button>
               <button 
                 onClick={() => scrollToSection('platform')}
-                className="text-gray-700 hover:text-red-600 transition-colors"
+                className="text-gray-700 transition-colors"
+                style={{'&:hover': {color: '#BF0004'}}}
+                onMouseEnter={(e) => e.target.style.color = '#BF0004'}
+                onMouseLeave={(e) => e.target.style.color = '#374151'}
               >
                 {t.platform}
               </button>
               <button 
                 onClick={() => scrollToSection('contact')}
-                className="text-gray-700 hover:text-red-600 transition-colors"
+                className="text-gray-700 transition-colors"
+                style={{'&:hover': {color: '#BF0004'}}}
+                onMouseEnter={(e) => e.target.style.color = '#BF0004'}
+                onMouseLeave={(e) => e.target.style.color = '#374151'}
               >
                 {t.contact}
               </button>
@@ -93,7 +103,9 @@ function App() {
               <Button 
                 size="lg" 
                 className="text-white px-8 py-4 text-lg transition-all hover:scale-105"
-                style={{backgroundColor: '#BF0004', '&:hover': {backgroundColor: '#9A0003'}}}
+                style={{backgroundColor: '#BF0004'}}
+                onMouseEnter={(e) => e.target.style.backgroundColor = '#9A0003'}
+                onMouseLeave={(e) => e.target.style.backgroundColor = '#BF0004'}
               >
                 <BarChart3 className="mr-2 w-5 h-5" />
                 {t.heroCtaPrimary}
@@ -103,7 +115,17 @@ function App() {
                 size="lg"
                 onClick={() => scrollToSection('platform')}
                 className="px-8 py-4 text-lg transition-all hover:scale-105"
-                style={{borderColor: '#BF0004', color: '#BF0004', '&:hover': {backgroundColor: '#FEF2F2'}}}
+                style={{borderColor: '#BF0004', color: '#BF0004'}}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = '#FEF2F2';
+                  e.target.style.borderColor = '#BF0004';
+                  e.target.style.color = '#BF0004';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = 'transparent';
+                  e.target.style.borderColor = '#BF0004';
+                  e.target.style.color = '#BF0004';
+                }}
               >
                 {t.heroCtaSecondary}
                 <ArrowRight className="ml-2 w-5 h-5" />
@@ -128,8 +150,8 @@ function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Card className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg hover:-translate-y-2">
               <CardContent className="p-8">
-                <div className="bg-red-100 p-3 rounded-full w-fit mb-6 group-hover:bg-red-200 transition-colors">
-                  <Database className="w-8 h-8 text-red-600" />
+                <div className="p-3 rounded-full w-fit mb-6 transition-colors" style={{backgroundColor: '#FEF2F2'}}>
+                  <Database className="w-8 h-8" style={{color: '#BF0004'}} />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">
                   {t.service1Title}
@@ -142,8 +164,8 @@ function App() {
             
             <Card className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg hover:-translate-y-2">
               <CardContent className="p-8">
-                <div className="bg-red-100 p-3 rounded-full w-fit mb-6 group-hover:bg-red-200 transition-colors">
-                  <TrendingUp className="w-8 h-8 text-red-600" />
+                <div className="p-3 rounded-full w-fit mb-6 transition-colors" style={{backgroundColor: '#FEF2F2'}}>
+                  <TrendingUp className="w-8 h-8" style={{color: '#BF0004'}} />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">
                   {t.service2Title}
@@ -156,8 +178,8 @@ function App() {
             
             <Card className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg hover:-translate-y-2">
               <CardContent className="p-8">
-                <div className="bg-red-100 p-3 rounded-full w-fit mb-6 group-hover:bg-red-200 transition-colors">
-                  <Globe className="w-8 h-8 text-red-600" />
+                <div className="p-3 rounded-full w-fit mb-6 transition-colors" style={{backgroundColor: '#FEF2F2'}}>
+                  <Globe className="w-8 h-8" style={{color: '#BF0004'}} />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">
                   {t.service3Title}
@@ -170,8 +192,8 @@ function App() {
             
             <Card className="group hover:shadow-xl transition-all duration-300 border-0 shadow-lg hover:-translate-y-2">
               <CardContent className="p-8">
-                <div className="bg-red-100 p-3 rounded-full w-fit mb-6 group-hover:bg-red-200 transition-colors">
-                  <Brain className="w-8 h-8 text-red-600" />
+                <div className="p-3 rounded-full w-fit mb-6 transition-colors" style={{backgroundColor: '#FEF2F2'}}>
+                  <Brain className="w-8 h-8" style={{color: '#BF0004'}} />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">
                   {t.service4Title}
@@ -185,6 +207,9 @@ function App() {
         </div>
       </section>
 
+      {/* DTA Model Section */}
+      <DTAModel language={language} />
+
       {/* WONK Platform Section */}
       <section id="platform" className="relative py-24 bg-white overflow-hidden">
         <NetworkBackground className="opacity-10" />
@@ -193,7 +218,7 @@ function App() {
             <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
               {t.wonkTitle}
             </h2>
-            <p className="text-xl text-red-600 mb-8 font-semibold">
+            <p className="text-xl mb-8 font-semibold" style={{color: '#BF0004'}}>
               {t.wonkSubtitle}
             </p>
             <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
@@ -204,8 +229,8 @@ function App() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
             <Card className="text-center group hover:shadow-xl transition-all duration-300 border-0 shadow-lg hover:-translate-y-2">
               <CardContent className="p-8">
-                <div className="bg-red-100 p-4 rounded-full w-fit mx-auto mb-6 group-hover:bg-red-200 transition-colors">
-                  <Network className="w-10 h-10 text-red-600" />
+                <div className="p-4 rounded-full w-fit mx-auto mb-6 transition-colors" style={{backgroundColor: '#FEF2F2'}}>
+                  <Network className="w-10 h-10" style={{color: '#BF0004'}} />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">
                   {t.wonkFeature1}
@@ -218,8 +243,8 @@ function App() {
             
             <Card className="text-center group hover:shadow-xl transition-all duration-300 border-0 shadow-lg hover:-translate-y-2">
               <CardContent className="p-8">
-                <div className="bg-red-100 p-4 rounded-full w-fit mx-auto mb-6 group-hover:bg-red-200 transition-colors">
-                  <Globe className="w-10 h-10 text-red-600" />
+                <div className="p-4 rounded-full w-fit mx-auto mb-6 transition-colors" style={{backgroundColor: '#FEF2F2'}}>
+                  <Globe className="w-10 h-10" style={{color: '#BF0004'}} />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">
                   {t.wonkFeature2}
@@ -232,8 +257,8 @@ function App() {
             
             <Card className="text-center group hover:shadow-xl transition-all duration-300 border-0 shadow-lg hover:-translate-y-2">
               <CardContent className="p-8">
-                <div className="bg-red-100 p-4 rounded-full w-fit mx-auto mb-6 group-hover:bg-red-200 transition-colors">
-                  <Zap className="w-10 h-10 text-red-600" />
+                <div className="p-4 rounded-full w-fit mx-auto mb-6 transition-colors" style={{backgroundColor: '#FEF2F2'}}>
+                  <Zap className="w-10 h-10" style={{color: '#BF0004'}} />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">
                   {t.wonkFeature3}
@@ -249,7 +274,10 @@ function App() {
           <div className="text-center">
             <Button 
               size="lg" 
-              className="bg-red-600 hover:bg-red-700 text-white px-12 py-4 text-lg transition-all hover:scale-105"
+              className="text-white px-12 py-4 text-lg transition-all hover:scale-105"
+              style={{backgroundColor: '#BF0004'}}
+              onMouseEnter={(e) => e.target.style.backgroundColor = '#9A0003'}
+              onMouseLeave={(e) => e.target.style.backgroundColor = '#BF0004'}
             >
               {language === 'es' ? 'Solicitar Demo de WONK' : 'Request WONK Demo'}
               <ArrowRight className="ml-2 w-5 h-5" />
@@ -265,16 +293,9 @@ function App() {
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="flex items-center justify-center space-x-3 mb-4">
-              <img 
-                src="/symbol.png" 
-                alt="InsightPlace" 
-                className="w-10 h-10 filter brightness-0 invert"
-              />
-              <div className="text-3xl font-bold">
-                <span className="text-white">Insight</span>
-                <span style={{color: '#BF0004'}}>Place</span>
-              </div>
+            <div className="text-3xl font-bold mb-4">
+              <span className="text-white">Insight</span>
+              <span style={{color: '#BF0004'}}>Place</span>
             </div>
             <p className="text-gray-400 mb-8 text-lg">
               {t.footerTagline}
