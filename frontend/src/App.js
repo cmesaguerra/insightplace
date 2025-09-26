@@ -81,7 +81,7 @@ function App() {
 
       {/* Hero Section */}
       <section className="relative py-24 lg:py-32 overflow-hidden">
-        <NetworkBackground className="opacity-20" />
+        <NetworkBackground className="opacity-20" showSymbol={true} />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 mb-8 leading-tight">
