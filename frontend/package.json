@@ -89,12 +89,14 @@
     "ajv": "^6.12.6",
     "ajv-keywords": "^3.5.2",
     "ajv-formats": "^1.6.1",
-    "schema-utils": "^2.7.1"
+    "schema-utils": "^2.7.1",
+    "terser-webpack-plugin": "^4.2.3"
   },
   "overrides": {
     "ajv": "^6.12.6",
     "ajv-keywords": "^3.5.2",
     "ajv-formats": "^1.6.1",
-    "schema-utils": "^2.7.1"
+    "schema-utils": "^2.7.1",
+    "terser-webpack-plugin": "^4.2.3"
   }
 }
