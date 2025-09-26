@@ -102,10 +102,10 @@ export const CaseStudies = ({ language = 'es' }) => {
                 
                 <div className="bg-white bg-opacity-20 p-4 rounded-lg text-center hover:bg-opacity-30 transition-all">
                   <h4 className="font-semibold text-sm mb-2">
-                    {language === 'es' ? 'Más sectores...' : 'More sectors...'}
+                    {language === 'es' ? 'Manufactura' : 'Manufacturing'}
                   </h4>
                   <p className="text-xs opacity-90">
-                    {language === 'es' ? 'Soluciones personalizadas' : 'Custom solutions'}
+                    {language === 'es' ? 'Encadenamientos productivos' : 'Input-output linkages'}
                   </p>
                 </div>
               </div>
