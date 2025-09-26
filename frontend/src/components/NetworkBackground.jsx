@@ -11,16 +11,16 @@ export const NetworkBackground = ({ className = '', showSymbol = false, enhanced
       >
         <defs>
           <radialGradient id="nodeGradient" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#dc2626" stopOpacity={enhanced ? "0.9" : "0.8"} />
-            <stop offset="100%" stopColor="#dc2626" stopOpacity={enhanced ? "0.4" : "0.3"} />
+            <stop offset="0%" stopColor="#BF0004" stopOpacity={enhanced ? "0.9" : "0.8"} />
+            <stop offset="100%" stopColor="#BF0004" stopOpacity={enhanced ? "0.4" : "0.3"} />
           </radialGradient>
           <radialGradient id="symbolGradient" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#dc2626" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#dc2626" stopOpacity="0.1" />
+            <stop offset="0%" stopColor="#BF0004" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="#BF0004" stopOpacity="0.1" />
           </radialGradient>
           <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#374151" stopOpacity={enhanced ? "0.6" : "0.3"} />
-            <stop offset="50%" stopColor="#dc2626" stopOpacity={enhanced ? "0.3" : "0.1"} />
+            <stop offset="50%" stopColor="#BF0004" stopOpacity={enhanced ? "0.3" : "0.1"} />
             <stop offset="100%" stopColor="#374151" stopOpacity={enhanced ? "0.6" : "0.3"} />
           </linearGradient>
           <filter id="glow">
