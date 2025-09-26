@@ -24,8 +24,8 @@ export const CaseStudies = ({ language = 'es' }) => {
               <div className="text-center mb-8">
                 <h3 className="text-2xl font-bold mb-4">
                   {language === 'es' 
-                    ? 'Sectores de Especialización' 
-                    : 'Specialization Sectors'
+                    ? 'Proyectos' 
+                    : 'Projects'
                   }
                 </h3>
                 <p className="text-lg" style={{color: '#FEF2F2'}}>
