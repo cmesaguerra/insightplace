@@ -82,14 +82,11 @@ function App() {
           <div className="text-center max-w-4xl mx-auto">
             {/* Large hero logo */}
             <div className="flex justify-center mb-12">
-              <div className="relative">
-                <img 
-                  src="/logo.jpg" 
-                  alt="InsightPlace" 
-                  className="h-24 lg:h-32 w-auto opacity-95 hover:opacity-100 transition-opacity duration-300"
-                />
-                <div className="absolute inset-0 bg-red-600 rounded-lg opacity-5 animate-pulse"></div>
-              </div>
+              <img 
+                src="/logo.jpg" 
+                alt="InsightPlace" 
+                className="h-24 lg:h-32 w-auto"
+              />
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
