@@ -121,9 +121,9 @@ export const ContactForm = ({ translations, language }) => {
                     : 'Explore our projects in sectors like health, electoral analysis, and more.'
                   }
                 </p>
-                <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="grid grid-cols-2 gap-3 mb-6">
                   <div className="bg-white bg-opacity-20 p-3 rounded-lg">
-                    <h4 className="font-semibold text-sm mb-1">
+                    <h4 className="font-semibold text-xs mb-1">
                       {language === 'es' ? 'Sector Salud' : 'Health Sector'}
                     </h4>
                     <p className="text-xs opacity-90">
@@ -131,11 +131,59 @@ export const ContactForm = ({ translations, language }) => {
                     </p>
                   </div>
                   <div className="bg-white bg-opacity-20 p-3 rounded-lg">
-                    <h4 className="font-semibold text-sm mb-1">
-                      {language === 'es' ? 'Electoral' : 'Electoral'}
+                    <h4 className="font-semibold text-xs mb-1">
+                      {language === 'es' ? 'Política' : 'Politics'}
                     </h4>
                     <p className="text-xs opacity-90">
                       {language === 'es' ? 'Predicción y segmentación' : 'Prediction & segmentation'}
+                    </p>
+                  </div>
+                  <div className="bg-white bg-opacity-20 p-3 rounded-lg">
+                    <h4 className="font-semibold text-xs mb-1">
+                      {language === 'es' ? 'Gobierno' : 'Government'}
+                    </h4>
+                    <p className="text-xs opacity-90">
+                      {language === 'es' ? 'Planes de desarrollo local' : 'Local development plans'}
+                    </p>
+                  </div>
+                  <div className="bg-white bg-opacity-20 p-3 rounded-lg">
+                    <h4 className="font-semibold text-xs mb-1">
+                      {language === 'es' ? 'Retail' : 'Retail'}
+                    </h4>
+                    <p className="text-xs opacity-90">
+                      {language === 'es' ? 'Análisis predictivo de demanda' : 'Predictive demand analysis'}
+                    </p>
+                  </div>
+                  <div className="bg-white bg-opacity-20 p-3 rounded-lg">
+                    <h4 className="font-semibold text-xs mb-1">
+                      {language === 'es' ? 'Fintech' : 'Fintech'}
+                    </h4>
+                    <p className="text-xs opacity-90">
+                      {language === 'es' ? 'Análisis geoestratégico' : 'Geostrategic analysis'}
+                    </p>
+                  </div>
+                  <div className="bg-white bg-opacity-20 p-3 rounded-lg">
+                    <h4 className="font-semibold text-xs mb-1">
+                      {language === 'es' ? 'Transporte' : 'Transportation'}
+                    </h4>
+                    <p className="text-xs opacity-90">
+                      {language === 'es' ? 'Evaluación de impacto' : 'Impact assessment'}
+                    </p>
+                  </div>
+                  <div className="bg-white bg-opacity-20 p-3 rounded-lg">
+                    <h4 className="font-semibold text-xs mb-1">
+                      {language === 'es' ? 'TV & Media' : 'TV & Media'}
+                    </h4>
+                    <p className="text-xs opacity-90">
+                      {language === 'es' ? 'Comportamiento de suscriptores' : 'Subscriber behavior'}
+                    </p>
+                  </div>
+                  <div className="bg-white bg-opacity-20 p-3 rounded-lg">
+                    <h4 className="font-semibold text-xs mb-1">
+                      {language === 'es' ? 'Más sectores...' : 'More sectors...'}
+                    </h4>
+                    <p className="text-xs opacity-90">
+                      {language === 'es' ? 'Soluciones personalizadas' : 'Custom solutions'}
                     </p>
                   </div>
                 </div>
