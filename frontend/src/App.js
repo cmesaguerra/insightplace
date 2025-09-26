@@ -288,7 +288,7 @@ function App() {
       </section>
 
       {/* Contact Section */}
-      <ContactForm translations={translations} language={language} />
+      <StaticContactForm translations={translations} language={language} />
 
       {/* Footer */}
       <footer className="text-white py-12" style={{backgroundColor: 'rgb(128, 128, 128)'}}>
