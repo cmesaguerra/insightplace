@@ -91,9 +91,6 @@ function App() {
                 <div className="absolute inset-0 bg-red-600 rounded-lg opacity-5 animate-pulse"></div>
               </div>
             </div>
-            <p className="text-xl lg:text-2xl text-gray-600 mb-12 leading-relaxed">
-              {t.heroSubtitle}
-            </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
