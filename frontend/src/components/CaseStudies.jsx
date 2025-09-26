@@ -30,8 +30,8 @@ export const CaseStudies = ({ language = 'es' }) => {
                 </h3>
                 <p className="text-lg" style={{color: '#FEF2F2'}}>
                   {language === 'es' 
-                    ? 'Desarrollamos soluciones personalizadas para cada industria' 
-                    : 'We develop customized solutions for each industry'
+                    ? 'Desarrollamos soluciones para cada industria' 
+                    : 'We develop solutions for each industry'
                   }
                 </p>
               </div>
