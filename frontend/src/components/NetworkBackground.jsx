@@ -235,7 +235,7 @@ export const NetworkBackground = ({ className = '', showSymbol = false, enhanced
           <g transform="translate(900, 100)" opacity={enhanced ? "0.08" : "0.05"}>
             <rect x="0" y="0" width="50" height="150" rx="25" fill="#6b7280" />
             <polygon points="0,0 25,25 0,50" fill="#dc2626" transform="translate(-15, -25)" />
-            <path d="M 60 50 Q 120 20, 120 80 Q 120 140, 60 110 Z" fill="#dc2626" />
+            <path d="M 60 50 Q 120 20, 120 80 Q 120 140, 60 110 Z" fill="#BF0004" />
           </g>
         )}
       </svg>
