@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="80" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .brandmark-font {
+        font-family: 'Arial', 'Helvetica', 'Brandmark Sans', sans-serif;
+        font-weight: 600; /* Boldness: 2 equivalent */
+        font-size: 36px; /* Size: 2 equivalent */
+        letter-spacing: 2.6px; /* Letter spacing: 2.6 */
+        line-height: 1.1; /* Line space: 1.1 */
+      }
+      .insightplace-black { fill: #272727; }
+      .insightplace-red { fill: #C10303; }
+      .insightplace-white { fill: #FFFFFF; }
+    </style>
+  </defs>
+  
+  <!-- Light background version -->
+  <g id="light-version">
+    <!-- "Insight" in black -->
+    <text x="10" y="45" class="brandmark-font insightplace-black">Insight</text>
+    
+    <!-- "Place" in red -->
+    <text x="155" y="45" class="brandmark-font insightplace-red">Place</text>
+  </g>
+  
+  <!-- Dark background version (hidden by default) -->
+  <g id="dark-version" style="display: none;">
+    <!-- "Insight" in white -->
+    <text x="10" y="45" class="brandmark-font insightplace-white">Insight</text>
+    
+    <!-- "Place" in red -->
+    <text x="155" y="45" class="brandmark-font insightplace-red">Place</text>
+  </g>
+</svg>
