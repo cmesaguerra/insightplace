@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { 
+            background: white; 
+            padding: 40px; 
+            font-family: Arial, sans-serif;
+        }
+        .logo-section {
+            margin: 60px 0;
+            padding: 30px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #BF0004;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; color: #333;">InsightPlace Logo Options with Red Dots</h1>
+    
+    <div class="logo-section">
+        <div class="title">VERSION 1: Basic Structure</div>
+        <svg width="500" height="100" viewBox="0 0 500 100">
+            <!-- "Insight" with red dots -->
+            <text x="20" y="60" font-family="Arial" font-weight="bold" font-size="48" fill="#000000">Insight</text>
+            <!-- Red dots on i and t -->
+            <circle cx="130" cy="25" r="5" fill="#BF0004"/>
+            <circle cx="190" cy="25" r="5" fill="#BF0004"/>
+            
+            <!-- "Place" in red -->
+            <text x="280" y="60" font-family="Arial" font-weight="bold" font-size="48" fill="#BF0004">Place</text>
+        </svg>
+        <p style="margin-top: 20px; color: #666;">Data Analytics and Economic Consulting</p>
+    </div>
+
+    <div class="logo-section">
+        <div class="title">VERSION 2: Precise Positioning</div>
+        <svg width="500" height="100" viewBox="0 0 500 100">
+            <!-- Individual letters for better control -->
+            <g font-family="Arial" font-weight="bold" font-size="48">
+                <text x="20" y="60" fill="#000000">I</text>
+                <text x="45" y="60" fill="#000000">n</text>
+                <text x="80" y="60" fill="#000000">s</text>
+                <text x="115" y="60" fill="#000000">i</text>
+                <text x="135" y="60" fill="#000000">g</text>
+                <text x="170" y="60" fill="#000000">h</text>
+                <text x="205" y="60" fill="#000000">t</text>
+                
+                <text x="280" y="60" fill="#BF0004">P</text>
+                <text x="315" y="60" fill="#BF0004">l</text>
+                <text x="340" y="60" fill="#BF0004">a</text>
+                <text x="370" y="60" fill="#BF0004">c</text>
+                <text x="400" y="60" fill="#BF0004">e</text>
+            </g>
+            
+            <!-- Precisely positioned red dots -->
+            <circle cx="123" cy="30" r="4" fill="#BF0004"/> <!-- i dot -->
+            <circle cx="213" cy="45" r="4" fill="#BF0004"/> <!-- t cross -->
+            
+            <!-- Decorative dots -->
+            <circle cx="460" cy="35" r="3" fill="#BF0004" opacity="0.8"/>
+            <circle cx="475" cy="50" r="2" fill="#BF0004" opacity="0.6"/>
+        </svg>
+        <p style="margin-top: 20px; color: #666;">Data Analytics and Economic Consulting</p>
+    </div>
+
+    <div class="logo-section" style="background: #333; color: white;">
+        <div class="title" style="color: #BF0004;">HOW THEY LOOK ON DARK BACKGROUND</div>
+        <svg width="500" height="100" viewBox="0 0 500 100">
+            <text x="20" y="60" font-family="Arial" font-weight="bold" font-size="48" fill="#FFFFFF">Insight</text>
+            <circle cx="130" cy="25" r="5" fill="#BF0004"/>
+            <circle cx="190" cy="25" r="5" fill="#BF0004"/>
+            <text x="280" y="60" font-family="Arial" font-weight="bold" font-size="48" fill="#BF0004">Place</text>
+        </svg>
+        <p style="margin-top: 20px; color: #ccc;">Data Analytics and Economic Consulting</p>
+    </div>
+</body>
+</html>
