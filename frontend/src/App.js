@@ -4,8 +4,9 @@ import { Button } from './components/ui/button';
 import { Card, CardContent } from './components/ui/card';
 import { LanguageToggle } from './components/LanguageToggle';
 import { NetworkBackground } from './components/NetworkBackground';
-import { ContactForm } from './components/ContactForm';
+import { ContactInfo } from './components/ContactInfo';
 import { DTAModel } from './components/DTAModel';
+import { CaseStudies } from './components/CaseStudies';
 import { Toaster } from './components/ui/sonner';
 import { translations } from './data/translations';
 import { 
