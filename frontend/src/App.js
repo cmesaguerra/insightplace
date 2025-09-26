@@ -4,7 +4,7 @@ import { Button } from './components/ui/button';
 import { Card, CardContent } from './components/ui/card';
 import { LanguageToggle } from './components/LanguageToggle';
 import { NetworkBackground } from './components/NetworkBackground';
-import { StaticContactForm } from './components/StaticContactForm';
+import { ContactForm } from './components/ContactForm';
 import { DTAModel } from './components/DTAModel';
 import { Toaster } from './components/ui/sonner';
 import { translations } from './data/translations';
