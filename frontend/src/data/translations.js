@@ -28,7 +28,7 @@ export const translations = {
     service4Desc: 'Construcción de ejercicios de pronóstico económico para el sector privado con modelos de predicción avanzados.',
     
     // WONK Platform Section
-    wonkTitle: 'WONK: Work-flow Oriented Network of Knowledge',
+    wonkTitle: 'WONK: Workflow Oriented Network of Knowledge',
     wonkSubtitle: 'Tu herramienta de análisis y enriquecimiento de datos',
     wonkDescription: 'Plataforma inteligente que integra, organiza y analiza múltiples fuentes de información sobre dinámicas económicas y sociales locales. Facilita información detallada y continua para ayudar a los clientes a tomar decisiones informadas.',
     
@@ -86,7 +86,7 @@ export const translations = {
     service4Desc: 'Construction of economic forecasting exercises for the private sector with advanced prediction models.',
     
     // WONK Platform Section
-    wonkTitle: 'WONK: Work-flow Oriented Network of Knowledge',
+    wonkTitle: 'WONK: Workflow Oriented Network of Knowledge',
     wonkSubtitle: 'Your data analysis and enrichment tool at hand',
     wonkDescription: 'Intelligent platform that integrates, organizes, and analyzes multiple sources of information on local economic and social dynamics. Provides detailed and continuous information to help clients make informed decisions.',
     
