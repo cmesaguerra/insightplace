@@ -79,7 +79,7 @@ export const DTAModel = ({ language = 'es' }) => {
         },
         analisis: {
           title: 'ANALYSIS',
-          subtitle: 'Active',
+          subtitle: 'Asset',
           question: 'Why do we do it?',
           description: 'Complex analyses: local/regional information, market analysis, prediction models.',
           details: [
