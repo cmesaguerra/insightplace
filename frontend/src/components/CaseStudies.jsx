@@ -39,7 +39,7 @@ export const CaseStudies = ({ language = 'es' }) => {
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 <div className="bg-white bg-opacity-20 p-4 rounded-lg text-center hover:bg-opacity-30 transition-all">
                   <h4 className="font-semibold text-sm mb-2">
-                    {language === 'es' ? 'Sector Salud' : 'Health Sector'}
+                    {language === 'es' ? 'Salud' : 'Healthcare'}
                   </h4>
                   <p className="text-xs opacity-90">
                     {language === 'es' ? 'Análisis de riesgos y acceso' : 'Risk analysis & access'}
