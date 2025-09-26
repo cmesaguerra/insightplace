@@ -107,7 +107,7 @@ export const ContactForm = ({ translations, language }) => {
             </Card>
             
             {/* Case Studies Preview CTA */}
-            <Card className="p-8 border-0 shadow-lg text-white" style={{background: 'linear-gradient(to right, #BF0004, #9A0003)'}}>
+            <Card id="casos-exito" className="p-8 border-0 shadow-lg text-white" style={{background: 'linear-gradient(to right, #BF0004, #9A0003)'}}>
               <CardContent className="p-0">
                 <h3 className="text-xl font-bold mb-4">
                   {language === 'es' 
