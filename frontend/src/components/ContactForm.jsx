@@ -192,7 +192,7 @@ export const ContactForm = ({ translations, language }) => {
                   className="bg-white hover:bg-gray-100"
                   style={{color: '#BF0004'}}
                 >
-                  {language === 'es' ? 'Ver Casos de Estudio' : 'View Case Studies'}
+                  {language === 'es' ? 'Ver Casos de Éxito' : 'View Case Studies'}
                 </Button>
               </CardContent>
             </Card>
