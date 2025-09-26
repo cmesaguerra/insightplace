@@ -293,19 +293,13 @@ function App() {
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            {/* InsightPlace Logo with exact specifications */}
+            {/* InsightPlace Logo - transparent background */}
             <div className="mb-4">
-              <div 
-                className="text-3xl font-semibold"
-                style={{
-                  fontFamily: 'Arial, Helvetica, sans-serif',
-                  letterSpacing: '2.6px',
-                  lineHeight: '1.1'
-                }}
-              >
-                <span className="text-white">Insight</span>
-                <span style={{color: '#C10303'}}>Place</span>
-              </div>
+              <img 
+                src="/footer-logo-transparent.png" 
+                alt="InsightPlace" 
+                className="h-12 w-auto mx-auto"
+              />
             </div>
             <p className="text-gray-400 mb-8 text-lg">
               {t.footerTagline}
