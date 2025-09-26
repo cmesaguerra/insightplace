@@ -295,27 +295,17 @@ function App() {
           <div className="text-center">
             {/* InsightPlace Logo with exact specifications */}
             <div className="mb-4">
-              <svg width="280" height="60" viewBox="0 0 280 60" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <style>
-                    .logo-text {
-                      font-family: 'Arial', 'Helvetica', sans-serif;
-                      font-weight: 600;
-                      font-size: 32px;
-                      letter-spacing: 2.6px;
-                      line-height: 1.1;
-                    }
-                    .logo-white { fill: #FFFFFF; }
-                    .logo-red { fill: #C10303; }
-                  </style>
-                </defs>
-                
-                {/* "Insight" in white */}
-                <text x="10" y="40" className="logo-text logo-white">Insight</text>
-                
-                {/* "Place" in red */}
-                <text x="145" y="40" className="logo-text logo-red">Place</text>
-              </svg>
+              <div 
+                className="text-3xl font-semibold"
+                style={{
+                  fontFamily: 'Arial, Helvetica, sans-serif',
+                  letterSpacing: '2.6px',
+                  lineHeight: '1.1'
+                }}
+              >
+                <span className="text-white">Insight</span>
+                <span style={{color: '#C10303'}}>Place</span>
+              </div>
             </div>
             <p className="text-gray-400 mb-8 text-lg">
               {t.footerTagline}
