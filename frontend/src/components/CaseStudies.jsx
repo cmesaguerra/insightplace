@@ -110,15 +110,7 @@ export const CaseStudies = ({ language = 'es' }) => {
                 </div>
               </div>
               
-              <div className="text-center">
-                <Button 
-                  variant="secondary" 
-                  className="bg-white hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
-                  style={{color: '#BF0004'}}
-                >
-                  {language === 'es' ? 'Otros casos de éxito' : 'Other success cases'}
-                </Button>
-              </div>
+              {/* Button removed as requested */}
             </CardContent>
           </Card>
         </div>
