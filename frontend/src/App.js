@@ -102,6 +102,7 @@ function App() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
+                onClick={() => scrollToSection('casos-exito')}
                 className="text-white px-8 py-4 text-lg transition-all hover:scale-105"
                 style={{backgroundColor: '#BF0004'}}
                 onMouseEnter={(e) => e.target.style.backgroundColor = '#9A0003'}
