@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsightPlace Logo Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .preview-card {
+            background: white;
+            margin: 30px 0;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .subtitle {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #BF0004;
+        }
+        .logo-container {
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid #eee;
+            border-radius: 8px;
+        }
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .demo-box {
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .bg-white { background: white; border: 1px solid #ddd; }
+        .bg-dark { background: #333; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">InsightPlace Logo Previews with Red Dots</h1>
+        
+        <!-- Version 1 -->
+        <div class="preview-card">
+            <h2 class="subtitle">Version 1: Basic Structure</h2>
+            <div class="logo-container">
+                <svg width="450" height="120" viewBox="0 0 450 120" xmlns="http://www.w3.org/2000/svg">
+                    <!-- "Insight" in black -->
+                    <text x="20" y="50" font-family="Arial, sans-serif" font-weight="bold" font-size="40" fill="#000000">Insight</text>
+                    <!-- Red dots on "i" and "t" -->
+                    <circle cx="110" cy="20" r="4" fill="#BF0004"/>
+                    <circle cx="165" cy="20" r="4" fill="#BF0004"/>
+                    
+                    <!-- "Place" in red -->
+                    <text x="220" y="50" font-family="Arial, sans-serif" font-weight="bold" font-size="40" fill="#BF0004">Place</text>
+                    
+                    <!-- Tagline -->
+                    <text x="20" y="80" font-family="Arial, sans-serif" font-size="14" fill="#666666">Data Analytics and Economic Consulting</text>
+                </svg>
+            </div>
+            
+            <div class="demo-grid">
+                <div class="demo-box bg-white">
+                    <p><strong>On White Background</strong></p>
+                    <svg width="300" height="80" viewBox="0 0 450 120">
+                        <text x="20" y="50" font-family="Arial, sans-serif" font-weight="bold" font-size="40" fill="#000000">Insight</text>
+                        <circle cx="110" cy="20" r="4" fill="#BF0004"/>
+                        <circle cx="165" cy="20" r="4" fill="#BF0004"/>
+                        <text x="220" y="50" font-family="Arial, sans-serif" font-weight="bold" font-size="40" fill="#BF0004">Place</text>
+                        <text x="20" y="80" font-family="Arial, sans-serif" font-size="14" fill="#666666">Data Analytics and Economic Consulting</text>
+                    </svg>
+                </div>
+                <div class="demo-box bg-dark">
+                    <p><strong>On Dark Background</strong></p>
+                    <svg width="300" height="80" viewBox="0 0 450 120">
+                        <text x="20" y="50" font-family="Arial, sans-serif" font-weight="bold" font-size="40" fill="#FFFFFF">Insight</text>
+                        <circle cx="110" cy="20" r="4" fill="#BF0004"/>
+                        <circle cx="165" cy="20" r="4" fill="#BF0004"/>
+                        <text x="220" y="50" font-family="Arial, sans-serif" font-weight="bold" font-size="40" fill="#BF0004">Place</text>
+                        <text x="20" y="80" font-family="Arial, sans-serif" font-size="14" fill="#CCCCCC">Data Analytics and Economic Consulting</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Version 2 -->
+        <div class="preview-card">
+            <h2 class="subtitle">Version 2: Precise Positioning</h2>
+            <div class="logo-container">
+                <svg width="450" height="120" viewBox="0 0 450 120" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Individual letters for precise positioning -->
+                    <g font-family="Arial, sans-serif" font-weight="bold" font-size="40">
+                        <!-- "Insight" letters -->
+                        <text x="20" y="50" fill="#000000">I</text>
+                        <text x="40" y="50" fill="#000000">n</text>
+                        <text x="70" y="50" fill="#000000">s</text>
+                        <text x="100" y="50" fill="#000000">i</text>
+                        <text x="115" y="50" fill="#000000">g</text>
+                        <text x="145" y="50" fill="#000000">h</text>
+                        <text x="175" y="50" fill="#000000">t</text>
+                        
+                        <!-- "Place" letters -->
+                        <text x="220" y="50" fill="#BF0004">P</text>
+                        <text x="250" y="50" fill="#BF0004">l</text>
+                        <text x="270" y="50" fill="#BF0004">a</text>
+                        <text x="295" y="50" fill="#BF0004">c</text>
+                        <text x="320" y="50" fill="#BF0004">e</text>
+                    </g>
+                    
+                    <!-- Red dots - positioned precisely -->
+                    <circle cx="107" cy="25" r="3.5" fill="#BF0004"/> <!-- dot for "i" -->
+                    <circle cx="183" cy="35" r="3.5" fill="#BF0004"/> <!-- dot for "t" cross -->
+                    
+                    <!-- Additional decorative dots -->
+                    <circle cx="380" cy="30" r="2.5" fill="#BF0004" opacity="0.8"/>
+                    <circle cx="395" cy="45" r="2" fill="#BF0004" opacity="0.6"/>
+                    
+                    <!-- Tagline -->
+                    <text x="20" y="80" font-family="Arial, sans-serif" font-size="14" fill="#666666">Data Analytics and Economic Consulting</text>
+                </svg>
+            </div>
+            
+            <div class="demo-grid">
+                <div class="demo-box bg-white">
+                    <p><strong>On White Background</strong></p>
+                    <svg width="300" height="80" viewBox="0 0 450 120">
+                        <g font-family="Arial, sans-serif" font-weight="bold" font-size="40">
+                            <text x="20" y="50" fill="#000000">I</text>
+                            <text x="40" y="50" fill="#000000">n</text>
+                            <text x="70" y="50" fill="#000000">s</text>
+                            <text x="100" y="50" fill="#000000">i</text>
+                            <text x="115" y="50" fill="#000000">g</text>
+                            <text x="145" y="50" fill="#000000">h</text>
+                            <text x="175" y="50" fill="#000000">t</text>
+                            <text x="220" y="50" fill="#BF0004">P</text>
+                            <text x="250" y="50" fill="#BF0004">l</text>
+                            <text x="270" y="50" fill="#BF0004">a</text>
+                            <text x="295" y="50" fill="#BF0004">c</text>
+                            <text x="320" y="50" fill="#BF0004">e</text>
+                        </g>
+                        <circle cx="107" cy="25" r="3.5" fill="#BF0004"/>
+                        <circle cx="183" cy="35" r="3.5" fill="#BF0004"/>
+                        <circle cx="380" cy="30" r="2.5" fill="#BF0004" opacity="0.8"/>
+                        <circle cx="395" cy="45" r="2" fill="#BF0004" opacity="0.6"/>
+                        <text x="20" y="80" font-family="Arial, sans-serif" font-size="14" fill="#666666">Data Analytics and Economic Consulting</text>
+                    </svg>
+                </div>
+                <div class="demo-box bg-dark">
+                    <p><strong>On Dark Background</strong></p>
+                    <svg width="300" height="80" viewBox="0 0 450 120">
+                        <g font-family="Arial, sans-serif" font-weight="bold" font-size="40">
+                            <text x="20" y="50" fill="#FFFFFF">I</text>
+                            <text x="40" y="50" fill="#FFFFFF">n</text>
+                            <text x="70" y="50" fill="#FFFFFF">s</text>
+                            <text x="100" y="50" fill="#FFFFFF">i</text>
+                            <text x="115" y="50" fill="#FFFFFF">g</text>
+                            <text x="145" y="50" fill="#FFFFFF">h</text>
+                            <text x="175" y="50" fill="#FFFFFF">t</text>
+                            <text x="220" y="50" fill="#BF0004">P</text>
+                            <text x="250" y="50" fill="#BF0004">l</text>
+                            <text x="270" y="50" fill="#BF0004">a</text>
+                            <text x="295" y="50" fill="#BF0004">c</text>
+                            <text x="320" y="50" fill="#BF0004">e</text>
+                        </g>
+                        <circle cx="107" cy="25" r="3.5" fill="#BF0004"/>
+                        <circle cx="183" cy="35" r="3.5" fill="#BF0004"/>
+                        <circle cx="380" cy="30" r="2.5" fill="#BF0004" opacity="0.8"/>
+                        <circle cx="395" cy="45" r="2" fill="#BF0004" opacity="0.6"/>
+                        <text x="20" y="80" font-family="Arial, sans-serif" font-size="14" fill="#CCCCCC">Data Analytics and Economic Consulting</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Logo -->
+        <div class="preview-card">
+            <h2 class="subtitle">Your Current Logo (for comparison)</h2>
+            <div class="logo-container">
+                <img src="/logo.jpg" alt="Current InsightPlace Logo" style="max-height: 100px;">
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px; padding: 20px; background: #e3f2fd; border-radius: 8px;">
+            <p><strong>Ready to use!</strong> Both SVG versions are saved and ready to be integrated into your website.</p>
+            <p>You can easily edit colors, dot positions, and sizing in the SVG files.</p>
+        </div>
+    </div>
+</body>
+</html>
