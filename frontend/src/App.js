@@ -271,7 +271,7 @@ function App() {
               />
               <div className="text-3xl font-bold">
                 <span className="text-white">Insight</span>
-                <span className="text-red-500">Place</span>
+                <span style={{color: '#BF0004'}}>Place</span>
               </div>
             </div>
             <p className="text-gray-400 mb-8 text-lg">
