@@ -111,7 +111,7 @@ export const ContactForm = ({ translations, language }) => {
               <CardContent className="p-0">
                 <h3 className="text-xl font-bold mb-4">
                   {language === 'es' 
-                    ? 'Casos de Estudio' 
+                    ? 'Casos de Éxito' 
                     : 'Case Studies'
                   }
                 </h3>
