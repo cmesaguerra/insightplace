@@ -116,7 +116,7 @@ export const CaseStudies = ({ language = 'es' }) => {
                   className="bg-white hover:bg-gray-100 px-8 py-3 text-lg font-semibold"
                   style={{color: '#BF0004'}}
                 >
-                  {language === 'es' ? 'Ver Portafolio Completo' : 'View Complete Portfolio'}
+                  {language === 'es' ? 'Otros casos de éxito' : 'Other success cases'}
                 </Button>
               </div>
             </CardContent>
