@@ -93,7 +93,7 @@ function App() {
             {/* Large hero logo */}
             <div className="flex justify-center mb-12">
               <img 
-                src="/logo.jpg" 
+                src="/logo-transparent.png" 
                 alt="InsightPlace" 
                 className="h-24 lg:h-32 w-auto"
               />
