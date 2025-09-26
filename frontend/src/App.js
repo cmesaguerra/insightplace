@@ -102,7 +102,8 @@ function App() {
                 variant="outline" 
                 size="lg"
                 onClick={() => scrollToSection('platform')}
-                className="border-red-600 text-red-600 hover:bg-red-50 px-8 py-4 text-lg transition-all hover:scale-105"
+                className="px-8 py-4 text-lg transition-all hover:scale-105"
+                style={{borderColor: '#BF0004', color: '#BF0004', '&:hover': {backgroundColor: '#FEF2F2'}}}
               >
                 {t.heroCtaSecondary}
                 <ArrowRight className="ml-2 w-5 h-5" />
