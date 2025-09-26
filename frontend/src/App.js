@@ -293,9 +293,29 @@ function App() {
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="text-3xl font-bold mb-4">
-              <span className="text-white">Insight</span>
-              <span style={{color: '#BF0004'}}>Place</span>
+            {/* InsightPlace Logo with exact specifications */}
+            <div className="mb-4">
+              <svg width="280" height="60" viewBox="0 0 280 60" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <style>
+                    .logo-text {
+                      font-family: 'Arial', 'Helvetica', sans-serif;
+                      font-weight: 600;
+                      font-size: 32px;
+                      letter-spacing: 2.6px;
+                      line-height: 1.1;
+                    }
+                    .logo-white { fill: #FFFFFF; }
+                    .logo-red { fill: #C10303; }
+                  </style>
+                </defs>
+                
+                {/* "Insight" in white */}
+                <text x="10" y="40" className="logo-text logo-white">Insight</text>
+                
+                {/* "Place" in red */}
+                <text x="145" y="40" className="logo-text logo-red">Place</text>
+              </svg>
             </div>
             <p className="text-gray-400 mb-8 text-lg">
               {t.footerTagline}
