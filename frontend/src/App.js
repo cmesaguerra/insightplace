@@ -265,9 +265,16 @@ function App() {
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="text-3xl font-bold mb-4">
-              <span className="text-white">Insight</span>
-              <span className="text-red-500">Place</span>
+            <div className="flex items-center justify-center space-x-3 mb-4">
+              <img 
+                src="/symbol.png" 
+                alt="InsightPlace" 
+                className="w-10 h-10 filter brightness-0 invert"
+              />
+              <div className="text-3xl font-bold">
+                <span className="text-white">Insight</span>
+                <span className="text-red-500">Place</span>
+              </div>
             </div>
             <p className="text-gray-400 mb-8 text-lg">
               {t.footerTagline}
