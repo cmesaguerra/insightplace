@@ -202,28 +202,28 @@ export const NetworkBackground = ({ className = '', showSymbol = false, enhanced
         
         {/* Enhanced animated pulse effects */}
         <g>
-          <circle cx="600" cy="580" r="8" fill="none" stroke="#dc2626" strokeWidth={enhanced ? "3" : "2"} strokeOpacity="0.6">
+          <circle cx="600" cy="580" r="8" fill="none" stroke="#BF0004" strokeWidth={enhanced ? "3" : "2"} strokeOpacity="0.6">
             <animate attributeName="r" values="8;20;8" dur="3s" repeatCount="indefinite" />
             <animate attributeName="stroke-opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite" />
           </circle>
-          <circle cx="350" cy="300" r="8" fill="none" stroke="#dc2626" strokeWidth={enhanced ? "3" : "2"} strokeOpacity="0.4">
+          <circle cx="350" cy="300" r="8" fill="none" stroke="#BF0004" strokeWidth={enhanced ? "3" : "2"} strokeOpacity="0.4">
             <animate attributeName="r" values="8;25;8" dur="4s" repeatCount="indefinite" />
             <animate attributeName="stroke-opacity" values="0.4;0;0.4" dur="4s" repeatCount="indefinite" />
           </circle>
           {enhanced && (
             <>
-              <circle cx="700" cy="180" r="7" fill="none" stroke="#dc2626" strokeWidth="2" strokeOpacity="0.5">
+              <circle cx="700" cy="180" r="7" fill="none" stroke="#BF0004" strokeWidth="2" strokeOpacity="0.5">
                 <animate attributeName="r" values="7;18;7" dur="5s" repeatCount="indefinite" />
                 <animate attributeName="stroke-opacity" values="0.5;0;0.5" dur="5s" repeatCount="indefinite" />
               </circle>
-              <circle cx="950" cy="400" r="5" fill="none" stroke="#dc2626" strokeWidth="2" strokeOpacity="0.3">
+              <circle cx="950" cy="400" r="5" fill="none" stroke="#BF0004" strokeWidth="2" strokeOpacity="0.3">
                 <animate attributeName="r" values="5;15;5" dur="6s" repeatCount="indefinite" />
                 <animate attributeName="stroke-opacity" values="0.3;0;0.3" dur="6s" repeatCount="indefinite" />
               </circle>
             </>
           )}
           {showSymbol && (
-            <circle cx="600" cy="400" r="10" fill="none" stroke="#dc2626" strokeWidth="3" strokeOpacity="0.8">
+            <circle cx="600" cy="400" r="10" fill="none" stroke="#BF0004" strokeWidth="3" strokeOpacity="0.8">
               <animate attributeName="r" values="10;30;10" dur="5s" repeatCount="indefinite" />
               <animate attributeName="stroke-opacity" values="0.8;0.2;0.8" dur="5s" repeatCount="indefinite" />
             </circle>
