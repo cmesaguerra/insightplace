@@ -77,7 +77,7 @@ function App() {
 
       {/* Hero Section */}
       <section className="relative py-24 lg:py-32 overflow-hidden">
-        <NetworkBackground className="opacity-20" showSymbol={true} />
+        <NetworkBackground className="opacity-30" showSymbol={true} enhanced={true} />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
             {/* Large hero logo */}
