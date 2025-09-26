@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const NetworkBackground = ({ className = '' }) => {
+export const NetworkBackground = ({ className = '', showSymbol = false }) => {
   return (
     <div className={`absolute inset-0 overflow-hidden ${className}`}>
       <svg
@@ -13,6 +13,10 @@ export const NetworkBackground = ({ className = '' }) => {
           <radialGradient id="nodeGradient" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="#dc2626" stopOpacity="0.8" />
             <stop offset="100%" stopColor="#dc2626" stopOpacity="0.3" />
+          </radialGradient>
+          <radialGradient id="symbolGradient" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#dc2626" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="#dc2626" stopOpacity="0.1" />
           </radialGradient>
         </defs>
         
@@ -43,6 +47,16 @@ export const NetworkBackground = ({ className = '' }) => {
           {/* Cross connections */}
           <line x1="350" y1="300" x2="600" y2="580" />
           <line x1="550" y1="380" x2="800" y2="520" />
+          
+          {/* Additional connections for symbol integration */}
+          {showSymbol && (
+            <>
+              <line x1="550" y1="380" x2="600" y2="400" />
+              <line x1="600" y1="400" x2="650" y2="420" />
+              <line x1="650" y1="420" x2="700" y2="400" />
+              <line x1="700" y1="400" x2="750" y2="380" />
+            </>
+          )}
         </g>
         
         {/* Network Nodes */}
@@ -65,6 +79,15 @@ export const NetworkBackground = ({ className = '' }) => {
           <circle cx="600" cy="580" r="8" fill="url(#nodeGradient)" />
           <circle cx="800" cy="520" r="5" fill="url(#nodeGradient)" />
           <circle cx="1000" cy="600" r="6" fill="url(#nodeGradient)" />
+          
+          {/* Symbol-inspired nodes */}
+          {showSymbol && (
+            <>
+              <circle cx="600" cy="400" r="10" fill="url(#symbolGradient)" />
+              <circle cx="650" cy="420" r="8" fill="url(#nodeGradient)" />
+              <circle cx="700" cy="400" r="6" fill="url(#nodeGradient)" />
+            </>
+          )}
         </g>
         
         {/* Animated pulse effect */}
@@ -77,8 +100,30 @@ export const NetworkBackground = ({ className = '' }) => {
             <animate attributeName="r" values="8;20;8" dur="4s" repeatCount="indefinite" />
             <animate attributeName="stroke-opacity" values="0.4;0;0.4" dur="4s" repeatCount="indefinite" />
           </circle>
+          {showSymbol && (
+            <circle cx="600" cy="400" r="10" fill="none" stroke="#dc2626" strokeWidth="3" strokeOpacity="0.8">
+              <animate attributeName="r" values="10;25;10" dur="5s" repeatCount="indefinite" />
+              <animate attributeName="stroke-opacity" values="0.8;0.2;0.8" dur="5s" repeatCount="indefinite" />
+            </circle>
+          )}
         </g>
+        
+        {/* Large symbol in the background */}
+        {showSymbol && (
+          <g transform="translate(900, 100)" opacity="0.05">
+            <rect x="0" y="0" width="50" height="150" rx="25" fill="#6b7280" />
+            <polygon points="0,0 25,25 0,50" fill="#dc2626" transform="translate(-15, -25)" />
+            <path d="M 60 50 Q 120 20, 120 80 Q 120 140, 60 110 Z" fill="#dc2626" />
+          </g>
+        )}
       </svg>
+      
+      {/* Floating symbol elements */}
+      {showSymbol && (
+        <div className="absolute top-20 right-20 opacity-10">
+          <img src="/symbol.png" alt="" className="w-32 h-32 animate-pulse" />
+        </div>
+      )}
     </div>
   );
 };
