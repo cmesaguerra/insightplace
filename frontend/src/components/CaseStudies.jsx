@@ -12,8 +12,8 @@ export const CaseStudies = ({ language = 'es' }) => {
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             {language === 'es' 
-              ? 'Explora nuestros proyectos exitosos en diversos sectores industriales y gubernamentales.' 
-              : 'Explore our successful projects across various industrial and government sectors.'
+              ? 'Explora nuestros proyectos exitosos en diversos sectores.' 
+              : 'Explore our successful projects across various sectors.'
             }
           </p>
         </div>
