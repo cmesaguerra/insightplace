@@ -302,11 +302,11 @@ function App() {
                 className="h-12 w-auto mx-auto"
               />
             </div>
-            <p className="text-gray-400 mb-8 text-lg">
+            <p className="text-white mb-8 text-lg">
               {t.footerTagline}
             </p>
-            <div className="border-t border-gray-800 pt-8">
-              <p className="text-gray-500">
+            <div className="border-t border-white pt-8">
+              <p className="text-white">
                 {t.footerRights}
               </p>
             </div>
