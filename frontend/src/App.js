@@ -218,6 +218,9 @@ function App() {
         </div>
       </section>
 
+      {/* Case Studies Section - MOVED BEFORE WONK */}
+      <CaseStudies language={language} />
+
       {/* DTA Model Section */}
       <DTAModel language={language} />
 
@@ -297,8 +300,8 @@ function App() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <ContactForm translations={translations} language={language} />
+      {/* Contact Section - NO FORM */}
+      <ContactInfo translations={translations} language={language} />
 
       {/* Footer */}
       <footer className="text-white py-12" style={{backgroundColor: 'rgb(128, 128, 128)'}}>
