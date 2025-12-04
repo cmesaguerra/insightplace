@@ -34,6 +34,32 @@
                 opacity: 0 !important;
             }
         </style>
+        <script>
+            // Remove Emergent badge after page loads
+            function removeEmergentBadge() {
+                const badge = document.querySelector('#emergent-badge');
+                if (badge) {
+                    badge.remove();
+                    console.log('Emergent badge removed');
+                }
+                
+                // Also remove any badges that might have different selectors
+                const emergentLinks = document.querySelectorAll('a[href*="emergent.sh"]');
+                emergentLinks.forEach(link => link.remove());
+            }
+            
+            // Run immediately
+            removeEmergentBadge();
+            
+            // Run after DOM is loaded
+            document.addEventListener('DOMContentLoaded', removeEmergentBadge);
+            
+            // Run after window loads
+            window.addEventListener('load', removeEmergentBadge);
+            
+            // Run periodically to catch dynamically added badges
+            setInterval(removeEmergentBadge, 1000);
+        </script>
     </head>
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
