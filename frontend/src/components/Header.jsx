@@ -47,13 +47,6 @@ const Header = ({ scrollToSection, language, translations, setLanguage }) => {
               >
                 🔐 Portal Clientes
               </Link>
-              <a
-                href="/demo-admin.html"
-                target="_blank"
-                className="bg-gray-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-700 transition-colors"
-              >
-                🔧 Demo Admin
-              </a>
               <LanguageToggle language={language} onLanguageChange={setLanguage} />
             </div>
           </nav>
