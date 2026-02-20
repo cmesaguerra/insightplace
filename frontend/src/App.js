@@ -7,7 +7,7 @@ import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import NetworkBackground from './components/NetworkBackground';
 import ServicesSection from './components/ServicesSection';
-import DtaModel from './components/DtaModel';
+import DTAModel from './components/DTAModel';
 import CaseStudies from './components/CaseStudies';
 import WonkSection from './components/WonkSection';
 import ContactInfo from './components/ContactInfo';
