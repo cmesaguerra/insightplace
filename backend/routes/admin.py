@@ -233,8 +233,8 @@ async def upload_report(
 
 @router.get("/reports", response_model=List[Report])
 async def get_reports(
-    company_id: Optional[str] = None,
     admin_user: User = Depends(get_admin_user),
+    company_id: Optional[str] = None,
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Get all reports, optionally filtered by company"""
