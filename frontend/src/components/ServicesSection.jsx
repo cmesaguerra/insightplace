@@ -4,21 +4,20 @@ import React from 'react';
 const ServiceIcons = {
   analytics: (
     <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="4" y="28" width="8" height="16" rx="1" stroke="currentColor" strokeWidth="2"/>
-      <rect x="16" y="20" width="8" height="24" rx="1" stroke="currentColor" strokeWidth="2"/>
-      <rect x="28" y="12" width="8" height="32" rx="1" stroke="currentColor" strokeWidth="2"/>
-      <rect x="40" y="4" width="4" height="40" rx="1" stroke="currentColor" strokeWidth="2"/>
-      <path d="M8 24L20 16L32 8L44 4" stroke="#DC2626" strokeWidth="2" strokeLinecap="round"/>
-      <circle cx="8" cy="24" r="2" fill="#DC2626"/>
-      <circle cx="20" cy="16" r="2" fill="#DC2626"/>
-      <circle cx="32" cy="8" r="2" fill="#DC2626"/>
+      <rect x="6" y="28" width="10" height="16" rx="1" stroke="currentColor" strokeWidth="2"/>
+      <rect x="20" y="18" width="10" height="26" rx="1" stroke="currentColor" strokeWidth="2"/>
+      <rect x="34" y="8" width="10" height="36" rx="1" stroke="currentColor" strokeWidth="2"/>
+      <path d="M11 24L25 14L39 6" stroke="#DC2626" strokeWidth="2" strokeLinecap="round"/>
+      <circle cx="11" cy="24" r="2.5" fill="#DC2626"/>
+      <circle cx="25" cy="14" r="2.5" fill="#DC2626"/>
+      <circle cx="39" cy="6" r="2.5" fill="#DC2626"/>
     </svg>
   ),
   economic: (
     <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
       <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="2"/>
-      <path d="M24 12V36" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-      <path d="M18 18C18 15.8 20.7 14 24 14C27.3 14 30 15.8 30 18C30 20.2 27.3 22 24 22C20.7 22 18 23.8 18 26C18 28.2 20.7 30 24 30C27.3 30 30 28.2 30 26" stroke="#DC2626" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M24 10V38" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      <path d="M30 17C30 14.8 27.3 13 24 13C20.7 13 18 14.8 18 17C18 19.2 20.7 21 24 21C27.3 21 30 22.8 30 25C30 27.2 27.3 29 24 29C20.7 29 18 27.2 18 25" stroke="#DC2626" strokeWidth="2.5" strokeLinecap="round"/>
     </svg>
   ),
   policy: (
