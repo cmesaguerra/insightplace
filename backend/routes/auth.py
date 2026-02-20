@@ -59,10 +59,31 @@ async def login(
         expires_delta=access_token_expires
     )
     
+    # Ensure all required fields exist with defaults
+    user_data = {
+        "id": user["id"],
+        "email": user["email"],
+        "full_name": user["full_name"],
+        "company_id": user["company_id"],
+        "role": user["role"],
+        "active": user.get("active", True),
+        "last_login": user.get("last_login"),
+        "created_at": user.get("created_at", datetime.utcnow())
+    }
+    
+    company_data = {
+        "id": company["id"],
+        "name": company["name"],
+        "description": company.get("description"),
+        "active": company.get("active", True),
+        "created_at": company.get("created_at", datetime.utcnow()),
+        "updated_at": company.get("updated_at", datetime.utcnow())
+    }
+    
     return LoginResponse(
         access_token=access_token,
-        user=UserResponse(**user),
-        company=Company(**company)
+        user=UserResponse(**user_data),
+        company=Company(**company_data)
     )
 
 @router.post("/logout")
