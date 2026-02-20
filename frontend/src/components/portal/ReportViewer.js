@@ -7,21 +7,20 @@ const ReportViewer = () => {
   const navigate = useNavigate();
   const { token, user, company, isAdmin } = useAuth();
   const [report, setReport] = useState(null);
-  const [htmlContent, setHtmlContent] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     if (reportId && token) {
-      fetchReportContent();
+      fetchReportDetails();
     }
   }, [reportId, token]);
 
-  const fetchReportContent = async () => {
+  const fetchReportDetails = async () => {
     try {
       setLoading(true);
       
-      // First get report details
+      // Get report details
       const reportRes = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/client/reports/${reportId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -34,42 +33,6 @@ const ReportViewer = () => {
 
       const reportData = await reportRes.json();
       setReport(reportData);
-
-      // Then get the HTML content
-      const contentRes = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/client/reports/${reportId}/view`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!contentRes.ok) {
-        throw new Error('No se pudo cargar el contenido del reporte');
-      }
-
-      let html = await contentRes.text();
-      
-      // Replace relative asset paths with authenticated API paths
-      const assetBaseUrl = `${process.env.REACT_APP_BACKEND_URL}/api/client/reports/${reportId}/asset`;
-      
-      // Replace src="./path" or src="path" with authenticated URLs
-      html = html.replace(
-        /src=["'](?!http|data:)([^"']+)["']/gi,
-        (match, path) => {
-          const cleanPath = path.replace(/^\.\//, '');
-          return `src="${assetBaseUrl}/${cleanPath}?token=${token}"`;
-        }
-      );
-      
-      // Replace href="./path" for CSS files
-      html = html.replace(
-        /href=["'](?!http|#)([^"']+\.css)["']/gi,
-        (match, path) => {
-          const cleanPath = path.replace(/^\.\//, '');
-          return `href="${assetBaseUrl}/${cleanPath}?token=${token}"`;
-        }
-      );
-
-      setHtmlContent(html);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -134,6 +97,9 @@ const ReportViewer = () => {
     );
   }
 
+  // Build the iframe URL with token for authentication
+  const iframeUrl = `${process.env.REACT_APP_BACKEND_URL}/api/client/reports/${reportId}/view?token=${token}`;
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Header */}
@@ -187,16 +153,14 @@ const ReportViewer = () => {
         </div>
       </div>
 
-      {/* Report Content */}
+      {/* Report Content in iframe */}
       <div className="flex-1 bg-white">
-        <div 
-          className="report-content"
-          dangerouslySetInnerHTML={{ __html: htmlContent }}
-          style={{
-            maxWidth: '100%',
-            margin: '0 auto',
-            padding: '20px',
-          }}
+        <iframe
+          src={iframeUrl}
+          title={report?.title || 'Report'}
+          className="w-full h-full border-0"
+          style={{ minHeight: 'calc(100vh - 120px)' }}
+          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
         />
       </div>
 
@@ -204,28 +168,6 @@ const ReportViewer = () => {
       <div className="bg-gray-800 text-gray-400 text-center py-4 text-sm">
         <p>© 2024 InsightPlace. Documento confidencial - No compartir.</p>
       </div>
-
-      {/* Prevent right-click and text selection on report content */}
-      <style>{`
-        .report-content {
-          user-select: none;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-        }
-        .report-content img {
-          max-width: 100%;
-          height: auto;
-        }
-        .report-content table {
-          border-collapse: collapse;
-          width: 100%;
-        }
-        .report-content th, .report-content td {
-          border: 1px solid #ddd;
-          padding: 8px;
-        }
-      `}</style>
     </div>
   );
 };
