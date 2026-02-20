@@ -109,6 +109,18 @@ const ReportViewer = () => {
     );
   }
 
+  // Don't render iframe until we have a valid token
+  if (!token) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Verificando autenticación...</p>
+        </div>
+      </div>
+    );
+  }
+
   // Build the iframe URL with token for authentication
   const iframeUrl = `${process.env.REACT_APP_BACKEND_URL}/api/client/reports/${reportId}/view?token=${token}`;
 
