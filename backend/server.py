@@ -25,6 +25,7 @@ async def lifespan(app: FastAPI):
     # Startup
     await connect_to_mongo()
     await create_indexes()
+    await create_admin_user()
     yield
     # Shutdown
     await close_mongo_connection()
