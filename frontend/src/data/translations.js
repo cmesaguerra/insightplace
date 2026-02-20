@@ -5,7 +5,8 @@ export const translations = {
       services: 'Servicios',
       caseStudies: 'Casos de Éxito',
       platform: 'Plataforma',
-      contact: 'Contacto'
+      contact: 'Contacto',
+      clientPortal: 'Portal Clientes'
     },
     
     // Hero Section
