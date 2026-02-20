@@ -118,3 +118,5 @@ const CaseStudies = ({ language = 'es' }) => {
     </section>
   );
 };
+
+export default CaseStudies;
