@@ -254,3 +254,5 @@ const NetworkBackground = ({ className = '', showSymbol = false, enhanced = fals
     </div>
   );
 };
+
+export default NetworkBackground;
