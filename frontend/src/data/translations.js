@@ -1,19 +1,48 @@
 export const translations = {
   es: {
-    // Header
-    services: 'Servicios',
-    platform: 'Plataforma',
-    contact: 'Contacto',
+    // Navigation
+    nav: {
+      services: 'Servicios',
+      caseStudies: 'Casos de Éxito',
+      platform: 'Plataforma',
+      contact: 'Contacto'
+    },
     
     // Hero Section
-    heroTitle: 'Analítica de Datos y Consultoría Económica',
-    heroSubtitle: 'Combinamos analítica de datos, sistemas de información geográfica y análisis económico para ayudar a nuestros clientes a tomar decisiones más informadas.',
-    heroCtaPrimary: 'Ver Casos de Éxito',
-    heroCtaSecondary: 'Conocer WONK',
+    hero: {
+      title: 'Analítica de Datos y Consultoría Económica',
+      subtitle: 'Combinamos analítica de datos, sistemas de información geográfica y análisis económico para ayudar a nuestros clientes a tomar decisiones más informadas.',
+      ctaButton: 'Ver Casos de Éxito',
+      ctaSecondary: 'Conocer WONK'
+    },
     
     // Services Section
-    servicesTitle: 'Nuestros Servicios',
-    servicesSubtitle: 'Soluciones integrales para el análisis de datos y consultoría económica',
+    services: {
+      title: 'Nuestros Servicios',
+      subtitle: 'Soluciones integrales para el análisis de datos y consultoría económica',
+      items: [
+        {
+          icon: '📊',
+          title: 'Analítica de Datos y Consolidación de Bases de Datos',
+          description: 'Generación de conocimiento práctico a partir de Big Data con georreferenciación de alto valor para decisiones de política pública, sectoriales y empresariales.'
+        },
+        {
+          icon: '💼',
+          title: 'Análisis Económico',
+          description: 'Estimación de impacto económico y fiscal, análisis de dinámicas sectoriales, industriales y del mercado laboral.'
+        },
+        {
+          icon: '🏛️',
+          title: 'Coordinación de Políticas Públicas',
+          description: 'Planes estadísticos, sistemas de información, políticas de desarrollo sectorial y territorial a nivel nacional y local.'
+        },
+        {
+          icon: '📈',
+          title: 'Pronósticos Económicos',
+          description: 'Construcción de ejercicios de pronóstico económico para el sector privado con modelos de predicción avanzados.'
+        }
+      ]
+    },
     
     service1Title: 'Analítica de Datos y Consolidación de Bases de Datos',
     service1Desc: 'Generación de conocimiento práctico a partir de Big Data con georreferenciación de alto valor para decisiones de política pública, sectoriales y empresariales.',
