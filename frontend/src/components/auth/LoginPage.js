@@ -16,7 +16,12 @@ const LoginPage = () => {
     const result = await login(email, password);
     
     if (result.success) {
-      navigate('/portal');
+      // Redirect admin users to admin panel, clients to portal
+      if (result.user?.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/portal');
+      }
     } else {
       setError(result.error);
     }
