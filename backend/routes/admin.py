@@ -248,10 +248,10 @@ async def get_reports(
 # Activity Logs
 @router.get("/activity-logs", response_model=List[ActivityLog])
 async def get_activity_logs(
+    admin_user: User = Depends(get_admin_user),
     limit: int = 100,
     user_id: Optional[str] = None,
     activity_type: Optional[str] = None,
-    admin_user: User = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Get activity logs"""
