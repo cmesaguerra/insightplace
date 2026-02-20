@@ -15,12 +15,12 @@ const WonkSection = ({ language, translations }) => {
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <h3 className="text-2xl font-semibold text-gray-900">
-              {translations.wonk.features.title}
-            </h3>
+            <p className="text-lg text-gray-700">
+              {translations.wonk.description}
+            </p>
             
             <div className="space-y-4">
-              {translations.wonk.features.items.map((feature, index) => (
+              {translations.wonk.features.map((feature, index) => (
                 <div key={index} className="flex items-start space-x-4">
                   <div className="bg-red-600 text-white rounded-full p-2 flex-shrink-0">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -40,10 +40,13 @@ const WonkSection = ({ language, translations }) => {
             <div className="text-center">
               <div className="text-6xl mb-4">🔗</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                {translations.wonk.platform.title}
+                WONK Platform
               </h3>
               <p className="text-gray-600">
-                {translations.wonk.platform.description}
+                {language === 'es' 
+                  ? 'Plataforma inteligente para análisis de datos avanzado'
+                  : 'Intelligent platform for advanced data analysis'
+                }
               </p>
             </div>
           </div>
