@@ -3,17 +3,15 @@ import { Card, CardContent } from './ui/card';
 import { Mail, MapPin } from 'lucide-react';
 
 const ContactInfo = ({ translations, language }) => {
-  const t = translations[language];
-
   return (
     <section id="contact" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            {t.contactTitle}
+            {translations.contact.title}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t.contactSubtitle}
+            {translations.contact.subtitle}
           </p>
         </div>
         
@@ -28,9 +26,9 @@ const ContactInfo = ({ translations, language }) => {
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">
                   {language === 'es' ? 'Correo Electrónico' : 'Email'}
                 </h3>
-                <p className="text-lg text-gray-600 mb-4">{t.contactEmail}</p>
+                <p className="text-lg text-gray-600 mb-4">{translations.contact.email}</p>
                 <a 
-                  href={`mailto:${t.contactEmail}`}
+                  href={`mailto:${translations.contact.email}`}
                   className="inline-block px-6 py-3 text-white font-semibold rounded-lg transition-all hover:scale-105"
                   style={{backgroundColor: '#BF0004'}}
                   onMouseEnter={(e) => e.target.style.backgroundColor = '#9A0003'}
