@@ -282,6 +282,16 @@ const AdminPanel = () => {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  // Modal states
+  const [showCompanyModal, setShowCompanyModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
+  const [modalError, setModalError] = useState('');
+  
+  // Form states
+  const [newCompany, setNewCompany] = useState({ name: '', description: '' });
+  const [newUser, setNewUser] = useState({ email: '', full_name: '', password: '', company_id: '', role: 'client' });
 
   useEffect(() => {
     if (!isAdmin) {
