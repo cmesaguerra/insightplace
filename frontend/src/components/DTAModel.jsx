@@ -257,3 +257,5 @@ export const DTAModel = ({ language = 'es' }) => {
     </section>
   );
 };
+
+export default DTAModel;
