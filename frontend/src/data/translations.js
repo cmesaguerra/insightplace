@@ -44,46 +44,59 @@ export const translations = {
       ]
     },
     
-    service1Title: 'Analítica de Datos y Consolidación de Bases de Datos',
-    service1Desc: 'Generación de conocimiento práctico a partir de Big Data con georreferenciación de alto valor para decisiones de política pública, sectoriales y empresariales.',
+    // Case Studies Section
+    caseStudies: {
+      title: 'Casos de Éxito',
+      subtitle: 'Proyectos que han transformado la toma de decisiones'
+    },
     
-    service2Title: 'Análisis Económico',
-    service2Desc: 'Estimación de impacto económico y fiscal, análisis de dinámicas sectoriales, industriales y del mercado laboral.',
-    
-    service3Title: 'Coordinación de Políticas Públicas',
-    service3Desc: 'Planes estadísticos, sistemas de información, políticas de desarrollo sectorial y territorial a nivel nacional y local.',
-    
-    service4Title: 'Pronósticos Económicos',
-    service4Desc: 'Construcción de ejercicios de pronóstico económico para el sector privado con modelos de predicción avanzados.',
+    // DTA Model Section
+    dtaModel: {
+      title: 'Modelo DTA',
+      subtitle: 'Data-driven Territorial Analysis'
+    },
     
     // WONK Platform Section
-    wonkTitle: 'WONK: Workflow Oriented Network of Knowledge',
-    wonkSubtitle: 'Tu herramienta de análisis y enriquecimiento de datos',
-    wonkDescription: 'Plataforma inteligente que integra, organiza y analiza múltiples fuentes de información sobre dinámicas económicas y sociales locales. Facilita información detallada y continua para ayudar a los clientes a tomar decisiones informadas.',
-    
-    wonkFeature1: 'Integración de Múltiples Fuentes',
-    wonkFeature1Desc: 'Combina registros administrativos, hogares, empresas, propiedades y datos satelitales.',
-    
-    wonkFeature2: 'Análisis Georeferenciado',
-    wonkFeature2Desc: 'Visualización y análisis espacial de datos económicos y sociales.',
-    
-    wonkFeature3: 'Predicción Avanzada',
-    wonkFeature3Desc: 'Modelos de machine learning para análisis predictivo y comportamental.',
+    wonk: {
+      title: 'WONK: Workflow Oriented Network of Knowledge',
+      subtitle: 'Tu herramienta de análisis y enriquecimiento de datos',
+      description: 'Plataforma inteligente que integra, organiza y analiza múltiples fuentes de información sobre dinámicas económicas y sociales locales. Facilita información detallada y continua para ayudar a los clientes a tomar decisiones informadas.',
+      features: [
+        {
+          title: 'Integración de Múltiples Fuentes',
+          description: 'Combina registros administrativos, hogares, empresas, propiedades y datos satelitales.'
+        },
+        {
+          title: 'Análisis Georeferenciado',
+          description: 'Visualización y análisis espacial de datos económicos y sociales.'
+        },
+        {
+          title: 'Predicción Avanzada',
+          description: 'Modelos de machine learning para análisis predictivo y comportamental.'
+        }
+      ]
+    },
     
     // Contact Section
-    contactTitle: 'Contactanos',
-    contactSubtitle: 'Estamos listos para ayudarte con tus proyectos de analítica de datos',
-    contactFormName: 'Nombre',
-    contactFormEmail: 'Correo Electrónico',
-    contactFormCompany: 'Empresa',
-    contactFormMessage: 'Mensaje',
-    contactFormSubmit: 'Enviar Mensaje',
-    contactEmail: 'contacto@insight-place.com',
-    contactLocations: 'Bogotá, Colombia • Cartagena, Colombia',
+    contact: {
+      title: 'Contactanos',
+      subtitle: 'Estamos listos para ayudarte con tus proyectos de analítica de datos',
+      form: {
+        name: 'Nombre',
+        email: 'Correo Electrónico',
+        company: 'Empresa',
+        message: 'Mensaje',
+        submit: 'Enviar Mensaje'
+      },
+      email: 'contacto@insight-place.com',
+      locations: 'Bogotá, Colombia • Cartagena, Colombia'
+    },
     
     // Footer
-    footerTagline: 'Transformando datos en decisiones inteligentes',
-    footerRights: '© 2024 InsightPlace. Todos los derechos reservados.',
+    footer: {
+      tagline: 'Transformando datos en decisiones inteligentes',
+      rights: '© 2024 InsightPlace. Todos los derechos reservados.'
+    },
   },
   
   en: {
