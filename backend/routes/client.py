@@ -127,10 +127,26 @@ async def view_report_file(
     report_id: str,
     request: Request,
     token: Optional[str] = None,
-    current_user: User = Depends(get_current_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
-    """View report HTML file in secure mode"""
+    """View report HTML file in secure mode - supports token query param for iframe"""
+    # Get user from token (either header or query param)
+    current_user = None
+    if token:
+        current_user = await get_user_from_token(token, db)
+    
+    if current_user is None:
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            header_token = auth_header[7:]
+            current_user = await get_user_from_token(header_token, db)
+    
+    if current_user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated"
+        )
+    
     report = await db.reports.find_one({
         "id": report_id,
         "company_id": current_user.company_id,
@@ -159,13 +175,8 @@ async def view_report_file(
         metadata={"report_id": report_id, "file": report["main_file"]}
     )
     
-    # Read file content
-    async with aiofiles.open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-        content = await f.read()
-    
-    # Create response with security headers to prevent sharing/caching
-    response = Response(
-        content=content,
+    return FileResponse(
+        file_path,
         media_type="text/html",
         headers={
             "Cache-Control": "no-store, no-cache, must-revalidate, private",
@@ -173,11 +184,8 @@ async def view_report_file(
             "Expires": "0",
             "X-Frame-Options": "SAMEORIGIN",
             "X-Content-Type-Options": "nosniff",
-            "Content-Security-Policy": "frame-ancestors 'self'",
         }
     )
-    
-    return response
 
 @router.get("/reports/{report_id}/asset/{file_name:path}")
 async def get_report_asset(
