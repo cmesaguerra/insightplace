@@ -61,6 +61,7 @@ const UploadReportSection = ({ companies, token, onUploadSuccess }) => {
       formData.append('title', title);
       formData.append('description', description);
       formData.append('company_id', selectedCompany);
+      formData.append('allow_download', allowDownload.toString());
       
       files.forEach(file => {
         formData.append('files', file);
@@ -86,6 +87,7 @@ const UploadReportSection = ({ companies, token, onUploadSuccess }) => {
       setTitle('');
       setDescription('');
       setSelectedCompany('');
+      setAllowDownload(false);
       setFiles([]);
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
