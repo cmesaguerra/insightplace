@@ -417,7 +417,12 @@ metadata:
 
 test_plan:
   current_focus:
-    - "All backend API endpoints tested"
+    - "Landing Page Header and Navigation"
+    - "Login Page UI and Form"
+    - "Authentication System Integration"
+    - "Client Portal Dashboard"
+    - "Admin Panel Interface"
+    - "Protected Routes and Authorization"
   stuck_tasks: []
   test_all: true
   test_priority: "high_first"
