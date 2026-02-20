@@ -456,7 +456,10 @@ const AdminPanel = () => {
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-gray-900">Gestión de Empresas</h2>
-              <button className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">
+              <button 
+                onClick={() => setShowCompanyModal(true)}
+                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
+              >
                 + Agregar Empresa
               </button>
             </div>
