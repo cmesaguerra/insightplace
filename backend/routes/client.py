@@ -180,14 +180,19 @@ async def view_report_file(
     async with aiofiles.open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
         html_content = await f.read()
     
-    # Add token to all relative src and href attributes
+    # Add token to relative file paths (images, html, css, etc.)
     def add_token_to_url(match):
         attr = match.group(1)  # src or href
         quote = match.group(2)  # quote character
         url = match.group(3)   # the URL
         
-        # Skip external URLs, data URLs, and anchors
-        if url.startswith(('http://', 'https://', 'data:', '#', 'javascript:')):
+        # Skip external URLs, data URLs, anchors, and javascript
+        if url.startswith(('http://', 'https://', 'data:', '#', 'javascript:', '//')):
+            return match.group(0)
+        
+        # Only add token to actual file paths (must contain a dot for extension)
+        # and not be just a fragment or query string
+        if '.' not in url or url.startswith('?'):
             return match.group(0)
         
         # Add token to the URL
