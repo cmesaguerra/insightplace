@@ -175,6 +175,24 @@ const UploadReportSection = ({ companies, token, onUploadSuccess }) => {
             </select>
           </div>
 
+          {/* Allow Download Toggle */}
+          <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg">
+            <input
+              type="checkbox"
+              id="allowDownload"
+              checked={allowDownload}
+              onChange={(e) => setAllowDownload(e.target.checked)}
+              className="w-5 h-5 text-red-600 border-gray-300 rounded focus:ring-red-500"
+              disabled={uploading}
+            />
+            <label htmlFor="allowDownload" className="flex-1">
+              <span className="text-sm font-medium text-gray-700">Permitir descarga</span>
+              <p className="text-xs text-gray-500">
+                Si está desactivado, los clientes solo podrán ver el reporte en el navegador (no podrán descargar ni compartir el enlace)
+              </p>
+            </label>
+          </div>
+
           {/* File Upload */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
