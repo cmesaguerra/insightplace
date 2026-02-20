@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext } from 'react';
+import React, { useState, useContext, createContext, useEffect } from 'react';
 
 const AuthContext = createContext();
 
@@ -10,11 +10,26 @@ export const useAuth = () => {
   return context;
 };
 
+// Initialize state from localStorage immediately (synchronously)
+const getInitialState = () => {
+  const savedToken = localStorage.getItem('token');
+  const savedUser = localStorage.getItem('user');
+  const savedCompany = localStorage.getItem('company');
+  
+  return {
+    token: savedToken || null,
+    user: savedUser ? JSON.parse(savedUser) : null,
+    company: savedCompany ? JSON.parse(savedCompany) : null
+  };
+};
+
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  const [company, setCompany] = useState(null);
+  const initialState = getInitialState();
+  const [user, setUser] = useState(initialState.user);
+  const [token, setToken] = useState(initialState.token);
+  const [company, setCompany] = useState(initialState.company);
   const [loading, setLoading] = useState(false);
+  const [initialized, setInitialized] = useState(true);
 
   const login = async (email, password) => {
     setLoading(true);
@@ -40,7 +55,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(data.user));
       localStorage.setItem('company', JSON.stringify(data.company));
       
-      return { success: true };
+      return { success: true, user: data.user };
     } catch (error) {
       console.error('Login error:', error);
       return { success: false, error: error.message };
@@ -71,28 +86,12 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const initializeAuth = () => {
-    const savedToken = localStorage.getItem('token');
-    const savedUser = localStorage.getItem('user');
-    const savedCompany = localStorage.getItem('company');
-    
-    if (savedToken && savedUser && savedCompany) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
-      setCompany(JSON.parse(savedCompany));
-    }
-  };
-
-  // Initialize auth on mount
-  React.useEffect(() => {
-    initializeAuth();
-  }, []);
-
   const value = {
     user,
     token,
     company,
     loading,
+    initialized,
     login,
     logout,
     isAuthenticated: !!token && !!user,
