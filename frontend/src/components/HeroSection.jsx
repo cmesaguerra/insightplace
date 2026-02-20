@@ -25,7 +25,7 @@ const HeroSection = ({ scrollToSection, language, translations }) => {
             to="/login"
             className="bg-black hover:bg-gray-800 text-white font-semibold py-4 px-8 rounded-lg text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 inline-block"
           >
-            🔐 Acceso de Clientes
+            🔐 {translations.hero.clientAccess}
           </Link>
         </div>
       </div>
