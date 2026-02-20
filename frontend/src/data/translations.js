@@ -116,7 +116,8 @@ export const translations = {
       title: 'Data Analytics and Economic Consulting',
       subtitle: 'We combine data analytics, geographic information systems, and economic analysis to help our clients make more informed decisions.',
       ctaButton: 'View Case Studies',
-      ctaSecondary: 'Discover WONK'
+      ctaSecondary: 'Discover WONK',
+      clientAccess: 'Client Access'
     },
     
     // Services Section
