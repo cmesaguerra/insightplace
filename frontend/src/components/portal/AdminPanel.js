@@ -303,23 +303,7 @@ const AdminPanel = () => {
         );
         
       case 'upload':
-        return (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">Subir Nuevo Reporte</h2>
-            
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <div className="max-w-2xl mx-auto">
-                <p className="text-gray-600 mb-6">Sube reportes confidenciales para tus clientes de manera segura.</p>
-                
-                <div className="text-center p-12 border-2 border-dashed border-gray-300 rounded-lg">
-                  <div className="text-6xl text-gray-400 mb-4">📄</div>
-                  <p className="text-lg text-gray-600 mb-2">Función de subida en desarrollo</p>
-                  <p className="text-sm text-gray-500">Por favor contacta al administrador para subir archivos.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
+        return <UploadReportSection companies={companies} token={token} onUploadSuccess={fetchDashboardData} />;
         
       case 'logs':
         return (
