@@ -430,3 +430,5 @@ test_plan:
 agent_communication:
   - agent: "testing"
     message: "Comprehensive backend API testing completed. Fixed critical database initialization issue by resolving bcrypt compatibility and deprecated startup event handler. All core functionality working correctly. 11/13 tests passing consistently, 2 tests have minor intermittent connection issues but manual verification confirms they work correctly."
+  - agent: "testing"
+    message: "Starting comprehensive frontend testing of InsightPlace Client Portal. Will test landing page, authentication flow, client portal, admin panel, and protected routes. Backend URL configured as: https://dataviz-portal-4.preview.emergentagent.com"
