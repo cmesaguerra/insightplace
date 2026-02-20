@@ -3,7 +3,7 @@ import { useAuth } from '../auth/AuthContext';
 import { Link } from 'react-router-dom';
 
 const ClientPortal = () => {
-  const { user, company, token, logout } = useAuth();
+  const { user, company, token, logout, isAdmin } = useAuth();
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
