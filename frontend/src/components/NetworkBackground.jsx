@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const NetworkBackground = ({ className = '', showSymbol = false, enhanced = false }) => {
+const NetworkBackground = ({ className = '', showSymbol = false, enhanced = false }) => {
   return (
     <div className={`absolute inset-0 overflow-hidden ${className}`}>
       <svg
