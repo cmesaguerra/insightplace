@@ -10,7 +10,7 @@ import secrets
 import hashlib
 
 from models import User, Report, Company, ActivityType
-from auth import get_current_user, get_client_ip
+from auth import get_current_user, get_client_ip, get_user_from_token
 from database import get_database
 from utils import log_activity
 
