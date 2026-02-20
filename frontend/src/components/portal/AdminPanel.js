@@ -1,6 +1,275 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../auth/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+
+// Upload Report Section Component
+const UploadReportSection = ({ companies, token, onUploadSuccess }) => {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [selectedCompany, setSelectedCompany] = useState('');
+  const [files, setFiles] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    setFiles(prev => [...prev, ...selectedFiles]);
+    setError('');
+  };
+
+  const removeFile = (index) => {
+    setFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+  };
+
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    
+    if (!title.trim()) {
+      setError('Por favor ingresa un título para el reporte');
+      return;
+    }
+    
+    if (!selectedCompany) {
+      setError('Por favor selecciona una empresa');
+      return;
+    }
+    
+    if (files.length === 0) {
+      setError('Por favor selecciona al menos un archivo');
+      return;
+    }
+
+    setUploading(true);
+    setError('');
+    setSuccess('');
+    setUploadProgress(0);
+
+    try {
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('description', description);
+      formData.append('company_id', selectedCompany);
+      
+      files.forEach(file => {
+        formData.append('files', file);
+      });
+
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/admin/reports/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Error al subir el reporte');
+      }
+
+      const result = await response.json();
+      setSuccess(`Reporte "${title}" subido exitosamente. ${result.files_uploaded} archivo(s) subido(s).`);
+      
+      // Reset form
+      setTitle('');
+      setDescription('');
+      setSelectedCompany('');
+      setFiles([]);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      
+      // Refresh dashboard data
+      if (onUploadSuccess) {
+        onUploadSuccess();
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploading(false);
+      setUploadProgress(100);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold text-gray-900">Subir Nuevo Reporte</h2>
+      
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <form onSubmit={handleUpload} className="max-w-2xl mx-auto space-y-6">
+          <p className="text-gray-600">Sube reportes confidenciales para tus clientes de manera segura.</p>
+          
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md">
+              {error}
+            </div>
+          )}
+          
+          {success && (
+            <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-md">
+              {success}
+            </div>
+          )}
+
+          {/* Title */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Título del Reporte *
+            </label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              placeholder="Ej: Análisis de Mercado Q4 2024"
+              disabled={uploading}
+            />
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Descripción (opcional)
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              placeholder="Descripción breve del contenido del reporte..."
+              disabled={uploading}
+            />
+          </div>
+
+          {/* Company Selection */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Empresa Destinataria *
+            </label>
+            <select
+              value={selectedCompany}
+              onChange={(e) => setSelectedCompany(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              disabled={uploading}
+            >
+              <option value="">Seleccionar empresa...</option>
+              {companies.filter(c => c.name !== 'InsightPlace Admin').map(company => (
+                <option key={company.id} value={company.id}>
+                  {company.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* File Upload */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Archivos *
+            </label>
+            <div 
+              className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-red-400 transition-colors"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                onChange={handleFileChange}
+                className="hidden"
+                accept=".html,.pdf,.png,.jpg,.jpeg,.gif,.csv,.xlsx,.docx,.zip"
+                disabled={uploading}
+              />
+              <div className="text-4xl text-gray-400 mb-2">📁</div>
+              <p className="text-gray-600 mb-1">
+                Haz clic para seleccionar archivos o arrastra aquí
+              </p>
+              <p className="text-xs text-gray-500">
+                Formatos permitidos: HTML, PDF, PNG, JPG, GIF, CSV, XLSX, DOCX, ZIP
+              </p>
+            </div>
+          </div>
+
+          {/* Selected Files List */}
+          {files.length > 0 && (
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h4 className="text-sm font-medium text-gray-700 mb-2">
+                Archivos seleccionados ({files.length})
+              </h4>
+              <ul className="space-y-2">
+                {files.map((file, index) => (
+                  <li key={index} className="flex items-center justify-between bg-white p-2 rounded-md">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xl">
+                        {file.name.endsWith('.html') ? '🌐' :
+                         file.name.endsWith('.pdf') ? '📕' :
+                         file.name.match(/\.(png|jpg|jpeg|gif)$/i) ? '🖼️' :
+                         file.name.match(/\.(xlsx|csv)$/i) ? '📊' :
+                         file.name.endsWith('.zip') ? '📦' : '📄'}
+                      </span>
+                      <span className="text-sm text-gray-700">{file.name}</span>
+                      <span className="text-xs text-gray-500">({formatFileSize(file.size)})</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeFile(index)}
+                      className="text-red-500 hover:text-red-700"
+                      disabled={uploading}
+                    >
+                      ✕
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-2 text-xs text-gray-500">
+                Tamaño total: {formatFileSize(files.reduce((sum, file) => sum + file.size, 0))}
+              </div>
+            </div>
+          )}
+
+          {/* Upload Progress */}
+          {uploading && (
+            <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div 
+                className="bg-red-600 h-2.5 rounded-full transition-all duration-300"
+                style={{ width: `${uploadProgress}%` }}
+              ></div>
+            </div>
+          )}
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={uploading || files.length === 0}
+            className="w-full bg-red-600 text-white py-3 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center space-x-2"
+          >
+            {uploading ? (
+              <>
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                <span>Subiendo...</span>
+              </>
+            ) : (
+              <>
+                <span>⬆️</span>
+                <span>Subir Reporte</span>
+              </>
+            )}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 const AdminPanel = () => {
   const { user, token, logout, isAdmin } = useAuth();
