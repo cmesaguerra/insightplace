@@ -1,0 +1,1 @@
+// Re-export DTAModel as DtaModel for consistency\nexport { DTAModel as default } from './DTAModel';\n
