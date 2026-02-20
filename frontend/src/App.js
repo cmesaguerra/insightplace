@@ -1,1 +1,156 @@
-import React, { useState } from 'react';\nimport { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';\nimport './App.css';\n\n// Import existing components\nimport Header from './components/Header';\nimport HeroSection from './components/HeroSection';\nimport NetworkBackground from './components/NetworkBackground';\nimport ServicesSection from './components/ServicesSection';\nimport DtaModel from './components/DtaModel';\nimport CaseStudies from './components/CaseStudies';\nimport WonkSection from './components/WonkSection';\nimport ContactInfo from './components/ContactInfo';\nimport LanguageToggle from './components/LanguageToggle';\n\n// Import new authentication and portal components\nimport { AuthProvider } from './components/auth/AuthContext';\nimport LoginPage from './components/auth/LoginPage';\nimport ProtectedRoute from './components/auth/ProtectedRoute';\nimport ClientPortal from './components/portal/ClientPortal';\nimport AdminPanel from './components/portal/AdminPanel';\n\n// Import translations\nimport { translations } from './data/translations';\n\n// Main landing page component\nconst LandingPage = ({ language, setLanguage }) => {\n  const t = translations[language];\n\n  const scrollToSection = (sectionId) => {\n    const element = document.getElementById(sectionId);\n    if (element) {\n      const headerHeight = 80;\n      const elementPosition = element.offsetTop - headerHeight;\n      window.scrollTo({\n        top: elementPosition,\n        behavior: 'smooth'\n      });\n    }\n  };\n\n  return (\n    <div className=\"App\">\n      <Header \n        scrollToSection={scrollToSection} \n        language={language} \n        translations={t} \n        setLanguage={setLanguage}\n      />\n      \n      <main>\n        <section id=\"hero\" className=\"relative\">\n          <NetworkBackground />\n          <HeroSection \n            scrollToSection={scrollToSection} \n            language={language} \n            translations={t} \n          />\n        </section>\n        \n        <section id=\"services\">\n          <ServicesSection language={language} translations={t} />\n        </section>\n        \n        <section id=\"casestudies\">\n          <CaseStudies language={language} translations={t} />\n        </section>\n        \n        <section id=\"dta-model\">\n          <DtaModel language={language} translations={t} />\n        </section>\n        \n        <section id=\"wonk\">\n          <WonkSection language={language} translations={t} />\n        </section>\n        \n        <section id=\"contact\">\n          <ContactInfo language={language} translations={t} />\n        </section>\n      </main>\n      \n      <footer className=\"bg-gray-800 text-white py-8\">\n        <div className=\"max-w-7xl mx-auto px-4 sm:px-6 lg:px-8\">\n          <div className=\"flex flex-col md:flex-row justify-between items-center\">\n            <div className=\"flex items-center space-x-4 mb-4 md:mb-0\">\n              <img \n                src=\"/symbol.png\" \n                alt=\"InsightPlace Logo\" \n                className=\"w-8 h-8\"\n              />\n              <span className=\"text-lg font-semibold\">InsightPlace</span>\n            </div>\n            <div className=\"flex items-center space-x-6\">\n              <Link \n                to=\"/login\"\n                className=\"bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors\"\n              >\n                🔐 Acceso de Clientes\n              </Link>\n              <LanguageToggle \n                language={language} \n                onLanguageChange={setLanguage} \n              />\n            </div>\n          </div>\n          <div className=\"mt-6 border-t border-gray-700 pt-6 text-center text-sm text-gray-400\">\n            <p>&copy; 2024 InsightPlace. Todos los derechos reservados.</p>\n            <p className=\"mt-1\">Analítica de Datos y Consultoría Económica</p>\n          </div>\n        </div>\n      </footer>\n    </div>\n  );\n};\n\n// Main App component with routing\nfunction App() {\n  const [language, setLanguage] = useState('es');\n\n  return (\n    <AuthProvider>\n      <Router>\n        <div className=\"App\">\n          <Routes>\n            {/* Public routes */}\n            <Route \n              path=\"/\" \n              element={<LandingPage language={language} setLanguage={setLanguage} />} \n            />\n            <Route path=\"/login\" element={<LoginPage />} />\n            \n            {/* Protected routes */}\n            <Route \n              path=\"/portal\" \n              element={\n                <ProtectedRoute>\n                  <ClientPortal />\n                </ProtectedRoute>\n              } \n            />\n            <Route \n              path=\"/admin\" \n              element={\n                <ProtectedRoute adminOnly={true}>\n                  <AdminPanel />\n                </ProtectedRoute>\n              } \n            />\n            \n            {/* Redirect unknown routes to home */}\n            <Route path=\"*\" element={<Navigate to=\"/\" replace />} />\n          </Routes>\n        </div>\n      </Router>\n    </AuthProvider>\n  );\n}\n\nexport default App;\n
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
+import './App.css';
+
+// Import existing components
+import Header from './components/Header';
+import HeroSection from './components/HeroSection';
+import NetworkBackground from './components/NetworkBackground';
+import ServicesSection from './components/ServicesSection';
+import DtaModel from './components/DtaModel';
+import CaseStudies from './components/CaseStudies';
+import WonkSection from './components/WonkSection';
+import ContactInfo from './components/ContactInfo';
+import LanguageToggle from './components/LanguageToggle';
+
+// Import new authentication and portal components
+import { AuthProvider } from './components/auth/AuthContext';
+import LoginPage from './components/auth/LoginPage';
+import ProtectedRoute from './components/auth/ProtectedRoute';
+import ClientPortal from './components/portal/ClientPortal';
+import AdminPanel from './components/portal/AdminPanel';
+
+// Import translations
+import { translations } from './data/translations';
+
+// Main landing page component
+const LandingPage = ({ language, setLanguage }) => {
+  const t = translations[language];
+
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const headerHeight = 80;
+      const elementPosition = element.offsetTop - headerHeight;
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  return (
+    <div className="App">
+      <Header 
+        scrollToSection={scrollToSection} 
+        language={language} 
+        translations={t} 
+        setLanguage={setLanguage}
+      />
+      
+      <main>
+        <section id="hero" className="relative">
+          <NetworkBackground />
+          <HeroSection 
+            scrollToSection={scrollToSection} 
+            language={language} 
+            translations={t} 
+          />
+        </section>
+        
+        <section id="services">
+          <ServicesSection language={language} translations={t} />
+        </section>
+        
+        <section id="casestudies">
+          <CaseStudies language={language} translations={t} />
+        </section>
+        
+        <section id="dta-model">
+          <DtaModel language={language} translations={t} />
+        </section>
+        
+        <section id="wonk">
+          <WonkSection language={language} translations={t} />
+        </section>
+        
+        <section id="contact">
+          <ContactInfo language={language} translations={t} />
+        </section>
+      </main>
+      
+      <footer className="bg-gray-800 text-white py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex items-center space-x-4 mb-4 md:mb-0">
+              <img 
+                src="/symbol.png" 
+                alt="InsightPlace Logo" 
+                className="w-8 h-8"
+              />
+              <span className="text-lg font-semibold">InsightPlace</span>
+            </div>
+            <div className="flex items-center space-x-6">
+              <Link 
+                to="/login"
+                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
+              >
+                Portal Clientes
+              </Link>
+              <LanguageToggle 
+                language={language} 
+                onLanguageChange={setLanguage} 
+              />
+            </div>
+          </div>
+          <div className="mt-6 border-t border-gray-700 pt-6 text-center text-sm text-gray-400">
+            <p>&copy; 2024 InsightPlace. Todos los derechos reservados.</p>
+            <p className="mt-1">Analítica de Datos y Consultoría Económica</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+// Main App component with routing
+function App() {
+  const [language, setLanguage] = useState('es');
+
+  return (
+    <AuthProvider>
+      <Router>
+        <div className="App">
+          <Routes>
+            <Route 
+              path="/" 
+              element={<LandingPage language={language} setLanguage={setLanguage} />} 
+            />
+            <Route path="/login" element={<LoginPage />} />
+            
+            <Route 
+              path="/portal" 
+              element={
+                <ProtectedRoute>
+                  <ClientPortal />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute adminOnly={true}>
+                  <AdminPanel />
+                </ProtectedRoute>
+              } 
+            />
+            
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
+  );
+}
+
+export default App;
