@@ -14,7 +14,8 @@ export const translations = {
       title: 'Analítica de Datos y Consultoría Económica',
       subtitle: 'Combinamos analítica de datos, sistemas de información geográfica y análisis económico para ayudar a nuestros clientes a tomar decisiones más informadas.',
       ctaButton: 'Ver Casos de Éxito',
-      ctaSecondary: 'Conocer WONK'
+      ctaSecondary: 'Conocer WONK',
+      clientAccess: 'Acceso de Clientes'
     },
     
     // Services Section
