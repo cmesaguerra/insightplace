@@ -7,9 +7,9 @@ const HeroSection = ({ scrollToSection, language, translations }) => {
       <div className="relative z-10 text-center max-w-4xl mx-auto">
         <div className="mb-8">
           <img 
-            src="/logo.jpg" 
+            src="/InsightPlace-noback.png" 
             alt="InsightPlace Logo" 
-            className="h-32 mx-auto mb-6 drop-shadow-2xl"
+            className="h-40 mx-auto mb-6 drop-shadow-2xl"
           />
         </div>
         
