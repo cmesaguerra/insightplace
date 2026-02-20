@@ -95,3 +95,5 @@ const ContactInfo = ({ translations, language }) => {
     </section>
   );
 };
+
+export default ContactInfo;
