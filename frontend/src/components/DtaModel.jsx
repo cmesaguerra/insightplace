@@ -1,1 +1,2 @@
-// Re-export DTAModel as DtaModel for consistency\nexport { DTAModel as default } from './DTAModel';\n
+// Re-export DTAModel as DtaModel for consistency
+export { default } from './DTAModel';
