@@ -198,11 +198,33 @@ async def upload_report(
             await f.write(content)
             total_size += len(content)
         
-        uploaded_files.append(str(file_path.relative_to(UPLOAD_DIR)))
-        
-        # Set main file if it's HTML
-        if file_ext == 'html' and not main_file:
-            main_file = str(file_path.relative_to(UPLOAD_DIR))
+        # Handle ZIP files - extract them
+        if file_ext == 'zip':
+            try:
+                with zipfile.ZipFile(file_path, 'r') as zip_ref:
+                    zip_ref.extractall(company_dir)
+                
+                # Find all extracted files
+                for extracted_file in company_dir.rglob('*'):
+                    if extracted_file.is_file() and extracted_file != file_path:
+                        relative_path = str(extracted_file.relative_to(UPLOAD_DIR))
+                        uploaded_files.append(relative_path)
+                        
+                        # Set main file if it's HTML
+                        if extracted_file.suffix.lower() == '.html' and not main_file:
+                            main_file = relative_path
+                
+                # Remove the ZIP file after extraction
+                file_path.unlink()
+            except Exception as e:
+                # If extraction fails, keep the ZIP as is
+                uploaded_files.append(str(file_path.relative_to(UPLOAD_DIR)))
+        else:
+            uploaded_files.append(str(file_path.relative_to(UPLOAD_DIR)))
+            
+            # Set main file if it's HTML
+            if file_ext == 'html' and not main_file:
+                main_file = str(file_path.relative_to(UPLOAD_DIR))
     
     if not main_file:
         main_file = uploaded_files[0] if uploaded_files else ""
