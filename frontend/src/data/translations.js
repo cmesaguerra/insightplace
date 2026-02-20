@@ -100,60 +100,102 @@ export const translations = {
   },
   
   en: {
-    // Header
-    services: 'Services',
-    platform: 'Platform',
-    contact: 'Contact',
+    // Navigation
+    nav: {
+      services: 'Services',
+      caseStudies: 'Case Studies',
+      platform: 'Platform',
+      contact: 'Contact'
+    },
     
     // Hero Section
-    heroTitle: 'Data Analytics and Economic Consulting',
-    heroSubtitle: 'We combine data analytics, geographic information systems, and economic analysis to help our clients make more informed decisions.',
-    heroCtaPrimary: 'View Case Studies',
-    heroCtaSecondary: 'Discover WONK',
+    hero: {
+      title: 'Data Analytics and Economic Consulting',
+      subtitle: 'We combine data analytics, geographic information systems, and economic analysis to help our clients make more informed decisions.',
+      ctaButton: 'View Case Studies',
+      ctaSecondary: 'Discover WONK'
+    },
     
     // Services Section
-    servicesTitle: 'Our Services',
-    servicesSubtitle: 'Comprehensive solutions for data analysis and economic consulting',
+    services: {
+      title: 'Our Services',
+      subtitle: 'Comprehensive solutions for data analysis and economic consulting',
+      items: [
+        {
+          icon: '📊',
+          title: 'Data Analytics & Database Consolidation',
+          description: 'Generation of practical knowledge from Big Data with high-value georeferencing for public policy, sectoral, and business decisions.'
+        },
+        {
+          icon: '💼',
+          title: 'Economic Analysis',
+          description: 'Estimation of economic and fiscal impact, analysis of sectoral, industrial, and labor market dynamics.'
+        },
+        {
+          icon: '🏛️',
+          title: 'Public Policy Coordination',
+          description: 'Statistical plans, information systems, sectoral and territorial development policies at national and local levels.'
+        },
+        {
+          icon: '📈',
+          title: 'Economic Forecasting',
+          description: 'Construction of economic forecasting exercises for the private sector with advanced prediction models.'
+        }
+      ]
+    },
     
-    service1Title: 'Data Analytics & Database Consolidation',
-    service1Desc: 'Generation of practical knowledge from Big Data with high-value georeferencing for public policy, sectoral, and business decisions.',
+    // Case Studies Section
+    caseStudies: {
+      title: 'Case Studies',
+      subtitle: 'Projects that have transformed decision-making'
+    },
     
-    service2Title: 'Economic Analysis',
-    service2Desc: 'Estimation of economic and fiscal impact, analysis of sectoral, industrial, and labor market dynamics.',
-    
-    service3Title: 'Public Policy Coordination',
-    service3Desc: 'Statistical plans, information systems, sectoral and territorial development policies at national and local levels.',
-    
-    service4Title: 'Economic Forecasting',
-    service4Desc: 'Construction of economic forecasting exercises for the private sector with advanced prediction models.',
+    // DTA Model Section
+    dtaModel: {
+      title: 'DTA Model',
+      subtitle: 'Data-driven Territorial Analysis'
+    },
     
     // WONK Platform Section
-    wonkTitle: 'WONK: Workflow Oriented Network of Knowledge',
-    wonkSubtitle: 'Your data analysis and enrichment tool at hand',
-    wonkDescription: 'Intelligent platform that integrates, organizes, and analyzes multiple sources of information on local economic and social dynamics. Provides detailed and continuous information to help clients make informed decisions.',
-    
-    wonkFeature1: 'Multiple Source Integration',
-    wonkFeature1Desc: 'Combines administrative records, households, companies, properties, and satellite data.',
-    
-    wonkFeature2: 'Georeferenced Analysis',
-    wonkFeature2Desc: 'Spatial visualization and analysis of economic and social data.',
-    
-    wonkFeature3: 'Advanced Prediction',
-    wonkFeature3Desc: 'Machine learning models for predictive and behavioral analysis.',
+    wonk: {
+      title: 'WONK: Workflow Oriented Network of Knowledge',
+      subtitle: 'Your data analysis and enrichment tool at hand',
+      description: 'Intelligent platform that integrates, organizes, and analyzes multiple sources of information on local economic and social dynamics. Provides detailed and continuous information to help clients make informed decisions.',
+      features: [
+        {
+          title: 'Multiple Source Integration',
+          description: 'Combines administrative records, households, companies, properties, and satellite data.'
+        },
+        {
+          title: 'Georeferenced Analysis',
+          description: 'Spatial visualization and analysis of economic and social data.'
+        },
+        {
+          title: 'Advanced Prediction',
+          description: 'Machine learning models for predictive and behavioral analysis.'
+        }
+      ]
+    },
     
     // Contact Section
-    contactTitle: 'Contact Us',
-    contactSubtitle: 'We are ready to help you with your data analytics projects',
-    contactFormName: 'Name',
-    contactFormEmail: 'Email',
-    contactFormCompany: 'Company',
-    contactFormMessage: 'Message',
-    contactFormSubmit: 'Send Message',
-    contactEmail: 'contacto@insight-place.com',
-    contactLocations: 'Bogotá, Colombia • Cartagena, Colombia',
+    contact: {
+      title: 'Contact Us',
+      subtitle: 'We are ready to help you with your data analytics projects',
+      form: {
+        name: 'Name',
+        email: 'Email',
+        company: 'Company',
+        message: 'Message',
+        submit: 'Send Message'
+      },
+      email: 'contacto@insight-place.com',
+      locations: 'Bogotá, Colombia • Cartagena, Colombia'
+    },
     
     // Footer
-    footerTagline: 'Transforming data into intelligent decisions',
-    footerRights: '© 2024 InsightPlace. All rights reserved.',
+    footer: {
+      tagline: 'Transforming data into intelligent decisions',
+      rights: '© 2024 InsightPlace. All rights reserved.'
+    },
   }
 };
