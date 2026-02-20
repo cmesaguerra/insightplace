@@ -119,6 +119,23 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
     
     return User(**user)
 
+async def get_user_from_token(token: str, db: AsyncIOMotorDatabase) -> Optional[User]:
+    """Validate a JWT token string and return the user if valid"""
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        user_id: str = payload.get("user_id")
+        if email is None or user_id is None:
+            return None
+        
+        user = await get_user_by_id(db, user_id)
+        if user is None or not user.get("active", True):
+            return None
+        
+        return User(**user)
+    except JWTError:
+        return None
+
 async def get_admin_user(current_user: User = Depends(get_current_user)):
     """Ensure current user is an admin"""
     if current_user.role != "admin":
