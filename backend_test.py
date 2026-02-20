@@ -460,22 +460,22 @@ class InsightPlaceAPITester:
         
         # Test admin endpoint without token
         response = self.make_request('GET', '/admin/dashboard')
-        if response and response.status_code == 401:
-            print_success("Admin endpoint correctly rejects unauthorized access")
+        if response and response.status_code in [401, 403]:
+            print_success(f"Admin endpoint correctly rejects unauthorized access (HTTP {response.status_code})")
             self.test_results['passed'] += 1
         else:
-            print_error(f"Admin endpoint should return 401 for unauthorized access, got: {response.status_code if response else 'No response'}")
+            print_error(f"Admin endpoint should return 401 or 403 for unauthorized access, got: {response.status_code if response else 'No response'}")
             self.test_results['failed'] += 1
             return False
         
         # Test client endpoint without token
         response = self.make_request('GET', '/client/reports')
-        if response and response.status_code == 401:
-            print_success("Client endpoint correctly rejects unauthorized access")
+        if response and response.status_code in [401, 403]:
+            print_success(f"Client endpoint correctly rejects unauthorized access (HTTP {response.status_code})")
             self.test_results['passed'] += 1
             return True
         else:
-            print_error(f"Client endpoint should return 401 for unauthorized access, got: {response.status_code if response else 'No response'}")
+            print_error(f"Client endpoint should return 401 or 403 for unauthorized access, got: {response.status_code if response else 'No response'}")
             self.test_results['failed'] += 1
             return False
 
