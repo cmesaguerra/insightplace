@@ -34,7 +34,7 @@ async def get_database() -> AsyncIOMotorDatabase:
 
 async def create_indexes():
     """Create database indexes for better performance"""
-    if not database:
+    if database is None:
         return
     
     # User indexes
