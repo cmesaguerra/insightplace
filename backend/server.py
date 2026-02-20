@@ -110,7 +110,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Initialize admin user on startup
-@app.on_event("startup")
 async def create_admin_user():
     """Create default admin user and company if they don't exist"""
     from auth import get_password_hash
