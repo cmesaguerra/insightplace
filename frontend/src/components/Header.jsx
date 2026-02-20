@@ -45,7 +45,7 @@ const Header = ({ scrollToSection, language, translations, setLanguage }) => {
                 to="/login"
                 className="bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700 transition-colors"
               >
-                🔐 Portal Clientes
+                🔐 {translations.nav.clientPortal}
               </Link>
               <LanguageToggle language={language} onLanguageChange={setLanguage} />
             </div>
