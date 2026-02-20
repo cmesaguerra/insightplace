@@ -65,16 +65,16 @@ class InsightPlaceAPITester:
         
         try:
             if method.upper() == 'GET':
-                response = requests.get(url, headers=headers, timeout=30)
+                response = requests.get(url, headers=headers, timeout=10)
             elif method.upper() == 'POST':
                 if isinstance(data, dict):
-                    response = requests.post(url, json=data, headers=headers, timeout=30)
+                    response = requests.post(url, json=data, headers=headers, timeout=10)
                 else:
-                    response = requests.post(url, data=data, headers=headers, timeout=30)
+                    response = requests.post(url, data=data, headers=headers, timeout=10)
             elif method.upper() == 'PUT':
-                response = requests.put(url, json=data, headers=headers, timeout=30)
+                response = requests.put(url, json=data, headers=headers, timeout=10)
             elif method.upper() == 'DELETE':
-                response = requests.delete(url, headers=headers, timeout=30)
+                response = requests.delete(url, headers=headers, timeout=10)
             else:
                 raise ValueError(f"Unsupported HTTP method: {method}")
             
