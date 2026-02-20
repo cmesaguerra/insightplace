@@ -102,6 +102,7 @@ class ReportUpdate(BaseModel):
     description: Optional[str] = None
     status: Optional[ReportStatus] = None
     tags: Optional[List[str]] = None
+    allow_download: Optional[bool] = None
 
 class Report(ReportBase):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -110,6 +111,7 @@ class Report(ReportBase):
     file_size: int = 0
     download_count: int = 0
     view_count: int = 0
+    allow_download: bool = False  # Default: view only, no download
     uploaded_by: str  # User ID
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
