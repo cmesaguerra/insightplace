@@ -175,8 +175,34 @@ async def view_report_file(
         metadata={"report_id": report_id, "file": report["main_file"]}
     )
     
-    return FileResponse(
-        file_path,
+    # Read the HTML content
+    import re
+    async with aiofiles.open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+        html_content = await f.read()
+    
+    # Add token to all relative src and href attributes
+    def add_token_to_url(match):
+        attr = match.group(1)  # src or href
+        quote = match.group(2)  # quote character
+        url = match.group(3)   # the URL
+        
+        # Skip external URLs, data URLs, and anchors
+        if url.startswith(('http://', 'https://', 'data:', '#', 'javascript:')):
+            return match.group(0)
+        
+        # Add token to the URL
+        separator = '&' if '?' in url else '?'
+        return f'{attr}={quote}{url}{separator}token={token}{quote}'
+    
+    # Process src="..." and href="..." attributes
+    html_content = re.sub(
+        r'(src|href)=(["\'])([^"\']+)\2',
+        add_token_to_url,
+        html_content
+    )
+    
+    return Response(
+        content=html_content,
         media_type="text/html",
         headers={
             "Cache-Control": "no-store, no-cache, must-revalidate, private",
