@@ -138,7 +138,7 @@ export const translations = {
         {
           icon: '🏛️',
           title: 'Public Policy Coordination',
-          description: 'Statistical plans, information systems, sectoral and territorial development policies at national and local levels.'
+          description: 'Development and competitiveness plans, information systems, sectoral and territorial development policies at national and local levels.'
         },
         {
           icon: '📈',
