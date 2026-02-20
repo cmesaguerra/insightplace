@@ -138,6 +138,14 @@ function App() {
               } 
             />
             <Route 
+              path="/portal/report/:reportId" 
+              element={
+                <ProtectedRoute>
+                  <ReportViewer />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/admin" 
               element={
                 <ProtectedRoute adminOnly={true}>
