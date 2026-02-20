@@ -106,7 +106,8 @@ export const translations = {
       services: 'Services',
       caseStudies: 'Case Studies',
       platform: 'Platform',
-      contact: 'Contact'
+      contact: 'Contact',
+      clientPortal: 'Client Portal'
     },
     
     // Hero Section
