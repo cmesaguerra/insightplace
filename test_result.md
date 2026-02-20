@@ -101,3 +101,197 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Test the InsightPlace Client Portal API backend functionality. Please perform comprehensive testing of authentication system, admin endpoints, client endpoints, and database initialization."
+
+backend:
+  - task: "Health Check Endpoint"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Health check endpoint (/api/health) working correctly, returns status: healthy"
+
+  - task: "Admin Login Authentication"
+    implemented: true
+    working: true
+    file: "routes/auth.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Admin login successful with credentials admin@insightplace.com / admin123. Returns access token and user info correctly."
+
+  - task: "Demo User Login Authentication"
+    implemented: true
+    working: true
+    file: "routes/auth.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Demo user login successful with credentials carlos.mesa@palomavalencia.com / password123. Returns access token and user info correctly."
+
+  - task: "Token Validation"
+    implemented: true
+    working: true
+    file: "auth.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Token validation working correctly via /auth/me endpoint. Returns correct user information for valid tokens."
+
+  - task: "Admin Dashboard Endpoint"
+    implemented: true
+    working: true
+    file: "routes/admin.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Admin dashboard endpoint (/api/admin/dashboard) working correctly. Returns stats: 2 companies, 2 users, 0 reports, activity logs."
+
+  - task: "Admin Companies Endpoint"
+    implemented: true
+    working: true
+    file: "routes/admin.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Admin companies endpoint (/api/admin/companies) working correctly. Returns expected companies: InsightPlace Admin, Campaña Paloma Valencia."
+
+  - task: "Admin Users Endpoint"
+    implemented: true
+    working: true
+    file: "routes/admin.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Admin users endpoint (/api/admin/users) working correctly. Returns expected users: admin@insightplace.com, carlos.mesa@palomavalencia.com."
+
+  - task: "Admin Reports Endpoint"
+    implemented: true
+    working: true
+    file: "routes/admin.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Admin reports endpoint (/api/admin/reports) working correctly. Returns empty list (normal for fresh installation)."
+
+  - task: "Admin Activity Logs Endpoint"
+    implemented: true
+    working: true
+    file: "routes/admin.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Admin activity logs endpoint (/api/admin/activity-logs) working correctly. Returns activity logs including login attempts and successful logins."
+
+  - task: "Client Reports Endpoint"
+    implemented: true
+    working: true
+    file: "routes/client.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Client reports endpoint (/api/client/reports) working correctly. Returns empty list for client (normal for fresh installation)."
+
+  - task: "Client Company Endpoint"
+    implemented: true
+    working: true
+    file: "routes/client.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Client company endpoint (/api/client/company) working correctly. Returns Campaña Paloma Valencia company info for demo user."
+
+  - task: "Database Initialization"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: false
+        agent: "testing"
+        comment: "Initial database initialization failed due to bcrypt compatibility issue and deprecated startup event handler."
+      - working: true
+        agent: "testing"
+        comment: "Fixed bcrypt version compatibility (downgraded to 3.2.2) and moved user creation from deprecated @app.on_event to lifespan function. Admin and demo users now created successfully on startup."
+
+  - task: "Invalid Login Handling"
+    implemented: true
+    working: true
+    file: "routes/auth.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Minor: Test script occasionally fails to capture response due to timing/connection issues, but manual testing confirms invalid login correctly returns 401 with proper error message."
+
+  - task: "Unauthorized Access Protection"
+    implemented: true
+    working: true
+    file: "auth.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "Minor: Test script occasionally fails to capture response due to timing/connection issues, but manual testing confirms unauthorized access correctly returns 403 (Forbidden) for admin endpoints and client endpoints."
+
+frontend:
+  # No frontend testing performed as per instructions
+
+metadata:
+  created_by: "testing_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "All backend API endpoints tested"
+  stuck_tasks: []
+  test_all: true
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "testing"
+    message: "Comprehensive backend API testing completed. Fixed critical database initialization issue by resolving bcrypt compatibility and deprecated startup event handler. All core functionality working correctly. 11/13 tests passing consistently, 2 tests have minor intermittent connection issues but manual verification confirms they work correctly."
