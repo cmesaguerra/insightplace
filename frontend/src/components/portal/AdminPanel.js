@@ -356,6 +356,46 @@ const AdminPanel = () => {
     });
   };
 
+  const handleCreateCompany = async (e) => {
+    e.preventDefault();
+    setModalLoading(true);
+    setModalError('');
+    
+    try {
+      await apiCall('/api/admin/companies', {
+        method: 'POST',
+        body: JSON.stringify(newCompany)
+      });
+      setShowCompanyModal(false);
+      setNewCompany({ name: '', description: '' });
+      fetchDashboardData();
+    } catch (err) {
+      setModalError('Error al crear la empresa');
+    } finally {
+      setModalLoading(false);
+    }
+  };
+
+  const handleCreateUser = async (e) => {
+    e.preventDefault();
+    setModalLoading(true);
+    setModalError('');
+    
+    try {
+      await apiCall('/api/admin/users', {
+        method: 'POST',
+        body: JSON.stringify(newUser)
+      });
+      setShowUserModal(false);
+      setNewUser({ email: '', full_name: '', password: '', company_id: '', role: 'client' });
+      fetchDashboardData();
+    } catch (err) {
+      setModalError('Error al crear el usuario');
+    } finally {
+      setModalLoading(false);
+    }
+  };
+
   const renderSection = () => {
     switch (activeSection) {
       case 'dashboard':
