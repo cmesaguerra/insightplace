@@ -109,9 +109,9 @@ async def view_report_file(
 @router.get("/reports/{report_id}/download")
 async def download_report(
     report_id: str,
-    file_path: Optional[str] = None,
     request: Request,
     current_user: User = Depends(get_current_user),
+    file_path: Optional[str] = None,
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Download report file or supporting file"""
