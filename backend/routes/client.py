@@ -357,3 +357,95 @@ async def get_company_info(
         )
     
     return Company(**company)
+
+@router.get("/reports/{report_id}/{file_path:path}")
+async def get_report_relative_asset(
+    report_id: str,
+    file_path: str,
+    request: Request,
+    token: Optional[str] = None,
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Catch-all route for relative asset paths from iframe.
+    Handles paths like /api/client/reports/{id}/00_Logos/image.png
+    that are resolved relative to the Main.html view URL."""
+    
+    # Skip if this matches other endpoints
+    if file_path in ['view', 'download', 'secure-token'] or file_path.startswith('asset/'):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
+    
+    # Get user from token (query param or header)
+    current_user = None
+    if token:
+        current_user = await get_user_from_token(token, db)
+    
+    if current_user is None:
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            header_token = auth_header[7:]
+            current_user = await get_user_from_token(header_token, db)
+    
+    if current_user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated"
+        )
+    
+    report = await db.reports.find_one({
+        "id": report_id,
+        "company_id": current_user.company_id,
+        "status": "published"
+    })
+    
+    if not report:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Report not found"
+        )
+    
+    # Get the report's directory (where Main.html is located)
+    main_file_path = Path(report["main_file"])
+    report_dir = UPLOAD_DIR / main_file_path.parent
+    asset_path = report_dir / file_path
+    
+    # Security: ensure the asset is within the report directory
+    try:
+        asset_path.resolve().relative_to(report_dir.resolve())
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied"
+        )
+    
+    if not asset_path.exists():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Asset not found: {file_path}"
+        )
+    
+    # Determine content type
+    suffix = asset_path.suffix.lower()
+    content_types = {
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".gif": "image/gif",
+        ".svg": "image/svg+xml",
+        ".css": "text/css",
+        ".js": "application/javascript",
+        ".json": "application/json",
+        ".html": "text/html",
+        ".woff": "font/woff",
+        ".woff2": "font/woff2",
+        ".ttf": "font/ttf",
+        ".eot": "application/vnd.ms-fontobject",
+    }
+    content_type = content_types.get(suffix, "application/octet-stream")
+    
+    return FileResponse(
+        asset_path,
+        media_type=content_type,
+        headers={
+            "Cache-Control": "no-store, no-cache, must-revalidate, private",
+        }
+    )
