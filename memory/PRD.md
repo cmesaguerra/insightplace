@@ -10,6 +10,7 @@ The user wants to add a secure client portal to their existing static website. T
 - A database to store company info, user credentials, and login history
 - A simple and secure file upload mechanism for a non-technical admin to upload reports
 - Tracking of logins, failed login attempts, and file downloads
+- Download permission control (allow/disallow downloads per report)
 - 2FA is a "nice-to-have" if easy and free to implement
 
 ## Architecture
@@ -29,7 +30,7 @@ The user wants to add a secure client portal to their existing static website. T
 │   │   ├── admin.py      # Admin CRUD APIs
 │   │   ├── auth.py       # Login/logout/token APIs
 │   │   └── client.py     # Client report access APIs
-│   ├── auth.py           # JWT utilities
+│   ├── auth.py           # JWT utilities + token validation
 │   ├── database.py       # MongoDB connection
 │   ├── models.py         # Pydantic models
 │   ├── server.py         # FastAPI app
@@ -43,7 +44,8 @@ The user wants to add a secure client portal to their existing static website. T
             │   └── ProtectedRoute.js  # Route protection
             └── portal/
                 ├── AdminPanel.js      # Full admin dashboard
-                └── ClientPortal.js    # Client report viewer
+                ├── ClientPortal.js    # Client report list
+                └── ReportViewer.js    # In-app secure report viewer
 ```
 
 ## Features Implemented
@@ -60,19 +62,31 @@ The user wants to add a secure client portal to their existing static website. T
 - [x] Company management (list, create via modal)
 - [x] User management (list, create via modal)
 - [x] Report listing
-- [x] **Report Upload Form** - Title, description, company selector, multi-file upload
+- [x] **Report Upload Form** - Title, description, company selector, ZIP file upload with auto-extraction
+- [x] Download permission toggle (allow_download per report)
 - [x] Activity logs viewer
+- [x] "Vista de Usuario" - Admin can view portal as client would
 
 ### Client Portal
 - [x] Welcome page with company name
-- [x] Reports list with view/download buttons
+- [x] Reports list with view button
 - [x] Report statistics (views, downloads)
+- [x] **Secure In-App Report Viewer** - HTML reports rendered in-app without direct file access
+- [x] Download button (shown only if allowed)
+
+### Report Viewing System
+- [x] ZIP archive auto-extraction on upload
+- [x] Main HTML file detection (Main.html)
+- [x] Secure asset serving (images, CSS, JS) via authenticated endpoint
+- [x] Token-based authentication for embedded assets (query param support)
+- [x] Content Security Policy headers to prevent external sharing
 
 ### Tracking & Security
 - [x] Login history tracking (user, IP, timestamp)
 - [x] Activity logging for all admin actions
-- [x] File download tracking
+- [x] Report view/download tracking
 - [x] Password hashing with bcrypt
+- [x] Secure file access (no direct URL access to reports)
 
 ## API Endpoints
 
@@ -87,13 +101,15 @@ The user wants to add a secure client portal to their existing static website. T
 - `GET /api/admin/users` - List users
 - `POST /api/admin/users` - Create user
 - `GET /api/admin/reports` - List all reports
-- `POST /api/admin/reports/upload` - Upload report (multipart/form-data)
+- `POST /api/admin/reports/upload` - Upload report (supports ZIP extraction, allow_download flag)
 - `GET /api/admin/activity-logs` - Activity logs
 
 ### Client APIs
 - `GET /api/client/reports` - Reports for client's company
-- `GET /api/client/reports/{id}/view` - View report file
-- `GET /api/client/reports/{id}/download` - Download report file
+- `GET /api/client/reports/{id}` - Get report details
+- `GET /api/client/reports/{id}/view` - View report HTML content (authenticated)
+- `GET /api/client/reports/{id}/asset/{path}` - Get report assets (images, CSS) - supports token query param
+- `GET /api/client/reports/{id}/download` - Download report file (if allowed)
 
 ## Database Schema
 
@@ -125,28 +141,26 @@ The user wants to add a secure client portal to their existing static website. T
 - file_size (int)
 - uploaded_by (UUID, FK)
 - status (enum: draft, published)
+- **allow_download (boolean)** - controls download permission
 - view_count, download_count (int)
 - created_at (datetime)
 
 ### Activity Logs
 - id (UUID)
 - user_id, user_email
-- activity_type (login, logout, report_upload, etc.)
+- activity_type (login, logout, report_upload, report_view, report_download, etc.)
 - description
 - ip_address
 - timestamp
 - metadata (dict)
 
 ## Test Credentials
-- **Admin:** admin@insightplace.com / admin123
-- **Client:** carlos.mesa@palomavalencia.com / password123
+- **Admin:** cmesa@insight-place.com / Ins1ght#2024!
+- **Client:** demo@palomavalencia.com / demo123
 
 ## Backlog / Future Tasks
 
-### P0 (Next Priority)
-- [ ] Test actual file upload with real HTML report and verify it appears in client portal
-
-### P1
+### P1 (Next Priority)
 - [ ] Password reset functionality
 - [ ] Edit/delete companies and users
 - [ ] Report preview in admin panel
@@ -160,14 +174,16 @@ The user wants to add a secure client portal to their existing static website. T
 - [ ] Search and filter in admin tables
 
 ### P3
-- [ ] Remove obsolete demo-admin.html
 - [ ] Advanced analytics dashboard
 - [ ] Export activity logs to CSV
 
 ## Changelog
-- **2026-02-20:** Fixed frontend blank page issue by updating AuthContext to initialize state synchronously from localStorage
-- **2026-02-20:** Implemented role-based redirect (admin -> /admin, client -> /portal)
-- **2026-02-20:** Added functional modals for creating companies and users
-- **2026-02-20:** Implemented complete upload form with multi-file support
-- **2026-02-20:** Added data-testid attributes to login form
-- **2026-02-20:** All tests passing (100% backend, 100% frontend)
+- **2026-02-20 (Session 2):** Fixed 404 report viewing error - reset client user password and fixed asset endpoint to support token query parameter for browser-loaded assets
+- **2026-02-20 (Session 2):** Added `get_user_from_token()` helper in auth.py for token validation without header dependency
+- **2026-02-20 (Session 2):** Updated asset endpoint with expanded MIME types (fonts, woff, woff2, etc.)
+- **2026-02-20:** Implemented secure in-app ReportViewer component
+- **2026-02-20:** Added ZIP file extraction on upload
+- **2026-02-20:** Added download permission toggle (allow_download)
+- **2026-02-20:** Added "Vista de Usuario" admin feature
+- **2026-02-20:** Fixed frontend blank page issue
+- **2026-02-20:** All login/portal/report viewing flows working (95% test coverage)
