@@ -7,6 +7,7 @@ const UploadReportSection = ({ companies, token, onUploadSuccess }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedCompany, setSelectedCompany] = useState('');
+  const [allowDownload, setAllowDownload] = useState(false);
   const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
