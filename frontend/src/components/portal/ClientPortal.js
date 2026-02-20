@@ -198,10 +198,8 @@ const ClientPortal = () => {
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <a
-                        href={`${process.env.REACT_APP_BACKEND_URL}/api/client/reports/${report.id}/view`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <Link
+                        to={`/portal/report/${report.id}`}
                         className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 transition-colors flex items-center space-x-2"
                       >
                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -209,17 +207,17 @@ const ClientPortal = () => {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
                         <span>Ver</span>
-                      </a>
+                      </Link>
                       {report.allow_download && (
-                        <a
-                          href={`${process.env.REACT_APP_BACKEND_URL}/api/client/reports/${report.id}/download`}
+                        <button
+                          onClick={() => handleDownload(report.id)}
                           className="bg-red-600 text-white px-4 py-2 rounded-md text-sm hover:bg-red-700 transition-colors flex items-center space-x-2"
                         >
                           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
                           </svg>
                           <span>Descargar</span>
-                        </a>
+                        </button>
                       )}
                     </div>
                   </div>
