@@ -147,13 +147,13 @@ async def get_users(
 # Report Management
 @router.post("/reports/upload")
 async def upload_report(
+    request: Request,
+    admin_user: User = Depends(get_admin_user),
+    db: AsyncIOMotorDatabase = Depends(get_database),
     title: str = Form(...),
     description: str = Form(""),
     company_id: str = Form(...),
-    files: List[UploadFile] = File(...),
-    request: Request,
-    admin_user: User = Depends(get_admin_user),
-    db: AsyncIOMotorDatabase = Depends(get_database)
+    files: List[UploadFile] = File(...)
 ):
     """Upload report files"""
     # Verify company exists
