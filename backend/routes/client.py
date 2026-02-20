@@ -479,13 +479,18 @@ async def get_report_relative_asset(
         async with aiofiles.open(asset_path, 'r', encoding='utf-8', errors='ignore') as f:
             html_content = await f.read()
         
-        # Add token to all relative src and href attributes
+        # Add token to relative file paths only
         def add_token_to_url(match):
             attr = match.group(1)
             quote = match.group(2)
             url = match.group(3)
             
-            if url.startswith(('http://', 'https://', 'data:', '#', 'javascript:')):
+            # Skip external URLs, data URLs, anchors, and javascript
+            if url.startswith(('http://', 'https://', 'data:', '#', 'javascript:', '//')):
+                return match.group(0)
+            
+            # Only add token to actual file paths (must contain a dot for extension)
+            if '.' not in url or url.startswith('?'):
                 return match.group(0)
             
             separator = '&' if '?' in url else '?'
