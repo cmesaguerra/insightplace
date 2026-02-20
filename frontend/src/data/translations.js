@@ -34,7 +34,7 @@ export const translations = {
         {
           icon: '🏛️',
           title: 'Coordinación de Políticas Públicas',
-          description: 'Planes estadísticos, sistemas de información, políticas de desarrollo sectorial y territorial a nivel nacional y local.'
+          description: 'Planes de desarrollo y competitividad, sistemas de información, políticas de desarrollo sectorial y territorial a nivel nacional y local.'
         },
         {
           icon: '📈',
