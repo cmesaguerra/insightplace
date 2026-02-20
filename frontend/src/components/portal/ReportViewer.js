@@ -5,16 +5,22 @@ import { useAuth } from '../auth/AuthContext';
 const ReportViewer = () => {
   const { reportId } = useParams();
   const navigate = useNavigate();
-  const { token, user, company, isAdmin } = useAuth();
+  const { token, user, company, isAdmin, isAuthenticated } = useAuth();
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
+    // Redirect to login if not authenticated
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
+    
     if (reportId && token) {
       fetchReportDetails();
     }
-  }, [reportId, token]);
+  }, [reportId, token, isAuthenticated, navigate]);
 
   const fetchReportDetails = async () => {
     try {
@@ -26,6 +32,12 @@ const ReportViewer = () => {
           'Authorization': `Bearer ${token}`,
         },
       });
+
+      if (reportRes.status === 401) {
+        // Token expired or invalid, redirect to login
+        navigate('/login');
+        return;
+      }
 
       if (!reportRes.ok) {
         throw new Error('No se pudo cargar el reporte');
