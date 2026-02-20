@@ -184,10 +184,30 @@ async def get_report_asset(
     report_id: str,
     file_name: str,
     request: Request,
-    current_user: User = Depends(get_current_user),
+    token: Optional[str] = None,
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
-    """Get supporting assets (images, css, etc.) for a report"""
+    """Get supporting assets (images, css, etc.) for a report.
+    Supports token authentication via query parameter for browser-loaded assets."""
+    
+    # First try to get user from query parameter token (for embedded assets)
+    current_user = None
+    if token:
+        current_user = await get_user_from_token(token, db)
+    
+    # If no valid token in query param, try the Authorization header
+    if current_user is None:
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            header_token = auth_header[7:]  # Remove "Bearer " prefix
+            current_user = await get_user_from_token(header_token, db)
+    
+    if current_user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated"
+        )
+    
     report = await db.reports.find_one({
         "id": report_id,
         "company_id": current_user.company_id,
@@ -231,6 +251,11 @@ async def get_report_asset(
         ".css": "text/css",
         ".js": "application/javascript",
         ".json": "application/json",
+        ".html": "text/html",
+        ".woff": "font/woff",
+        ".woff2": "font/woff2",
+        ".ttf": "font/ttf",
+        ".eot": "application/vnd.ms-fontobject",
     }
     content_type = content_types.get(suffix, "application/octet-stream")
     
