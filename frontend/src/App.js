@@ -19,6 +19,7 @@ import LoginPage from './components/auth/LoginPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import ClientPortal from './components/portal/ClientPortal';
 import AdminPanel from './components/portal/AdminPanel';
+import ReportViewer from './components/portal/ReportViewer';
 
 // Import translations
 import { translations } from './data/translations';
