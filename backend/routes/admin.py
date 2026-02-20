@@ -7,6 +7,7 @@ import os
 import aiofiles
 import uuid
 import shutil
+import zipfile
 from pathlib import Path
 
 from models import (
