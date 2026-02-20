@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent } from './ui/card';
 import { Mail, MapPin } from 'lucide-react';
 
-export const ContactInfo = ({ translations, language }) => {
+const ContactInfo = ({ translations, language }) => {
   const t = translations[language];
 
   return (
