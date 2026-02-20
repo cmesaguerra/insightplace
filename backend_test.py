@@ -47,6 +47,7 @@ class InsightPlaceAPITester:
         self.client_token = None
         self.admin_user = None
         self.client_user = None
+        self.session = requests.Session()  # Use session for connection pooling
         self.test_results = {
             'passed': 0,
             'failed': 0,
