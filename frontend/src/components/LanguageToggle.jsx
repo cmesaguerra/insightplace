@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from './ui/button';
 import { Globe } from 'lucide-react';
 
-export const LanguageToggle = ({ language, setLanguage }) => {
+const LanguageToggle = ({ language, setLanguage }) => {
   return (
     <div className="flex items-center gap-2">
       <Globe className="w-4 h-4 text-gray-600" />
