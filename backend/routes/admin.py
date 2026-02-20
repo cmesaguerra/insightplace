@@ -153,6 +153,7 @@ async def upload_report(
     title: str = Form(...),
     description: str = Form(""),
     company_id: str = Form(...),
+    allow_download: str = Form("false"),
     files: List[UploadFile] = File(...)
 ):
     """Upload report files"""
@@ -163,6 +164,9 @@ async def upload_report(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Company not found"
         )
+    
+    # Parse allow_download boolean
+    allow_download_bool = allow_download.lower() == "true"
     
     # Create company directory
     company_dir = UPLOAD_DIR / sanitize_filename(company["name"]) / sanitize_filename(title)
@@ -210,6 +214,7 @@ async def upload_report(
         main_file=main_file,
         supporting_files=[f for f in uploaded_files if f != main_file],
         file_size=total_size,
+        allow_download=allow_download_bool,
         uploaded_by=admin_user.id,
         status=ReportStatus.PUBLISHED
     )
