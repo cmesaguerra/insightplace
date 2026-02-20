@@ -25,3 +25,5 @@ const LanguageToggle = ({ language, setLanguage }) => {
     </div>
   );
 };
+
+export default LanguageToggle;
