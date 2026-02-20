@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsightPlace - Admin Panel Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background-color: #000;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo .red {
+            color: #BF0004;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 70px;
+            width: 250px;
+            height: calc(100vh - 70px);
+            background-color: white;
+            border-right: 1px solid #e0e0e0;
+            padding: 2rem 0;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            color: #333;
+            border-left: 4px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: #f8f9fa;
+            border-left-color: #BF0004;
+            color: #BF0004;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            min-height: calc(100vh - 70px);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #BF0004;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #BF0004;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn {
+            background-color: #BF0004;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #a00003;
+        }
+
+        .btn-secondary {
+            background-color: #666;
+        }
+
+        .btn-secondary:hover {
+            background-color: #555;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .table th,
+        .table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            margin: 2rem 0;
+            transition: border-color 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: #BF0004;
+            background-color: #fafafa;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .recent-activity {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #BF0004;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-time {
+            color: #666;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">Insight<span class="red">Place</span> - Admin Panel</div>
+        <div class="user-info">
+            <span>Admin User</span>
+            <button class="btn btn-secondary">Logout</button>
+        </div>
+    </div>
+
+    <nav class="sidebar">
+        <a href="#" class="nav-item active" onclick="showSection('dashboard')">📊 Dashboard</a>
+        <a href="#" class="nav-item" onclick="showSection('companies')">🏢 Companies</a>
+        <a href="#" class="nav-item" onclick="showSection('users')">👥 Users</a>
+        <a href="#" class="nav-item" onclick="showSection('reports')">📁 Reports</a>
+        <a href="#" class="nav-item" onclick="showSection('upload')">⬆️ Upload Report</a>
+        <a href="#" class="nav-item" onclick="showSection('logs')">📋 Activity Logs</a>
+    </nav>
+
+    <main class="main-content">
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section">
+            <h1 class="page-title">Dashboard</h1>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Active Companies</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Reports Published</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">245</div>
+                    <div class="stat-label">Total Access Logs</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Recent Activity</h3>
+                <div class="recent-activity">
+                    <div class="activity-item">
+                        <div class="activity-icon">📊</div>
+                        <div class="activity-content">
+                            <strong>New report uploaded</strong><br>
+                            Informe_Elecciones_Paloma_Valencia_20022026.html
+                            <div class="activity-time">2 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">👤</div>
+                        <div class="activity-content">
+                            <strong>User login</strong><br>
+                            carlos.mesa@palomavalencia.com (IP: 192.168.1.45)
+                            <div class="activity-time">4 hours ago</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">🏢</div>
+                        <div class="activity-content">
+                            <strong>New company created</strong><br>
+                            Campaña Paloma Valencia
+                            <div class="activity-time">1 day ago</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Companies Section -->
+        <div id="companies" class="section hidden">
+            <h1 class="page-title">Company Management</h1>
+            
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>Companies</h3>
+                    <button class="btn" onclick="showModal('addCompanyModal')">+ Add Company</button>
+                </div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Users</th>
+                            <th>Reports</th>
+                            <th>Created</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Campaña Paloma Valencia</strong></td>
+                            <td>4 users</td>
+                            <td>2 reports</td>
+                            <td>Dec 1, 2024</td>
+                            <td><span class="status status-active">Active</span></td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">Edit</button>
+                                <button class="btn" style="padding: 0.5rem 1rem;">View</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Empresa Demo</strong></td>
+                            <td>2 users</td>
+                            <td>1 report</td>
+                            <td>Dec 2, 2024</td>
+                            <td><span class="status status-pending">Pending</span></td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">Edit</button>
+                                <button class="btn" style="padding: 0.5rem 1rem;">View</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Users Section -->
+        <div id="users" class="section hidden">
+            <h1 class="page-title">User Management</h1>
+            
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>Users</h3>
+                    <button class="btn" onclick="showModal('addUserModal')">+ Add User</button>
+                </div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Company</th>
+                            <th>Last Login</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Carlos Mesa</strong></td>
+                            <td>carlos.mesa@palomavalencia.com</td>
+                            <td>Campaña Paloma Valencia</td>
+                            <td>2 hours ago</td>
+                            <td><span class="status status-active">Active</span></td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">Edit</button>
+                                <button class="btn" style="padding: 0.5rem 1rem;">Reset Password</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ana Rodriguez</strong></td>
+                            <td>ana.rodriguez@palomavalencia.com</td>
+                            <td>Campaña Paloma Valencia</td>
+                            <td>1 day ago</td>
+                            <td><span class="status status-active">Active</span></td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">Edit</button>
+                                <button class="btn" style="padding: 0.5rem 1rem;">Reset Password</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Reports Section -->
+        <div id="reports" class="section hidden">
+            <h1 class="page-title">Report Management</h1>
+            
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>Published Reports</h3>
+                    <button class="btn" onclick="showSection('upload')">+ Upload New Report</button>
+                </div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Report Title</th>
+                            <th>Company</th>
+                            <th>Upload Date</th>
+                            <th>File Size</th>
+                            <th>Downloads</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Informe Elecciones 2026</strong></td>
+                            <td>Campaña Paloma Valencia</td>
+                            <td>Dec 4, 2024</td>
+                            <td>2.4 MB</td>
+                            <td>12 times</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">Preview</button>
+                                <button class="btn" style="padding: 0.5rem 1rem;">Download</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Análisis Demográfico Q4</strong></td>
+                            <td>Campaña Paloma Valencia</td>
+                            <td>Dec 1, 2024</td>
+                            <td>1.8 MB</td>
+                            <td>8 times</td>
+                            <td>
+                                <button class="btn btn-secondary" style="padding: 0.5rem 1rem; margin-right: 0.5rem;">Preview</button>
+                                <button class="btn" style="padding: 0.5rem 1rem;">Download</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div id="upload" class="section hidden">
+            <h1 class="page-title">Upload New Report</h1>
+            
+            <div class="card">
+                <h3>Report Details</h3>
+                <form>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Report Title</label>
+                            <input type="text" placeholder="e.g., Informe Elecciones 2026" value="">
+                        </div>
+                        <div class="form-group">
+                            <label>Company</label>
+                            <select>
+                                <option>Select Company</option>
+                                <option selected>Campaña Paloma Valencia</option>
+                                <option>Empresa Demo</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea rows="3" placeholder="Brief description of the report content..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Main Report File (HTML)</label>
+                        <div class="upload-area">
+                            <p>📄 Drag and drop your main HTML file here</p>
+                            <p style="margin: 1rem 0;">or</p>
+                            <button type="button" class="btn">Browse Files</button>
+                            <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">Supported: .html files</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Supporting Files (Images, Figures, etc.)</label>
+                        <div class="upload-area">
+                            <p>📁 Drag and drop supporting files/folders here</p>
+                            <p style="margin: 1rem 0;">or</p>
+                            <button type="button" class="btn">Browse Files</button>
+                            <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">Supported: .png, .jpg, .pdf, .csv, folders</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <button type="submit" class="btn">Upload Report</button>
+                        <button type="button" class="btn btn-secondary" style="margin-left: 1rem;">Save as Draft</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Activity Logs Section -->
+        <div id="logs" class="section hidden">
+            <h1 class="page-title">Activity Logs</h1>
+            
+            <div class="card">
+                <div style="display: flex; justify-content: between; gap: 1rem; margin-bottom: 1rem;">
+                    <input type="text" placeholder="Search logs..." style="flex: 1; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
+                    <select style="padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px;">
+                        <option>All Activities</option>
+                        <option>Logins</option>
+                        <option>Report Access</option>
+                        <option>Admin Actions</option>
+                    </select>
+                </div>
+                
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>IP Address</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dec 4, 2024 14:23</td>
+                            <td>carlos.mesa@palomavalencia.com</td>
+                            <td>Login</td>
+                            <td>192.168.1.45</td>
+                            <td>Successful login</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 4, 2024 14:25</td>
+                            <td>carlos.mesa@palomavalencia.com</td>
+                            <td>Report Access</td>
+                            <td>192.168.1.45</td>
+                            <td>Viewed: Informe_Elecciones_2026.html</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 4, 2024 10:15</td>
+                            <td>admin@insightplace.com</td>
+                            <td>Report Upload</td>
+                            <td>10.0.0.1</td>
+                            <td>Uploaded: Informe_Elecciones_2026.html</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 3, 2024 16:45</td>
+                            <td>ana.rodriguez@palomavalencia.com</td>
+                            <td>Login</td>
+                            <td>192.168.1.67</td>
+                            <td>Successful login</td>
+                        </tr>
+                        <tr>
+                            <td>Dec 3, 2024 09:30</td>
+                            <td>unknown</td>
+                            <td>Failed Login</td>
+                            <td>203.45.67.89</td>
+                            <td>Invalid credentials</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Add active class to clicked nav item
+            event.target.classList.add('active');
+        }
+
+        function showModal(modalId) {
+            alert('Modal would open: ' + modalId);
+        }
+
+        // Demo interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate real-time updates
+            setInterval(function() {
+                const stats = document.querySelectorAll('.stat-number');
+                stats.forEach(stat => {
+                    if (Math.random() < 0.1) { // 10% chance to update
+                        const currentValue = parseInt(stat.textContent);
+                        stat.textContent = currentValue + Math.floor(Math.random() * 3);
+                    }
+                });
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
