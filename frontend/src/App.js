@@ -67,7 +67,7 @@ const LandingPage = ({ language, setLanguage }) => {
         </section>
         
         <section id="dta-model">
-          <DtaModel language={language} translations={t} />
+          <DTAModel language={language} translations={t} />
         </section>
         
         <section id="wonk">
