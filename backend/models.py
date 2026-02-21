@@ -20,7 +20,9 @@ class ActivityType(str, Enum):
     REPORT_DOWNLOAD = "report_download"
     REPORT_UPLOAD = "report_upload"
     USER_CREATE = "user_create"
+    USER_DELETE = "user_delete"
     COMPANY_CREATE = "company_create"
+    COMPANY_DELETE = "company_delete"
     FAILED_LOGIN = "failed_login"
 
 # Company Models
