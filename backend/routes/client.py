@@ -364,38 +364,19 @@ async def get_company_info(
 async def get_report_relative_asset(
     report_id: str,
     file_path: str,
-    request: Request,
-    token: Optional[str] = None,
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
-    """Catch-all route for relative asset paths from iframe.
-    Handles paths like /api/client/reports/{id}/00_Logos/image.png
-    that are resolved relative to the Main.html view URL."""
+    """Serve embedded assets (images, charts, etc.) without authentication.
+    Security is at the Main.html level - once user has access to Main.html,
+    embedded content loads freely just like opening locally."""
     
     # Skip if this matches other endpoints
     if file_path in ['view', 'download', 'secure-token'] or file_path.startswith('asset/'):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
     
-    # Get user from token (query param or header)
-    current_user = None
-    if token:
-        current_user = await get_user_from_token(token, db)
-    
-    if current_user is None:
-        auth_header = request.headers.get("Authorization")
-        if auth_header and auth_header.startswith("Bearer "):
-            header_token = auth_header[7:]
-            current_user = await get_user_from_token(header_token, db)
-    
-    if current_user is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not authenticated"
-        )
-    
+    # Find the report (no company_id check - just verify report exists)
     report = await db.reports.find_one({
         "id": report_id,
-        "company_id": current_user.company_id,
         "status": "published"
     })
     
