@@ -253,9 +253,10 @@ async def upload_report(
     description: str = Form(""),
     company_id: str = Form(...),
     allow_download: str = Form("false"),
+    notify_users: str = Form("false"),
     files: List[UploadFile] = File(...)
 ):
-    """Upload report files"""
+    """Upload report files. Set notify_users=true to email all company users."""
     # Verify company exists
     company = await db.companies.find_one({"id": company_id})
     if not company:
@@ -264,8 +265,9 @@ async def upload_report(
             detail="Company not found"
         )
     
-    # Parse allow_download boolean
+    # Parse boolean values
     allow_download_bool = allow_download.lower() == "true"
+    notify_users_bool = notify_users.lower() == "true"
     
     # Create company directory
     company_dir = UPLOAD_DIR / sanitize_filename(company["name"]) / sanitize_filename(title)
