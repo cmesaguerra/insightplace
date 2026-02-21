@@ -19,8 +19,12 @@ from models import (
 from auth import get_admin_user, get_password_hash, get_client_ip
 from database import get_database
 from utils import log_activity, sanitize_filename, format_file_size
+from email_service import send_email, send_email_bulk, get_welcome_email_html, get_new_report_email_html
 
 router = APIRouter(prefix="/api/admin", tags=["admin"])
+
+# Portal URL for email links
+PORTAL_URL = os.environ.get("PORTAL_URL", "https://access-control-178.preview.emergentagent.com")
 
 # File storage configuration
 UPLOAD_DIR = Path("/app/uploads")
