@@ -175,39 +175,10 @@ async def view_report_file(
         metadata={"report_id": report_id, "file": report["main_file"]}
     )
     
-    # Read the HTML content
-    import re
-    async with aiofiles.open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-        html_content = await f.read()
-    
-    # Add token to relative file paths (images, html, css, etc.)
-    def add_token_to_url(match):
-        attr = match.group(1)  # src or href
-        quote = match.group(2)  # quote character
-        url = match.group(3)   # the URL
-        
-        # Skip external URLs, data URLs, anchors, and javascript
-        if url.startswith(('http://', 'https://', 'data:', '#', 'javascript:', '//')):
-            return match.group(0)
-        
-        # Only add token to actual file paths (must contain a dot for extension)
-        # and not be just a fragment or query string
-        if '.' not in url or url.startswith('?'):
-            return match.group(0)
-        
-        # Add token to the URL
-        separator = '&' if '?' in url else '?'
-        return f'{attr}={quote}{url}{separator}token={token}{quote}'
-    
-    # Process src="..." and href="..." attributes
-    html_content = re.sub(
-        r'(src|href)=(["\'])([^"\']+)\2',
-        add_token_to_url,
-        html_content
-    )
-    
-    return Response(
-        content=html_content,
+    # Serve the HTML file directly - no token injection needed
+    # Embedded assets will load freely (security is at Main.html level)
+    return FileResponse(
+        file_path,
         media_type="text/html",
         headers={
             "Cache-Control": "no-store, no-cache, must-revalidate, private",
