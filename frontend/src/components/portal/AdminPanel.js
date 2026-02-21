@@ -1021,6 +1021,23 @@ const AdminPanel = () => {
                 </div>
               </div>
               
+              {/* Send Notification Checkbox */}
+              <div className="flex items-center space-x-3 p-4 bg-blue-50 rounded-lg mt-4">
+                <input
+                  type="checkbox"
+                  id="sendNotification"
+                  checked={newUser.sendNotification}
+                  onChange={(e) => setNewUser({ ...newUser, sendNotification: e.target.checked })}
+                  className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <label htmlFor="sendNotification" className="flex-1">
+                  <span className="text-sm font-medium text-gray-700">Enviar credenciales por correo</span>
+                  <p className="text-xs text-gray-500">
+                    Enviar un correo electrónico al usuario con sus credenciales de acceso
+                  </p>
+                </label>
+              </div>
+              
               <div className="flex justify-end space-x-3 mt-6">
                 <button
                   type="button"
