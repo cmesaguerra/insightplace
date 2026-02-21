@@ -145,6 +145,82 @@ async def get_users(
     users = await db.users.find(filter_query).to_list(length=None)
     return [UserResponse(**user) for user in users]
 
+@router.delete("/users/{user_id}")
+async def delete_user(
+    user_id: str,
+    request: Request,
+    admin_user: User = Depends(get_admin_user),
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Delete a user"""
+    # Find user
+    user = await db.users.find_one({"id": user_id})
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    # Prevent deleting yourself
+    if user["id"] == admin_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot delete your own account"
+        )
+    
+    # Delete user
+    await db.users.delete_one({"id": user_id})
+    
+    # Log activity
+    await log_activity(
+        db, admin_user.id, admin_user.email, ActivityType.USER_DELETE,
+        f"Deleted user: {user['email']}",
+        get_client_ip(request)
+    )
+    
+    return {"message": "User deleted successfully"}
+
+@router.delete("/companies/{company_id}")
+async def delete_company(
+    company_id: str,
+    request: Request,
+    admin_user: User = Depends(get_admin_user),
+    db: AsyncIOMotorDatabase = Depends(get_database)
+):
+    """Delete a company and all associated users and reports"""
+    # Find company
+    company = await db.companies.find_one({"id": company_id})
+    if not company:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Company not found"
+        )
+    
+    # Check if admin belongs to this company
+    if admin_user.company_id == company_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot delete your own company"
+        )
+    
+    # Delete all users in this company
+    await db.users.delete_many({"company_id": company_id})
+    
+    # Delete all reports for this company
+    await db.reports.delete_many({"company_id": company_id})
+    
+    # Delete company
+    await db.companies.delete_one({"id": company_id})
+    
+    # Log activity
+    await log_activity(
+        db, admin_user.id, admin_user.email, ActivityType.COMPANY_DELETE,
+        f"Deleted company: {company['name']} and all associated data",
+        get_client_ip(request)
+    )
+    
+    return {"message": "Company deleted successfully"}
+
 # Report Management
 @router.post("/reports/upload")
 async def upload_report(
