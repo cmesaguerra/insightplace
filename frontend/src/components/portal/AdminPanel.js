@@ -404,12 +404,13 @@ const AdminPanel = () => {
     setModalError('');
     
     try {
-      await apiCall('/api/admin/users', {
+      const { sendNotification, ...userData } = newUser;
+      await apiCall(`/api/admin/users?send_notification=${sendNotification}`, {
         method: 'POST',
-        body: JSON.stringify(newUser)
+        body: JSON.stringify(userData)
       });
       setShowUserModal(false);
-      setNewUser({ email: '', full_name: '', password: '', company_id: '', role: 'client' });
+      setNewUser({ email: '', full_name: '', password: '', company_id: '', role: 'client', sendNotification: false });
       fetchDashboardData();
     } catch (err) {
       setModalError('Error al crear el usuario');
