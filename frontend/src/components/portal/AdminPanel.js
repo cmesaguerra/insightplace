@@ -338,7 +338,6 @@ const AdminPanel = () => {
   // Form states
   const [newCompany, setNewCompany] = useState({ name: '', description: '' });
   const [newUser, setNewUser] = useState({ email: '', full_name: '', password: '', company_id: '', role: 'client', sendNotification: false });
-  const [notifyUsersOnUpload, setNotifyUsersOnUpload] = useState(false);
 
   useEffect(() => {
     if (!isAdmin) {
