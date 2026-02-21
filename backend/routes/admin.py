@@ -98,10 +98,11 @@ async def get_companies(
 async def create_user(
     user_data: UserCreate,
     request: Request,
+    send_notification: bool = False,
     admin_user: User = Depends(get_admin_user),
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
-    """Create a new user"""
+    """Create a new user. Set send_notification=true to email credentials."""
     # Check if user already exists
     existing = await db.users.find_one({"email": user_data.email})
     if existing:
@@ -118,6 +119,9 @@ async def create_user(
             detail="Company not found"
         )
     
+    # Store original password before hashing (for email notification)
+    original_password = user_data.password
+    
     # Create user with hashed password
     user_dict = user_data.dict()
     hashed_password = get_password_hash(user_dict.pop("password"))
@@ -132,6 +136,20 @@ async def create_user(
         f"Created user: {user.email} for company: {company['name']}",
         get_client_ip(request)
     )
+    
+    # Send welcome email if requested
+    if send_notification:
+        html_content = get_welcome_email_html(
+            user_name=user.full_name,
+            user_email=user.email,
+            password=original_password,
+            portal_url=PORTAL_URL
+        )
+        await send_email(
+            recipient_email=user.email,
+            subject="Bienvenido al Portal de Clientes - InsightPlace",
+            html_content=html_content
+        )
     
     return UserResponse(**user.dict())
 
