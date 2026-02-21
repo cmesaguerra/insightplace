@@ -417,6 +417,36 @@ const AdminPanel = () => {
     }
   };
 
+  const handleDeleteUser = async (userId, userName) => {
+    if (!window.confirm(`¿Estás seguro de eliminar al usuario "${userName}"? Esta acción no se puede deshacer.`)) {
+      return;
+    }
+    
+    try {
+      await apiCall(`/api/admin/users/${userId}`, {
+        method: 'DELETE'
+      });
+      fetchDashboardData();
+    } catch (err) {
+      alert('Error al eliminar el usuario');
+    }
+  };
+
+  const handleDeleteCompany = async (companyId, companyName) => {
+    if (!window.confirm(`¿Estás seguro de eliminar la empresa "${companyName}"? Esto eliminará también todos los usuarios y reportes asociados. Esta acción no se puede deshacer.`)) {
+      return;
+    }
+    
+    try {
+      await apiCall(`/api/admin/companies/${companyId}`, {
+        method: 'DELETE'
+      });
+      fetchDashboardData();
+    } catch (err) {
+      alert('Error al eliminar la empresa');
+    }
+  };
+
   const renderSection = () => {
     switch (activeSection) {
       case 'dashboard':
