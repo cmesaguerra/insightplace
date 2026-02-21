@@ -425,43 +425,7 @@ async def get_report_relative_asset(
     }
     content_type = content_types.get(suffix, "application/octet-stream")
     
-    # For HTML files (embedded iframes), inject token into URLs
-    if suffix == ".html" and token:
-        import re
-        async with aiofiles.open(asset_path, 'r', encoding='utf-8', errors='ignore') as f:
-            html_content = await f.read()
-        
-        # Add token to relative file paths only
-        def add_token_to_url(match):
-            attr = match.group(1)
-            quote = match.group(2)
-            url = match.group(3)
-            
-            # Skip external URLs, data URLs, anchors, and javascript
-            if url.startswith(('http://', 'https://', 'data:', '#', 'javascript:', '//')):
-                return match.group(0)
-            
-            # Only add token to actual file paths (must contain a dot for extension)
-            if '.' not in url or url.startswith('?'):
-                return match.group(0)
-            
-            separator = '&' if '?' in url else '?'
-            return f'{attr}={quote}{url}{separator}token={token}{quote}'
-        
-        html_content = re.sub(
-            r'(src|href)=(["\'])([^"\']+)\2',
-            add_token_to_url,
-            html_content
-        )
-        
-        return Response(
-            content=html_content,
-            media_type="text/html",
-            headers={
-                "Cache-Control": "no-store, no-cache, must-revalidate, private",
-            }
-        )
-    
+    # Serve all files directly without modification
     return FileResponse(
         asset_path,
         media_type=content_type,
