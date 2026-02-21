@@ -62,6 +62,7 @@ const UploadReportSection = ({ companies, token, onUploadSuccess }) => {
       formData.append('description', description);
       formData.append('company_id', selectedCompany);
       formData.append('allow_download', allowDownload.toString());
+      formData.append('notify_users', notifyUsersOnUpload.toString());
       
       files.forEach(file => {
         formData.append('files', file);
@@ -81,13 +82,18 @@ const UploadReportSection = ({ companies, token, onUploadSuccess }) => {
       }
 
       const result = await response.json();
-      setSuccess(`Reporte "${title}" subido exitosamente. ${result.files_uploaded} archivo(s) subido(s).`);
+      let successMsg = `Reporte "${title}" subido exitosamente. ${result.files_uploaded} archivo(s) subido(s).`;
+      if (result.notifications_sent > 0) {
+        successMsg += ` ${result.notifications_sent} notificación(es) enviada(s).`;
+      }
+      setSuccess(successMsg);
       
       // Reset form
       setTitle('');
       setDescription('');
       setSelectedCompany('');
       setAllowDownload(false);
+      setNotifyUsersOnUpload(false);
       setFiles([]);
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
