@@ -547,8 +547,12 @@ const AdminPanel = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-sm space-x-2">
-                        <button className="text-gray-600 hover:text-gray-900">Editar</button>
-                        <button className="text-red-600 hover:text-red-900">Ver</button>
+                        <button 
+                          onClick={() => handleDeleteCompany(company.id, company.name)}
+                          className="text-red-600 hover:text-red-900"
+                        >
+                          Eliminar
+                        </button>
                       </td>
                     </tr>
                   ))}
