@@ -8,6 +8,7 @@ import aiofiles
 import os
 import secrets
 import hashlib
+import unicodedata
 
 from models import User, Report, Company, ActivityType
 from auth import get_current_user, get_client_ip, get_user_from_token
@@ -17,6 +18,10 @@ from utils import log_activity
 router = APIRouter(prefix="/api/client", tags=["client"])
 
 UPLOAD_DIR = Path("/app/uploads")
+
+def normalize_path(path_str: str) -> str:
+    """Normalize Unicode characters in path to handle Mac NFD vs NFC differences"""
+    return unicodedata.normalize('NFD', path_str)
 
 # Store for temporary view tokens (in production, use Redis)
 view_tokens = {}
