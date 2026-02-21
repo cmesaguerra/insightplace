@@ -392,13 +392,23 @@ async def get_report_relative_asset(
         )
     
     # Get the report's directory (where Main.html is located)
-    # Normalize Unicode to handle Mac NFD vs NFC differences
-    main_file_path = Path(normalize_path(report["main_file"]))
+    main_file_path = Path(report["main_file"])
     report_dir = UPLOAD_DIR / main_file_path.parent
     
-    # Normalize the requested file path
-    normalized_file_path = normalize_path(file_path)
-    asset_path = report_dir / normalized_file_path
+    # Try to find the file with different Unicode normalizations
+    # Mac uses NFD (decomposed), Windows/Linux typically use NFC (composed)
+    asset_path = report_dir / file_path
+    
+    if not asset_path.exists():
+        # Try NFD normalization (Mac style)
+        nfd_path = report_dir / normalize_path(file_path)
+        if nfd_path.exists():
+            asset_path = nfd_path
+        else:
+            # Try NFC normalization
+            nfc_path = report_dir / unicodedata.normalize('NFC', file_path)
+            if nfc_path.exists():
+                asset_path = nfc_path
     
     # Security: ensure the asset is within the report directory
     try:
