@@ -352,11 +352,30 @@ async def upload_report(
         metadata={"report_id": report.id, "file_count": len(uploaded_files)}
     )
     
+    # Send notifications to company users if requested
+    notifications_sent = 0
+    if notify_users_bool:
+        company_users = await db.users.find({"company_id": company_id}).to_list(length=None)
+        for user in company_users:
+            html_content = get_new_report_email_html(
+                user_name=user.get("full_name", "Usuario"),
+                report_title=title,
+                company_name=company["name"],
+                portal_url=PORTAL_URL
+            )
+            await send_email(
+                recipient_email=user["email"],
+                subject=f"Nuevo Reporte Disponible: {title}",
+                html_content=html_content
+            )
+            notifications_sent += 1
+    
     return {
         "message": "Report uploaded successfully",
         "report_id": report.id,
         "files_uploaded": len(uploaded_files),
-        "total_size": format_file_size(total_size)
+        "total_size": format_file_size(total_size),
+        "notifications_sent": notifications_sent
     }
 
 @router.get("/reports", response_model=List[Report])
