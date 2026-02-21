@@ -194,7 +194,25 @@ const UploadReportSection = ({ companies, token, onUploadSuccess }) => {
             <label htmlFor="allowDownload" className="flex-1">
               <span className="text-sm font-medium text-gray-700">Permitir descarga</span>
               <p className="text-xs text-gray-500">
-                Si está desactivado, los clientes solo podrán ver el reporte en el navegador (no podrán descargar ni compartir el enlace)
+                Si está desactivado, los clientes solo podrán ver el reporte en el navegador
+              </p>
+            </label>
+          </div>
+
+          {/* Notify Users Toggle */}
+          <div className="flex items-center space-x-3 p-4 bg-blue-50 rounded-lg">
+            <input
+              type="checkbox"
+              id="notifyUsers"
+              checked={notifyUsersOnUpload}
+              onChange={(e) => setNotifyUsersOnUpload(e.target.checked)}
+              className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              disabled={uploading}
+            />
+            <label htmlFor="notifyUsers" className="flex-1">
+              <span className="text-sm font-medium text-gray-700">Notificar a los usuarios</span>
+              <p className="text-xs text-gray-500">
+                Enviar un correo electrónico a todos los usuarios de la empresa notificando el nuevo reporte
               </p>
             </label>
           </div>
