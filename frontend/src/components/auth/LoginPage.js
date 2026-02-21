@@ -13,7 +13,11 @@ const LoginPage = () => {
     e.preventDefault();
     setError('');
     
+    console.log('Attempting login for:', email);
+    
     const result = await login(email, password);
+    
+    console.log('Login result:', result);
     
     if (result.success) {
       // Redirect admin users to admin panel, clients to portal
@@ -23,7 +27,7 @@ const LoginPage = () => {
         navigate('/portal');
       }
     } else {
-      setError(result.error);
+      setError(result.error || 'Error al iniciar sesión. Por favor intenta de nuevo.');
     }
   };
 
