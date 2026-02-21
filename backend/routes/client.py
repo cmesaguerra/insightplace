@@ -392,9 +392,13 @@ async def get_report_relative_asset(
         )
     
     # Get the report's directory (where Main.html is located)
-    main_file_path = Path(report["main_file"])
+    # Normalize Unicode to handle Mac NFD vs NFC differences
+    main_file_path = Path(normalize_path(report["main_file"]))
     report_dir = UPLOAD_DIR / main_file_path.parent
-    asset_path = report_dir / file_path
+    
+    # Normalize the requested file path
+    normalized_file_path = normalize_path(file_path)
+    asset_path = report_dir / normalized_file_path
     
     # Security: ensure the asset is within the report directory
     try:
