@@ -12,15 +12,24 @@ export const useAuth = () => {
 
 // Initialize state from localStorage immediately (synchronously)
 const getInitialState = () => {
-  const savedToken = localStorage.getItem('token');
-  const savedUser = localStorage.getItem('user');
-  const savedCompany = localStorage.getItem('company');
-  
-  return {
-    token: savedToken || null,
-    user: savedUser ? JSON.parse(savedUser) : null,
-    company: savedCompany ? JSON.parse(savedCompany) : null
-  };
+  try {
+    const savedToken = localStorage.getItem('token');
+    const savedUser = localStorage.getItem('user');
+    const savedCompany = localStorage.getItem('company');
+    
+    return {
+      token: savedToken || null,
+      user: savedUser ? JSON.parse(savedUser) : null,
+      company: savedCompany ? JSON.parse(savedCompany) : null
+    };
+  } catch (error) {
+    // Clear corrupted localStorage data
+    console.error('Error parsing localStorage:', error);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('company');
+    return { token: null, user: null, company: null };
+  }
 };
 
 export const AuthProvider = ({ children }) => {
