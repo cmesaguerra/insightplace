@@ -308,6 +308,7 @@ async def download_report(
     import zipfile
     import io
     import re
+    from urllib.parse import quote
     
     # Admin can access all reports, clients only their company's
     if current_user.role == 'admin':
@@ -345,45 +346,13 @@ async def download_report(
             detail="Report directory not found"
         )
     
-    # Look for an existing ZIP file in the parent directory first
-    parent_dir = report_dir.parent
-    existing_zips = list(parent_dir.glob("*.zip"))
-    
-    if existing_zips:
-        # Use the first found ZIP file
-        zip_path = existing_zips[0]
-        
-        # Increment download count
-        await db.reports.update_one(
-            {"id": report_id},
-            {"$inc": {"download_count": 1}}
-        )
-        
-        # Log activity
-        await log_activity(
-            db, current_user.id, current_user.email, ActivityType.REPORT_DOWNLOAD,
-            f"Downloaded report archive: {report['title']}",
-            get_client_ip(request),
-            metadata={"report_id": report_id, "file": zip_path.name}
-        )
-        
-        # Create a safe filename
-        safe_title = re.sub(r'[^\w\s\-\(\)]', '', report['title']).strip()
-        download_filename = f"{safe_title}.zip"
-        
-        return FileResponse(
-            zip_path,
-            filename=download_filename,
-            media_type="application/zip",
-            headers={"Content-Disposition": f"attachment; filename=\"{download_filename}\""}
-        )
-    
-    # No existing ZIP found, create one on-the-fly
+    # Always create a fresh ZIP with NFC-normalized filenames for cross-platform compatibility
     zip_buffer = io.BytesIO()
     with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
         for file_path_item in report_dir.rglob('*'):
             if file_path_item.is_file():
-                arcname = file_path_item.relative_to(report_dir)
+                # Normalize filename to NFC for cross-platform compatibility
+                arcname = unicodedata.normalize('NFC', str(file_path_item.relative_to(report_dir)))
                 zip_file.write(file_path_item, arcname)
     
     zip_buffer.seek(0)
