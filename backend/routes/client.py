@@ -72,11 +72,18 @@ async def get_report(
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Get specific report details"""
-    report = await db.reports.find_one({
-        "id": report_id,
-        "company_id": current_user.company_id,
-        "status": "published"
-    })
+    # Admin can access all reports, clients only their company's
+    if current_user.role == 'admin':
+        report = await db.reports.find_one({
+            "id": report_id,
+            "status": "published"
+        })
+    else:
+        report = await db.reports.find_one({
+            "id": report_id,
+            "company_id": current_user.company_id,
+            "status": "published"
+        })
     
     if not report:
         raise HTTPException(
