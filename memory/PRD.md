@@ -161,14 +161,13 @@ The user wants to add a secure client portal to their existing static website. T
 ## Backlog / Future Tasks
 
 ### P1 (Next Priority)
+- [ ] Production Deployment via Emergent platform
+- [ ] Display Login History in Admin Panel (backend infrastructure already in place)
 - [ ] Password reset functionality
-- [ ] Edit/delete companies and users
-- [ ] Report preview in admin panel
 - [ ] Better error messages in forms
 
 ### P2
 - [ ] 2FA implementation
-- [ ] Email notifications for new reports
 - [ ] Bulk user import
 - [ ] Report versioning
 - [ ] Search and filter in admin tables
@@ -177,7 +176,18 @@ The user wants to add a secure client portal to their existing static website. T
 - [ ] Advanced analytics dashboard
 - [ ] Export activity logs to CSV
 
+## Recently Completed
+- [x] Admin report preview ("Vista Previa") - Admin can preview ANY report regardless of company
+- [x] Admin report download ("Descargar") - Admin can download ANY report as ZIP archive
+- [x] Delete users and companies in Admin Panel
+- [x] Email notifications for user creation and new report uploads (via Resend API)
+
 ## Changelog
+- **2026-02-22:** Fixed admin "Vista Previa" and "Descargar" buttons - updated `/api/client/reports/{id}` endpoint to allow admins to access any report
+- **2026-02-22:** Fixed download endpoint to return ZIP archives instead of HTML files - now looks for existing ZIP or creates on-the-fly
+- **2026-02-21:** Implemented email notifications via Resend API for user creation and report uploads
+- **2026-02-21:** Added delete functionality for users and companies in Admin Panel
+- **2026-02-21:** Fixed critical report rendering issues (asset 404s, Plotly errors, Unicode filename corruption)
 - **2026-02-20 (Session 2):** Fixed 404 report viewing error - reset client user password and fixed asset endpoint to support token query parameter for browser-loaded assets
 - **2026-02-20 (Session 2):** Added `get_user_from_token()` helper in auth.py for token validation without header dependency
 - **2026-02-20 (Session 2):** Updated asset endpoint with expanded MIME types (fonts, woff, woff2, etc.)
