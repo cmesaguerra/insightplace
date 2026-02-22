@@ -90,7 +90,7 @@ async def get_companies(
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Get all companies"""
-    companies = await db.companies.find().to_list(length=None)
+    companies = await db.companies.find().limit(1000).to_list(length=1000)
     return [Company(**company) for company in companies]
 
 # User Management
@@ -165,7 +165,7 @@ async def get_users(
     if company_id:
         filter_query["company_id"] = company_id
     
-    users = await db.users.find(filter_query).to_list(length=None)
+    users = await db.users.find(filter_query).limit(1000).to_list(length=1000)
     return [UserResponse(**user) for user in users]
 
 @router.delete("/users/{user_id}")
@@ -402,7 +402,7 @@ async def get_reports(
     if company_id:
         filter_query["company_id"] = company_id
     
-    reports = await db.reports.find(filter_query).sort("created_at", -1).to_list(length=None)
+    reports = await db.reports.find(filter_query).sort("created_at", -1).limit(500).to_list(length=500)
     return [Report(**report) for report in reports]
 
 # Activity Logs
