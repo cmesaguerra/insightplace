@@ -60,7 +60,7 @@ async def get_client_reports(
     reports = await db.reports.find({
         "company_id": current_user.company_id,
         "status": "published"
-    }).sort("created_at", -1).to_list(length=None)
+    }).sort("created_at", -1).limit(100).to_list(length=100)
     
     return [Report(**report) for report in reports]
 
