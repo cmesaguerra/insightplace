@@ -327,8 +327,8 @@ async def upload_report(
                             main_file = f
                             break
                 
-                # Remove the ZIP file after extraction
-                file_path.unlink()
+                # Keep the ZIP file for downloads (don't delete it)
+                # file_path.unlink()  # Commented out to preserve original ZIP
             except Exception as e:
                 # If extraction fails, keep the ZIP as is
                 uploaded_files.append(str(file_path.relative_to(UPLOAD_DIR)))
