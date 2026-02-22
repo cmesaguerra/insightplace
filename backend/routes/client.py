@@ -291,11 +291,18 @@ async def download_report(
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
     """Download report file or supporting file"""
-    report = await db.reports.find_one({
-        "id": report_id,
-        "company_id": current_user.company_id,
-        "status": "published"
-    })
+    # Admin can access all reports, clients only their company's
+    if current_user.role == 'admin':
+        report = await db.reports.find_one({
+            "id": report_id,
+            "status": "published"
+        })
+    else:
+        report = await db.reports.find_one({
+            "id": report_id,
+            "company_id": current_user.company_id,
+            "status": "published"
+        })
     
     if not report:
         raise HTTPException(
@@ -303,8 +310,8 @@ async def download_report(
             detail="Report not found"
         )
     
-    # Check if download is allowed
-    if not report.get("allow_download", False):
+    # Check if download is allowed (skip for admin)
+    if current_user.role != 'admin' and not report.get("allow_download", False):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Download not allowed for this report"
