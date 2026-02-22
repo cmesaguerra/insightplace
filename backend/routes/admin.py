@@ -143,6 +143,7 @@ async def create_user(
             user_name=user.full_name,
             user_email=user.email,
             password=original_password,
+            company_name=company['name'],
             portal_url=PORTAL_URL
         )
         await send_email(
