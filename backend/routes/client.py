@@ -152,11 +152,18 @@ async def view_report_file(
             detail="Not authenticated"
         )
     
-    report = await db.reports.find_one({
-        "id": report_id,
-        "company_id": current_user.company_id,
-        "status": "published"
-    })
+    # Admin can access all reports, clients only their company's
+    if current_user.role == 'admin':
+        report = await db.reports.find_one({
+            "id": report_id,
+            "status": "published"
+        })
+    else:
+        report = await db.reports.find_one({
+            "id": report_id,
+            "company_id": current_user.company_id,
+            "status": "published"
+        })
     
     if not report:
         raise HTTPException(
