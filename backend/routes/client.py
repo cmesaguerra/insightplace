@@ -371,14 +371,16 @@ async def download_report(
         metadata={"report_id": report_id}
     )
     
-    # Create a safe filename
-    safe_title = re.sub(r'[^\w\s\-\(\)]', '', report['title']).strip()
-    download_filename = f"{safe_title}.zip"
+    # Create a safe ASCII filename and RFC 5987 encoded filename for Unicode
+    ascii_filename = "report.zip"  # Fallback for old browsers
+    utf8_filename = quote(f"{report['title']}.zip")  # RFC 5987 encoded
     
     return StreamingResponse(
         zip_buffer,
         media_type="application/zip",
-        headers={"Content-Disposition": f"attachment; filename=\"{download_filename}\""}
+        headers={
+            "Content-Disposition": f"attachment; filename=\"{ascii_filename}\"; filename*=UTF-8''{utf8_filename}"
+        }
     )
 
 @router.get("/company", response_model=Company)
