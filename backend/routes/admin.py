@@ -24,7 +24,7 @@ from email_service import send_email, send_email_bulk, get_welcome_email_html, g
 router = APIRouter(prefix="/api/admin", tags=["admin"])
 
 # Portal URL for email links
-PORTAL_URL = os.environ.get("PORTAL_URL", "https://access-control-178.preview.emergentagent.com")
+PORTAL_URL = os.environ.get("PORTAL_URL", "https://secure-report-viewer.preview.emergentagent.com")
 
 # File storage configuration
 UPLOAD_DIR = Path("/app/uploads")
