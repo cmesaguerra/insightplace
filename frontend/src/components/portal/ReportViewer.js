@@ -33,27 +33,41 @@ const ReportViewer = () => {
   const fetchReportDetails = async () => {
     try {
       setLoading(true);
+      setError(''); // Clear any previous errors
       
       // Get report details
-      const reportRes = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/client/reports/${reportId}`, {
+      const url = `${process.env.REACT_APP_BACKEND_URL}/api/client/reports/${reportId}`;
+      console.log('Fetching report from:', url);
+      
+      const reportRes = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
       });
 
+      console.log('Report response status:', reportRes.status);
+
       if (reportRes.status === 401) {
         // Token expired or invalid, redirect to login
+        console.log('Token expired, redirecting to login');
         navigate('/login');
         return;
       }
 
+      if (reportRes.status === 404) {
+        throw new Error('Reporte no encontrado. Verifique que el reporte existe.');
+      }
+
       if (!reportRes.ok) {
-        throw new Error('No se pudo cargar el reporte');
+        const errorData = await reportRes.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'No se pudo cargar el reporte');
       }
 
       const reportData = await reportRes.json();
+      console.log('Report loaded successfully:', reportData.title);
       setReport(reportData);
     } catch (err) {
+      console.error('Error loading report:', err);
       setError(err.message);
     } finally {
       setLoading(false);
