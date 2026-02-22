@@ -304,10 +304,7 @@ async def download_report(
     file_path: Optional[str] = None,
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
-    """Download report as ZIP archive"""
-    import zipfile
-    import io
-    import re
+    """Download report as original ZIP archive"""
     from urllib.parse import quote
     
     # Admin can access all reports, clients only their company's
@@ -336,7 +333,7 @@ async def download_report(
             detail="Download not allowed for this report"
         )
     
-    # Get the main file path and its parent directory
+    # Get the main file path and find the original ZIP
     main_file_path = Path(report["main_file"])
     report_dir = UPLOAD_DIR / main_file_path.parent
     
@@ -346,16 +343,18 @@ async def download_report(
             detail="Report directory not found"
         )
     
-    # Always create a fresh ZIP with NFC-normalized filenames for cross-platform compatibility
-    zip_buffer = io.BytesIO()
-    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-        for file_path_item in report_dir.rglob('*'):
-            if file_path_item.is_file():
-                # Normalize filename to NFC for cross-platform compatibility
-                arcname = unicodedata.normalize('NFC', str(file_path_item.relative_to(report_dir)))
-                zip_file.write(file_path_item, arcname)
+    # Look for the original ZIP file in the parent directory
+    parent_dir = report_dir.parent
+    existing_zips = list(parent_dir.glob("*.zip"))
     
-    zip_buffer.seek(0)
+    if not existing_zips:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Original ZIP file not found"
+        )
+    
+    # Use the original ZIP file
+    zip_path = existing_zips[0]
     
     # Increment download count
     await db.reports.update_one(
@@ -368,15 +367,15 @@ async def download_report(
         db, current_user.id, current_user.email, ActivityType.REPORT_DOWNLOAD,
         f"Downloaded report archive: {report['title']}",
         get_client_ip(request),
-        metadata={"report_id": report_id}
+        metadata={"report_id": report_id, "file": zip_path.name}
     )
     
-    # Create a safe ASCII filename and RFC 5987 encoded filename for Unicode
+    # Use RFC 5987 encoding for proper Unicode filename support
     ascii_filename = "report.zip"  # Fallback for old browsers
-    utf8_filename = quote(f"{report['title']}.zip")  # RFC 5987 encoded
+    utf8_filename = quote(zip_path.name)  # RFC 5987 encoded original filename
     
-    return StreamingResponse(
-        zip_buffer,
+    return FileResponse(
+        zip_path,
         media_type="application/zip",
         headers={
             "Content-Disposition": f"attachment; filename=\"{ascii_filename}\"; filename*=UTF-8''{utf8_filename}"
