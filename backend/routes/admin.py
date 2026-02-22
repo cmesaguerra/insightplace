@@ -308,12 +308,24 @@ async def upload_report(
                 # Find all extracted files
                 for extracted_file in company_dir.rglob('*'):
                     if extracted_file.is_file() and extracted_file != file_path:
+                        # Skip macOS metadata files and __MACOSX folder
+                        if '__MACOSX' in str(extracted_file) or extracted_file.name.startswith('._'):
+                            continue
+                        
                         relative_path = str(extracted_file.relative_to(UPLOAD_DIR))
                         uploaded_files.append(relative_path)
                         
-                        # Set main file if it's HTML
+                        # Set main file if it's Main.html or index.html (preferred names)
                         if extracted_file.suffix.lower() == '.html' and not main_file:
-                            main_file = relative_path
+                            if extracted_file.name.lower() in ['main.html', 'index.html']:
+                                main_file = relative_path
+                
+                # If no Main.html or index.html found, pick first HTML file
+                if not main_file:
+                    for f in uploaded_files:
+                        if f.lower().endswith('.html'):
+                            main_file = f
+                            break
                 
                 # Remove the ZIP file after extraction
                 file_path.unlink()
