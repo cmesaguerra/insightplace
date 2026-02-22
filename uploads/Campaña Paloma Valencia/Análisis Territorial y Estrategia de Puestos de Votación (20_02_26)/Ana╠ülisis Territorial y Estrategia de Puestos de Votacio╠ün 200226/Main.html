@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informe Electoral – Paloma Valencia | InsightPlace</title>
+
+  <!-- ============================================================
+       FUENTES TIPOGRÁFICAS (Google Fonts)
+       - "Playfair Display": serif elegante para títulos principales
+       - "Source Serif 4": serif de lectura para cuerpo de texto
+       - "DM Sans": sans-serif limpio para etiquetas y UI
+       ============================================================ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ==============================================================
+       VARIABLES CSS – PALETA DE COLORES Y TIPOGRAFÍA
+       Modifica aquí para ajustar el tema globalmente.
+       ============================================================== */
+    :root {
+      /* Grises base (fondos neutros) */
+      --gris-claro:   #F2F2F2;   /* Fondo general de la página */
+      --gris-medio:   #BFBFBF;   /* Fondos de sidebar, separadores */
+      --gris-oscuro:  #333333;   /* Texto secundario, notas */
+      --gris-texto:   #111111;   /* Texto principal del cuerpo */
+
+      /* Rojo – SOLO para acentos pequeños (no competir con azul) */
+      --rojo-acento:  #C00000;
+
+      /* Azul referencial (los iframes/gráficas ya traen este tono) */
+      --azul-ref:     #1B4F8A;
+
+      /* Blanco */
+      --blanco:       #FFFFFF;
+
+      /* Tipografías */
+      --font-titulo:  'Playfair Display', Georgia, serif;
+      --font-cuerpo:  'Source Serif 4', Georgia, serif;
+      --font-ui:      'DM Sans', system-ui, sans-serif;
+
+      /* Dimensiones del sidebar */
+      --sidebar-ancho: 270px;
+
+      /* Transiciones */
+      --trans-suave: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ==============================================================
+       RESET Y BASE
+       ============================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      background-color: var(--gris-claro);
+      color: var(--gris-texto);
+      font-family: var(--font-cuerpo);
+      font-size: 1rem;
+      line-height: 1.75;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ==============================================================
+       SIDEBAR – MENÚ LATERAL IZQUIERDO COLAPSABLE
+       ============================================================== */
+
+    /* Overlay oscuro detrás del sidebar en móvil */
+    #sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 40;
+      opacity: 0;
+      transition: opacity var(--trans-suave);
+    }
+    #sidebar-overlay.activo { opacity: 1; }
+
+    /* Contenedor principal del sidebar */
+    #sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: var(--sidebar-ancho);
+      height: 100vh;
+      background-color: #2B2B2B;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      transition: transform var(--trans-suave);
+      overflow: hidden;
+      box-shadow: 4px 0 20px rgba(0,0,0,0.18);
+    }
+
+    /* Estado colapsado: se oculta hacia la izquierda */
+    #sidebar.colapsado {
+      transform: translateX(calc(-1 * var(--sidebar-ancho)));
+    }
+
+    /* ---- Bloque del Logo en la parte superior del sidebar ---- */
+    #sidebar-logo {
+      padding: 28px 24px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       LOGO PLACEHOLDER DEL SIDEBAR:
+       Reemplaza el contenido de #logo-img con:
+       <img src="assets/img/logo.png" alt="InsightPlace" />
+       ============================================================ */
+    #logo-img {
+      width: 100%;
+      max-width: 160px;
+      height: 50px;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px dashed rgba(255,255,255,0.25);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.4);
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: default;
+      user-select: none;
+    }
+    #logo-img img { width: 100%; height: 100%; object-fit: contain; }
+
+    /* Título del informe dentro del sidebar */
+    #sidebar-informe-titulo {
+      margin-top: 12px;
+      font-family: var(--font-ui);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.4;
+    }
+
+    /* ---- Índice de navegación ---- */
+    #sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 0 20px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.1) transparent;
+    }
+    #sidebar-nav::-webkit-scrollbar { width: 4px; }
+    #sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+
+    /* Etiqueta de grupo de secciones */
+    .nav-grupo-label {
+      padding: 14px 24px 6px;
+      font-family: var(--font-ui);
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+    }
+
+    /* Enlace de sección en el índice */
+    .nav-enlace {
+      display: block;
+      padding: 8px 24px 8px 20px;
+      font-family: var(--font-ui);
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.6);
+      text-decoration: none;
+      line-height: 1.35;
+      border-left: 3px solid transparent;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .nav-enlace:hover {
+      color: var(--blanco);
+      border-left-color: var(--rojo-acento);
+      background: rgba(255,255,255,0.04);
+    }
+    .nav-enlace.activo {
+      color: var(--blanco);
+      border-left-color: var(--rojo-acento);
+      font-weight: 600;
+      background: rgba(192,0,0,0.08);
+    }
+
+    /* Sub-enlace (H2 dentro de una sección) */
+    .nav-enlace.sub {
+      padding-left: 36px;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.42);
+    }
+    .nav-enlace.sub:hover { color: rgba(255,255,255,0.8); border-left-color: var(--rojo-acento); }
+
+    /* ---- Pie del sidebar ---- */
+    #sidebar-footer {
+      padding: 16px 24px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0;
+    }
+    #sidebar-footer span {
+      font-family: var(--font-ui);
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.05em;
+    }
+
+    /* ==============================================================
+       BOTÓN DE HAMBURGUESA
+       ============================================================== */
+    #btn-menu {
+      position: fixed;
+      top: 16px;
+      left: calc(var(--sidebar-ancho) + 16px);
+      width: 40px;
+      height: 40px;
+      background: var(--blanco);
+      border: 1px solid var(--gris-medio);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 60;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: left var(--trans-suave), background 0.2s;
+    }
+    #btn-menu:hover { background: var(--gris-claro); }
+    #btn-menu.sidebar-colapsado { left: 16px; }
+
+    .hamburguesa-barra {
+      width: 18px;
+      height: 2px;
+      background: var(--gris-oscuro);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    #btn-menu.abierto .hamburguesa-barra:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    #btn-menu.abierto .hamburguesa-barra:nth-child(2) { opacity: 0; }
+    #btn-menu.abierto .hamburguesa-barra:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ==============================================================
+       ÁREA PRINCIPAL DE CONTENIDO
+       ============================================================== */
+    #contenido-principal {
+      margin-left: var(--sidebar-ancho);
+      flex: 1;
+      min-width: 0;
+      transition: margin-left var(--trans-suave);
+    }
+    #contenido-principal.expandido { margin-left: 0; }
+
+    /* ==============================================================
+       PORTADA / CABECERA DEL INFORME
+       ============================================================== */
+    #portada {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      padding: 80px 64px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    #portada::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 340px; height: 340px;
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    #portada::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; right: 80px;
+      width: 200px; height: 200px;
+      border: 1px solid rgba(192,0,0,0.15);
+      border-radius: 50%;
+    }
+
+    .portada-kicker {
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rojo-acento);
+      margin-bottom: 18px;
+    }
+    .portada-titulo {
+      font-family: var(--font-titulo);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700;
+      color: var(--blanco);
+      line-height: 1.2;
+      max-width: 700px;
+      margin-bottom: 10px;
+    }
+    .portada-subtitulo {
+      font-family: var(--font-titulo);
+      font-style: italic;
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 32px;
+    }
+    .portada-meta { display: flex; gap: 32px; flex-wrap: wrap; }
+    .portada-meta-item {
+      font-family: var(--font-ui);
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.04em;
+    }
+    .portada-meta-item strong {
+      display: block;
+      color: rgba(255,255,255,0.7);
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    .portada-linea {
+      height: 3px;
+      background: linear-gradient(90deg, var(--rojo-acento), transparent);
+    }
+
+    /* ==============================================================
+       CONTENEDOR DE SECCIONES
+       ============================================================== */
+    #secciones-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 48px 80px;
+    }
+
+    /* ==============================================================
+       SECCIONES DEL DOCUMENTO
+       ============================================================== */
+    .seccion {
+      margin-bottom: 64px;
+      scroll-margin-top: 80px;
+    }
+
+    .seccion-header {
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--gris-medio);
+    }
+    .seccion-numero {
+      font-family: var(--font-ui);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--rojo-acento);
+      margin-bottom: 6px;
+    }
+    .seccion-titulo {
+      font-family: var(--font-titulo);
+      font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+      font-weight: 700;
+      color: #1a1a1a;
+      line-height: 1.25;
+    }
+
+    /* Subtítulos H2 dentro de una sección */
+    .subseccion {
+      margin-bottom: 48px;
+      scroll-margin-top: 80px;
+    }
+    .subseccion-titulo {
+      font-family: var(--font-titulo);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    /* Párrafos de cuerpo – JUSTIFICADO como en Word */
+    .cuerpo-texto p {
+      margin-bottom: 1.1em;
+      font-size: 0.97rem;
+      color: #111111;
+      font-weight: 400;
+      text-align: justify;       /* Justificado */
+      text-align-last: left;     /* Última línea alineada a la izquierda */
+      hyphens: auto;             /* Silabeo automático para evitar espacios grandes */
+    }
+    .cuerpo-texto p:last-child { margin-bottom: 0; }
+
+    .cuerpo-texto strong { font-weight: 600; color: #1a1a1a; }
+
+    /* Lista de viñetas en el cuerpo */
+    .cuerpo-texto ul {
+      margin: 0.8em 0 1em 1.2em;
+      list-style: none;
+    }
+    .cuerpo-texto ul li {
+      position: relative;
+      padding-left: 1.2em;
+      margin-bottom: 0.6em;
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: #111111;
+      text-align: justify;
+      text-align-last: left;
+      hyphens: auto;
+    }
+    .cuerpo-texto ul li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--rojo-acento);
+      font-weight: 600;
+    }
+
+    /* ==============================================================
+       BLOQUE DE GRÁFICA
+       Estructura: título → iframe (con botón expandir) → fuente → insight
+       ============================================================== */
+    .grafica-bloque {
+      margin: 36px 0;
+      background: var(--blanco);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07), 0 0 0 1px rgba(0,0,0,0.05);
+    }
+
+    .grafica-header {
+      padding: 18px 22px 12px;
+      border-bottom: 1px solid var(--gris-claro);
+    }
+    .grafica-titulo {
+      font-family: var(--font-ui);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #1a1a1a;
+      line-height: 1.35;
+      letter-spacing: 0.01em;
+    }
+
+    /* ============================================================
+       ÁREA DE IFRAME
+       Para insertar tu gráfica, modifica el atributo src del iframe.
+       Cada iframe tiene un ID único (ej. iframe-01).
+       ============================================================ */
+    .iframe-contenedor {
+      width: 100%;
+      min-height: 380px;
+      position: relative;
+      background: #f8f9fb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .iframe-contenedor iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 380px;
+      border: none;
+      display: block;
+    }
+
+    /* Placeholder visual mientras no hay iframe */
+    .iframe-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #f0f2f5;
+      pointer-events: none;
+    }
+    .iframe-placeholder-icon {
+      width: 48px; height: 48px;
+      border: 2px dashed var(--gris-medio);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gris-medio);
+      font-size: 1.3rem;
+    }
+    .iframe-placeholder-texto {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--gris-medio);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .iframe-placeholder-id {
+      font-family: 'Courier New', monospace;
+      font-size: 0.65rem;
+      color: #aaa;
+      background: rgba(0,0,0,0.04);
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
+
+    /* ==============================================================
+       BOTÓN DE EXPANDIR GRÁFICA (Lightbox trigger)
+       Aparece en la esquina superior derecha del iframe al hacer hover.
+       ============================================================== */
+    .btn-expandir {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 34px;
+      height: 34px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      opacity: 0;                          /* Oculto por defecto */
+      transition: opacity 0.2s, background 0.2s, transform 0.15s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      /* Sin pointer-events cuando está oculto */
+      pointer-events: none;
+    }
+    /* Al hacer hover sobre el contenedor del iframe, aparece el botón */
+    .iframe-contenedor:hover .btn-expandir {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .btn-expandir:hover {
+      background: var(--blanco);
+      transform: scale(1.08);
+    }
+    /* Ícono SVG del botón expandir */
+    .btn-expandir svg {
+      width: 16px;
+      height: 16px;
+      stroke: #444;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    /* Tooltip del botón expandir */
+    .btn-expandir::after {
+      content: 'Ver en grande';
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1a1a1a;
+      color: var(--blanco);
+      font-family: var(--font-ui);
+      font-size: 0.62rem;
+      white-space: nowrap;
+      padding: 4px 8px;
+      border-radius: 4px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.15s;
+    }
+    .btn-expandir:hover::after { opacity: 1; }
+
+    /* Pie de la gráfica: fuente y nota metodológica */
+    .grafica-footer {
+      padding: 10px 22px 14px;
+      background: var(--gris-claro);
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    .grafica-fuente {
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      color: #444;
+      line-height: 1.5;
+    }
+    .grafica-fuente strong { font-weight: 600; color: #333; }
+    .grafica-nota {
+      margin-top: 5px;
+      font-family: var(--font-ui);
+      font-size: 0.67rem;
+      color: #666;
+      font-style: italic;
+      line-height: 1.5;
+    }
+    .grafica-nota strong { font-style: normal; font-weight: 600; color: #555; }
+
+    /* ==============================================================
+       BOX DE INSIGHTS ESTRATÉGICOS
+       Fondo gris, borde izquierdo ROJO, título ROJO, bullets ROJOS.
+       ============================================================== */
+    .insight-box {
+      margin-top: 0;
+      background: var(--gris-claro);
+      border-left: 3px solid var(--rojo-acento);   /* ROJO */
+      border-radius: 0 8px 8px 0;
+      padding: 18px 22px 16px;
+      border-top: 2px solid var(--gris-claro);
+    }
+
+    .insight-box-titulo {
+      font-family: var(--font-ui);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--rojo-acento);                   /* ROJO */
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .insight-box-titulo::before {
+      content: '';
+      display: inline-block;
+      width: 14px;
+      height: 2px;
+      background: var(--rojo-acento);              /* ROJO */
+      border-radius: 1px;
+    }
+
+    .insight-box ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .insight-box ul li {
+      font-family: var(--font-ui);
+      font-size: 0.8rem;
+      color: #333333;
+      line-height: 1.55;
+      padding-left: 16px;
+      position: relative;
+    }
+    .insight-box ul li::before {
+      content: '●';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--rojo-acento);                   /* ROJO */
+      font-size: 0.45rem;
+      line-height: 1.9;
+    }
+    .insight-box ul li strong {
+      color: #1a1a1a;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* ==============================================================
+       SEPARADOR VISUAL
+       ============================================================== */
+    .separador {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gris-medio), transparent);
+      margin: 44px 0;
+    }
+
+    /* ==============================================================
+       PIE DE PÁGINA – AVISO LEGAL
+       ============================================================== */
+    #footer-legal {
+      background: #1a1a1a;
+      padding: 28px 48px;
+      text-align: center;
+    }
+    #footer-legal p {
+      font-family: var(--font-ui);
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.28);
+      line-height: 1.7;
+      max-width: 680px;
+      margin: 0 auto;
+      letter-spacing: 0.02em;
+    }
+    #footer-legal .footer-brand {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.15);
+    }
+
+    /* ==============================================================
+       BOTÓN FLOTANTE (FAB) – ESQUINA INFERIOR DERECHA
+       ============================================================== */
+    #fab-flotante {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--blanco);
+      border: 1px solid var(--gris-medio);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 100;
+      transition: transform 0.25s, box-shadow 0.25s, background 0.2s;
+      overflow: hidden;
+      text-decoration: none;
+    }
+    #fab-flotante:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      background: var(--gris-claro);
+    }
+
+    /* ============================================================
+       LOGO DEL FAB – INSTRUCCIÓN:
+       Busca <div id="fab-logo"> en el HTML (cerca del final del body)
+       y reemplaza el texto "IP" por:
+       <img src="assets/img/logo-icon.png" alt="InsightPlace" />
+
+       La imagen debe ser PNG con fondo transparente, mínimo 72x72px.
+       El div ya tiene border-radius:50% por lo que se recorta en círculo.
+       ============================================================ -->
+    #fab-logo {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+}
+    #fab-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+    #fab-flotante::after {
+      content: 'Volver al inicio';
+      position: absolute;
+      right: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1a1a1a;
+      color: var(--blanco);
+      font-family: var(--font-ui);
+      font-size: 0.65rem;
+      white-space: nowrap;
+      padding: 5px 10px;
+      border-radius: 4px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    #fab-flotante:hover::after { opacity: 1; }
+
+    /* ==============================================================
+       RESUMEN EJECUTIVO – Letra capital NEGRA
+       ============================================================== */
+    #resumen-ejecutivo .cuerpo-texto p:first-child::first-letter {
+      float: left;
+      font-family: var(--font-titulo);
+      font-size: 3.6rem;
+      line-height: 0.75;
+      margin: 6px 10px 0 0;
+      color: #000000;            /* NEGRO */
+      font-weight: 700;
+    }
+
+    /* ==============================================================
+       RESPONSIVE
+       ============================================================== */
+    @media (max-width: 768px) {
+      #sidebar { transform: translateX(calc(-1 * var(--sidebar-ancho))); }
+      #sidebar.abierto { transform: translateX(0); }
+      #sidebar-overlay { display: block; }
+      #contenido-principal { margin-left: 0 !important; }
+      #btn-menu { left: 16px !important; }
+      #portada { padding: 60px 28px 44px; }
+      #secciones-wrapper { padding: 32px 24px 60px; }
+      .grafica-header, .grafica-footer { padding-left: 16px; padding-right: 16px; }
+      .insight-box { padding: 14px 16px; }
+    }
+
+    /* ==============================================================
+       BARRA DE PROGRESO DE LECTURA
+       ============================================================== */
+    #barra-progreso {
+      position: fixed;
+      top: 0; left: 0;
+      width: 0%;
+      height: 3px;
+      background: var(--rojo-acento);
+      z-index: 200;
+      transition: width 0.1s linear;
+    }
+
+    /* ==============================================================
+       ANIMACIÓN DE ENTRADA
+       ============================================================== */
+    .seccion, .grafica-bloque, .insight-box {
+      animation: fadeInUp 0.5s ease both;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==============================================================
+       LIGHTBOX – MODAL DE EXPANSIÓN DE GRÁFICAS
+       Se activa al hacer clic en el botón "Ver en grande" de cada iframe.
+       Muestra la misma gráfica a pantalla completa con botón de cerrar.
+       ============================================================== */
+
+    /* Fondo oscuro semitransparente */
+    #lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      padding: 24px;
+    }
+    /* Estado visible */
+    #lightbox-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Ventana del modal */
+    #lightbox-modal {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      height: 85vh;
+      background: var(--blanco);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      transform: scale(0.93);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #lightbox-overlay.visible #lightbox-modal {
+      transform: scale(1);
+    }
+
+    /* Barra superior del modal con título y botón cerrar */
+    #lightbox-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: #1a1a1a;
+      flex-shrink: 0;
+    }
+    #lightbox-titulo {
+      font-family: var(--font-ui);
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.02em;
+      flex: 1;
+      padding-right: 16px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    /* Botón de cerrar el modal */
+    #lightbox-cerrar {
+      width: 32px;
+      height: 32px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.2s, transform 0.15s;
+      color: rgba(255,255,255,0.7);
+      font-size: 1rem;
+      line-height: 1;
+    }
+    #lightbox-cerrar:hover {
+      background: var(--rojo-acento);
+      border-color: var(--rojo-acento);
+      color: var(--blanco);
+      transform: scale(1.05);
+    }
+
+    /* Pista de tecla ESC */
+    #lightbox-esc-hint {
+      font-family: var(--font-ui);
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.3);
+      margin-right: 12px;
+      letter-spacing: 0.06em;
+    }
+
+    /* Iframe dentro del modal */
+    #lightbox-iframe {
+      width: 100%;
+      flex: 1;
+      border: none;
+      display: block;
+      background: #f8f9fb;
+    }
+
+  </style>
+</head>
+<body>
+
+<!-- ================================================================
+     BARRA DE PROGRESO DE LECTURA
+     ================================================================ -->
+<div id="barra-progreso" aria-hidden="true"></div>
+
+<!-- ================================================================
+     OVERLAY DEL SIDEBAR (para cerrar en móvil)
+     ================================================================ -->
+<div id="sidebar-overlay" onclick="toggleSidebar()" aria-hidden="true"></div>
+
+<!-- ================================================================
+     SIDEBAR – MENÚ LATERAL IZQUIERDO
+     Solo secciones y sub-secciones. Sin enlaces a gráficas.
+     ================================================================ -->
+<nav id="sidebar" aria-label="Índice del informe">
+
+  <!-- ---- LOGO ---- -->
+  <div id="sidebar-logo">
+    <!-- ============================================================
+         LOGO DEL SIDEBAR – Reemplaza el texto con:
+         <img src="assets/img/logo.png" alt="InsightPlace" />
+         ============================================================ -->
+    <div id="logo-img" class="placeholder"><img src="00_Logos/InsightPlace2-noback.png" alt="InsightPlace" /></div>
+    <p id="sidebar-informe-titulo">Informe de Campaña Electoral<br />Paloma Valencia · 2026</p>
+  </div>
+
+  <!-- ---- ÍNDICE – Solo secciones y sub-secciones ---- -->
+  <div id="sidebar-nav">
+
+    <p class="nav-grupo-label">Introducción</p>
+    <a class="nav-enlace" href="#resumen-ejecutivo">Resumen Ejecutivo</a>
+
+    <p class="nav-grupo-label">Análisis</p>
+    <a class="nav-enlace" href="#seccion-1">1. Priorización Estratégica (Pareto)</a>
+
+    <a class="nav-enlace" href="#seccion-2">2. Solidez Competitiva</a>
+
+    <a class="nav-enlace" href="#seccion-3">3. Vulnerabilidad y Fragmentación</a>
+    <a class="nav-enlace sub" href="#s3-1">3.1 Vulnerabilidad Temporal</a>
+    <a class="nav-enlace sub" href="#s3-2">3.2 Fragmentación Interna</a>
+
+    <a class="nav-enlace" href="#seccion-4">4. Efecto Arrastre Congreso</a>
+
+    <a class="nav-enlace" href="#seccion-5">5. Análisis Consulta y Primera Vuelta</a>
+
+  </div>
+
+  <!-- ---- PIE DEL SIDEBAR ---- -->
+  <div id="sidebar-footer">
+    <span>© InsightPlace · Confidencial</span>
+  </div>
+</nav>
+
+<!-- ================================================================
+     BOTÓN HAMBURGUESA
+     ================================================================ -->
+<button id="btn-menu" onclick="toggleSidebar()" aria-label="Abrir o cerrar menú" aria-expanded="true">
+  <span class="hamburguesa-barra"></span>
+  <span class="hamburguesa-barra"></span>
+  <span class="hamburguesa-barra"></span>
+</button>
+
+<!-- ================================================================
+     ÁREA PRINCIPAL DE CONTENIDO
+     ================================================================ -->
+<main id="contenido-principal">
+
+  <!-- PORTADA -->
+  <header id="portada">
+    <p class="portada-kicker"></p>
+    <h1 class="portada-titulo">Campaña Electoral<br />Paloma Valencia</h1>
+    <p class="portada-subtitulo">Análisis Territorial y Estrategia de Puestos de Votación</p>
+    <div class="portada-meta">
+      <div class="portada-meta-item">
+        <strong>Elaborado por</strong>
+        Carlos Antonio Mesa &amp; Bernardo Romero Torres
+      </div>
+      <div class="portada-meta-item">
+        <strong>Organización</strong>
+        InsightPlace
+      </div>
+      <div class="portada-meta-item">
+        <strong>Clasificación</strong>
+        Confidencial – Uso restringido
+      </div>
+    </div>
+  </header>
+  <div class="portada-linea"></div>
+
+  <!-- CUERPO DEL INFORME -->
+  <div id="secciones-wrapper">
+
+    <!-- ============================================================
+         RESUMEN EJECUTIVO
+         ============================================================ -->
+    <section id="resumen-ejecutivo" class="seccion">
+      <div class="seccion-header">
+        <p class="seccion-numero">Introducción</p>
+        <h2 class="seccion-titulo">Resumen Ejecutivo</h2>
+      </div>
+
+      <div class="cuerpo-texto">
+        <p>La campaña de Paloma Valencia tiene una oportunidad clara de optimizar sus recursos con una estrategia territorial precisa. El análisis electoral muestra que el 20% de los puestos de votación concentra casi el 80% de los votos del partido, lo que abre una ruta eficiente y enfocada: en lugar de dispersarse por todo el territorio nacional, la campaña puede concentrar su inversión en dos tipos de puestos con el mayor retorno electoral. Los Bastiones —donde el partido ya tiene alta afinidad y alto volumen— y los Persuasibles —donde el volumen es grande pero la lealtad aún no está consolidada. Juntos representan casi el 90% de los votos alcanzables y deben guiar toda la asignación de tiempo, presupuesto y presencia de la candidata.</p>
+
+        <p>Para aprovechar ese potencial al máximo, es clave primero consolidar lo que ya se tiene. Cerca del 70% de los puestos donde el partido lidera opera con márgenes estrechos, y entre 2018 y 2022 el partido perdió votos en 364 puestos del corazón de su base. La prioridad inmediata es estabilizar esos territorios. La competencia en ellos, además, no viene únicamente de la izquierda: en los Bastiones la mayor presión proviene de partidos históricamente cercanos como Cambio Radical y el Partido de la U, lo que exige estrategias de retención diferenciadas según el adversario específico en cada zona.</p>
+
+        <p>Un elemento adicional para gestionar es la fragmentación interna. En los Bastiones hay casi dos millones de votos de electores que rechazaron a Petro en segunda vuelta pero no votaron por el Centro Democrático en el Congreso. Ese electorado vota por alineación ideológica más que por lealtad al partido, y puede dispersarse hacia figuras como Abelardo de la Espriella o Vicky Dávila. Convertir esa afinidad ideológica en voto efectivo por Paloma Valencia es una de las mayores palancas de crecimiento disponibles.</p>
+
+        <p>Finalmente, los puestos Bisagra —donde la diferencia entre respaldado por el partido (Federico Gutiérrez) y la opción alternativa (Rodolfo Hernández) fue inferior a cinco puntos en 2022— concentran más de cuatro millones de votos altamente volátiles. Mover apenas el 5% o 10% de ellos equivale a entre 200.000 y 400.000 sufragios adicionales, suficientes para inclinar el resultado. Muchos de estos puestos están dentro o adyacentes a zonas donde el partido ya tiene infraestructura instalada, lo que los convierte en el terreno más rentable para la inversión en persuasión. A la par de este esfuerzo persuasivo, existe una clara oportunidad logística en las zonas de alta afinidad partidista: dado que la participación histórica en estos bastiones fluctúa entre el 45% y el 50%, movilizar una fracción de esta abstención estructural permitiría incrementar de manera considerable el volumen neto de votos sin incurrir en altos costos de persuasión ideológica.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECCIÓN 1 – PRIORIZACIÓN ESTRATÉGICA
+         ============================================================ -->
+    <section id="seccion-1" class="seccion">
+      <div class="seccion-header">
+        <p class="seccion-numero">Sección 1</p>
+        <h2 class="seccion-titulo">Priorización Estratégica de Puestos (Pareto)</h2>
+      </div>
+
+      <div class="cuerpo-texto">
+        <p>En una campaña electoral, priorizar los puestos de votación es fundamental para optimizar el uso de recursos limitados como tiempo, personal y presupuesto. Esta priorización permite identificar aquellos puestos donde el Centro Democrático (CD) presenta una ventaja competitiva clara frente a otros partidos, basándose en patrones históricos de votación. El objetivo principal es concentrar esfuerzos en áreas con alto rendimiento electoral, lo que maximiza la captación de votos, reduce el uso ineficiente de recursos en zonas de bajo impacto y, a su vez, alinea la estrategia política con principios de eficiencia como el análisis de Pareto, donde un número reducido de puestos concentra la mayoría de los resultados. Por ejemplo, al enfocarse en puestos con fuerte apoyo hacia el partido Centro Democrático, la campaña de Paloma Valencia puede fortalecer su base para aumentar la probabilidad de ganar la Gran Consulta por Colombia, asegurando un retorno eficiente en actividades como movilización de votantes y publicidad dirigida.</p>
+        
+        <p>Esta estrategia busca defender territorios consolidados mientras captura oportunidades en puestos con potencial de crecimiento significativo, generando una ruta que guíe las decisiones operativas de la campaña. De esta manera, se evita diluir esfuerzos en todo el territorio nacional y se invierte en zonas clave que representen un alto porcentaje de los votos totales del Centro Democrático.</p>
+        
+        <p>Para llevar a cabo esta priorización, se definen dos métricas clave. La <strong>afinidad</strong> se calcula como el porcentaje de votos que obtuvo el partido en un puesto específico durante las elecciones al Senado de 2022, dividido por el total de votos válidos en ese puesto. Esta métrica mide la intensidad del apoyo al partido, revelando la lealtad de los votantes en cada ubicación. Por su parte, el <strong>potencial</strong> estima el volumen de votos que se obtendría en la elección a Senado de 2026 teniendo en cuenta el censo electoral para este año y asumiendo que se mantiene la tasa de participación observada en 2022, así como el porcentaje de votos que recibió el partido en cada puesto de votación. En otras palabras, ajusta los votos recibidos en la elección a Senado de 2022 por el aumento—o reducción—del censo electoral en cada puesto de votación en 2026.</p>
+
+        <p>En línea con este enfoque de priorización, el primer paso es entender la distribución espacial de la métrica de afinidad en el territorio nacional. Al proyectar el comportamiento electoral en la elección de Senado en el mapa de Colombia, se revela una geografía política claramente definida que sirve como punto de partida para la estrategia territorial. En esta representación, la intensidad del color azul actúa como un termómetro de la lealtad hacia el Centro Democrático: los polígonos de azul oscuro representan las zonas con mayor afinidad al partido, mientras que las zonas en tonos claros señalan los territorios de menor afinidad y mayor resistencia hacia el partido.</p>
+        
+        <p>El análisis revela que el epicentro de la afinidad electoral se encuentra en el oriente del país, consolidando al departamento de Casanare como la región donde se concentra la mayor afinidad promedio por el partido, destacando dinámicas electorales muy fuertes en sus municipios principales, como su capital, Yopal, que concentra un nivel de intención de voto superior al 30%. La conexión del electorado se expande de manera natural hacia Antioquia, la segunda zona con mayor concentración de afinidad del país. En este departamento se destacan municipios de gran peso como Retiro, Bolívar y Sonsón con afinidades superiores al 40%, junto con Rionegro, con una afinidad del 32%, y Medellín, que con un 27% aporta más de 213.000 votos directos.</p>
+
+        <p>Al evaluar la tasa de participación en estas zonas de alta concentración de la intención de voto por el Centro Democrático, se observa que esta fluctúa sistemáticamente entre el 45% y el 50%. Esto sugiere que existe un margen operativo importante: si la campaña concentra sus esfuerzos logísticos en movilizar una fracción de esa abstención estructural, es altamente probable que el volumen neto de votos se incremente de manera considerable, consolidando e impulsando al alza el indicador de afinidad sin necesidad de incurrir en altos costos de persuasión ideológica.</p>
+
+        <p>En claro contraste, a medida que la observación se desplaza desde este núcleo central hacia las regiones costeras del territorio nacional, los indicadores experimentan una caída drástica que revela las barreras geográficas y la consolidación de estructuras políticas por parte de otros partidos. Las zonas de menor receptividad se ubican predominantemente en la región Caribe y el Pacífico, en departamentos como Córdoba, Sucre y Chocó, donde los porcentajes de afinidad son bastante bajos. Al evaluar la tasa de participación en estas áreas de baja afinidad, se identifica que, si bien existe una participación que a menudo supera el 55%, esta no se traduce en mayor apoyo para el partido.</p>
+
+    </div>
+
+      <!-- GRÁFICA 01 -->
+      <div class="grafica-bloque">
+        <div class="grafica-header">
+          <p class="grafica-titulo">Afinidad por el Centro Democrático en las Elecciones del Senado 2022 por Municipio</p>
+        </div>
+        <!-- iframe-01: Mapa de afinidad por municipio -->
+        <div class="iframe-contenedor" style="min-height:480px;">
+          <iframe id="iframe-01" src="01_Puestos_Pareto/02_mapa_afinidad_cd.html" title="Afinidad por el Centro Democrático en las Elecciones del Senado 2022 por Municipio" loading="lazy" allowfullscreen></iframe>
+          <!-- Botón expandir lightbox -->
+          <button class="btn-expandir" onclick="abrirLightbox('iframe-01', 'Afinidad por el CD en Elecciones del Senado 2022 por Municipio')" aria-label="Ver gráfica en grande">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+        <div class="grafica-footer">
+          <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <p class="insight-box-titulo">Insights Estratégicos</p>
+        <ul>
+          <li><strong>Concentración Espacial del Voto:</strong> El mapa revela una fuerte autocorrelación espacial; la afinidad hacia el partido no ocurre en puestos aislados, sino que forma clústeres densos. Estas concentraciones indican que el comportamiento del votante del CD está anclado a subregiones específicas, lo que sugiere un voto fuertemente identitario o cultural. Estratégicamente, esto permite optimizar la logística de campaña, centralizando la pauta y los equipos de movilización en bloques territoriales unificados.</li>
+          <li><strong>Fronteras Electorales:</strong> Se observa una caída abrupta en los niveles de afinidad en los bordes de los clústeres principales. No hay una degradación suave del voto; se pasa de zonas de alta intensidad a escenarios de nula receptividad en distancias geográficas muy cortas.</li>
+          <li><strong>Oportunidad de Crecimiento en la Abstención (Voto Dormido):</strong> A diferencia de la percepción de haber alcanzado un techo estructural en las zonas de mayor afinidad, la tasa de participación (cercana al 45-50%) revela que el margen para crecer en volumen aún existe. Este crecimiento no solo provendría de la persuasión de nuevos sectores, sino de la disminución de la abstención.</li>
+        </ul>
+      </div>
+
+      <div class="cuerpo-texto" style="margin-top:36px;">
+        <p>Para tener una comprensión más precisa de la dinámica electoral, debemos pasar del análisis geográfico general al detalle de cada puesto de votación. Si bien el mapa general nos muestra en qué regiones el partido es fuerte y dónde enfrenta barreras, es importante identificar exactamente en qué puntos a nivel local están las mayores fortalezas y las oportunidades reales para capturar nuevos votos. En ese sentido, se realiza una segmentación de cada puesto de votación cruzando su nivel de afinidad con su potencial electoral. El objetivo de esta clasificación es traducir los datos en una hoja de ruta táctica clara, indicando qué acción específica se debe tomar en cada lugar para optimizar la campaña.</p>
+        <p>A partir de este cruce estadístico, el universo de puestos de votación se clasifica en cuatro cuadrantes estratégicos de acción:</p>
+        
+        <ul>
+          <li><strong>Bastión (Alta afinidad + Alto potencial):</strong> Representan el corazón y las mayores fortalezas del partido, donde no solo existe una gran lealtad, sino también un altísimo volumen de votos disponibles. La estrategia en estos puntos no requiere un esfuerzo de persuasión; el objetivo central es proteger el territorio y facilitar una excelente labor de acompañamiento y logística el día de las elecciones, asegurando que este gran número de simpatizantes vote efectivamente por Paloma Valencia.</li>
+          <li><strong>Sostenimiento (Alta afinidad + Bajo/medio potencial):</strong> Identifica aquellos puestos donde el partido goza de lealtad, aunque el universo total de votantes es más reducido. La estrategia aquí consiste en mantener una presencia de fidelización, invirtiendo lo necesario para conservar su apoyo sin desviar los grandes recursos que requieren las zonas de expansión.</li>
+          <li><strong>Persuasible (Baja/media afinidad + Alto potencial):</strong> Son puestos sumamente atractivos, especialmente pensando en la primera vuelta presidencial, porque agrupan una cantidad enorme de votos disponibles en cada zona; y aunque el partido aún no es la fuerza dominante, este amplio margen de participación representa una oportunidad de crecimiento para la campaña. Son lugares ideales para convencer al electorado y sumar nuevas simpatías.</li>
+          <li><strong>Descarte (Baja afinidad + Bajo potencial):</strong> Son puestos donde el partido es históricamente débil y, de forma simultánea, el universo total de votos que se puede captar es muy reducido. La instrucción estratégica es clara: no se deben destinar recursos, tiempo ni logística a estos lugares, ya que el impacto será mínimo y desviaría la atención de las zonas verdaderamente “rentables”.</li>
+        </ul>
+      </div>
+
+      <div class="separador"></div>
+
+      <!-- GRÁFICA 02 -->
+      <div class="grafica-bloque">
+        <div class="grafica-header">
+          <p class="grafica-titulo">Dispersión de Cuadrantes Estratégicos por Percentiles</p>
+        </div>
+        <div class="iframe-contenedor" style="min-height:360px;">
+          <iframe id="iframe-02" src="01_Puestos_Pareto/02_Scatter_Afinidad_Potencial_CD.html" title="Dispersión de Cuadrantes Estratégico por Percentiles" loading="lazy" allowfullscreen></iframe>
+          <button class="btn-expandir" onclick="abrirLightbox('iframe-02', 'Dispersión de Cuadrantes Estratégicos por Percentiles')" aria-label="Ver gráfica en grande">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+        <div class="grafica-footer">
+          <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+          <p class="grafica-nota"><strong>Nota:</strong> La clasificación de los cuadrantes se realizó estableciendo puntos de corte sobre los datos electorales. Para cada puesto de votación se evaluaron dos variables: la Afinidad y el Potencial. Como puntos de corte se utilizaron los percentiles 40 y 80 a nivel nacional. De esta forma, un indicador se considera “alto” si se encuentra por encima del percentil 80, “medio” si se ubica entre el 40 y el 80, y “bajo” si está por debajo del 40. Al cruzar estas categorías, cada puesto de votación queda asignado de forma directa a uno de los cuatro cuadrantes estratégicos (Bastión, Sostenimiento, Persuasible o Descarte).</p>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <p class="insight-box-titulo">Insights Estratégicos</p>
+        <ul>
+          <li><strong>Priorización del presupuesto para el crecimiento:</strong> Los puestos “Persuasibles” concentran un valor estratégico para la campaña, especialmente con miras a la primera vuelta presidencial. Al concentrar un alto volumen de votos, pero no tener una lealtad consolidada, es exactamente en estos puntos donde se debe inyectar el grueso del presupuesto para pauta, el tiempo y presencia física de la candidata, así como el esfuerzo del equipo político y de los grupos territoriales para capturar nuevos electores. Para la consulta del 8 de marzo, nuestra sugerencia es concentrar los esfuerzos en los “Bastiones” y puestos clasificados como “Sostenimiento”, ya que el objetivo debe ser movilizar los votos más afines del CD.</li>
+          <li><strong>Eficiencia financiera y contención del gasto:</strong> Identificar las zonas de “Descarte” y “Sostenimiento” permite aplicar un filtro estricto sobre los recursos. La campaña debe priorizar una asignación estratégica de recursos, evitando concentrar esfuerzos en territorios que históricamente han mostrado baja receptividad y limitada contribución electoral. De esta manera, se minimiza la dispersión de recursos financieros y humanos en escenarios cuya rentabilidad electoral es reducida.</li>
+          <li><strong>El valor del "Sostenimiento" a bajo costo:</strong> Las zonas de “Sostenimiento” son vitales por su alta lealtad, pero engañosas si se miden solo por afinidad. Al saber que su techo de votos es bajo, la campaña puede mantener contento a ese electorado fiel con estrategias de bajo costo (como contacto digital directo o líderes locales), liberando así recursos y esfuerzo para las zonas de verdadera expansión.</li>
+        </ul>
+      </div>
+
+      <div class="cuerpo-texto" style="margin-top:36px;">
+        <p>Al proyectar la clasificación de los cuadrantes sobre las cifras consolidadas a nivel nacional, se logra dimensionar con exactitud el peso específico y el alcance de cada escenario de intervención. El resumen numérico revela una asimetría muy marcada en el comportamiento de los puestos de votación, lo que resalta la importancia de priorizar los recursos de la campaña de manera diferenciada y estratégica para obtener un impacto electoral verdaderamente significativo.</p>
+        <p>El cuadrante Bastión se consolida como el motor principal de la campaña. Aunque agrupa solo 1.000 puestos de votación (el 8,28% de los puestos), esta categoría concentra un volumen significativo de votos directos, lo que representa casi el 45% de la votación total del partido. Este dato evidencia que el grueso del apoyo está fuertemente concentrado, demostrando que la campaña debe buscar profundidad operativa en estos nichos específicos. Al cruzar esto con su tasa de participación, que se sitúa en promedio en 45,8%, se hace evidente el amplio margen que existe para movilizar el “voto dormido” en territorios donde el partido ya es fuerte. Por otro lado, la categoría de Sostenimiento abarca 1.424 puestos y ostenta la afinidad promedio más alta (27,9% de la intención de voto). Sin embargo, su aporte total es de apenas 105.567 votos (solo el 5,5% del total de votos del CD). Esto expone una particularidad estructural clave: tener una lealtad altísima en un número considerable de mesas no equivale a un volumen masivo de votos.</p>
+        <p>En cuanto a las zonas de disputa, el escenario de crecimiento más atractivo y decisivo se encuentra en el cuadrante Persuasible. Este segmento agrupa 3.976 puestos que, con una afinidad media del 9,01%, actualmente logran aportar un bloque importantísimo de 836.077 votos (el 44,2% de la votación total del CD). Su gran oportunidad radica en que registran una participación del 42,4%, existiendo una abstención considerable. Al ser escenarios con un altísimo volumen de votantes potenciales, la meta aquí es captar al elector indeciso. Es en este cuadrante donde la pauta publicitaria, el tiempo y el esfuerzo discursivo de la candidata pueden detonar el mayor crecimiento neto para la campaña en el escenario de una primera vuelta a la presidencia. Finalmente, el cuadrante de Descarte agrupa la abrumadora mayoría de los puestos de votación del país (5.674, casi el 47% del total), pero muestra un bajo rendimiento: una afinidad de apenas el 3,02% que se traduce en menos de 100.000 votos (apenas el 5,2% del total). </p>
+        <p>Esta desproporción es la prueba definitiva de que intentar abarcar todo el territorio nacional es financieramente ineficiente; cualquier despliegue operativo o inversión de campaña en esta enorme cantidad de puestos representaría un esfuerzo logístico gigantesco sin retorno electoral probado.</p>
+    </div>
+
+      <div class="separador"></div>
+
+      <!-- GRÁFICA 03 -->
+      <div class="grafica-bloque">
+        <div class="grafica-header">
+          <p class="grafica-titulo">Resumen de Cuadrantes Estratégicos</p>
+        </div>
+        <div class="iframe-contenedor" style="min-height:260px;">
+          <iframe id="iframe-03" src="01_Puestos_Pareto/02_tabla_cuadrantes_CD.html" title="Resumen de Cuadrantes Estratégicos" loading="lazy" allowfullscreen></iframe>
+          <button class="btn-expandir" onclick="abrirLightbox('iframe-03', 'Resumen de Cuadrantes Estratégicos')" aria-label="Ver gráfica en grande">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+        <div class="grafica-footer">
+          <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <p class="insight-box-titulo">Insights Estratégicos</p>
+        <ul>
+          <li><strong>Concentración Logística de Alto Rendimiento (Bastión):</strong> El esfuerzo debe ser puramente operativo, garantizando un despliegue organizativo impecable el día de las elecciones para llevar a las urnas a una base ya fidelizada, pero que aún presenta un margen de abstención importante (54,2%).</li>
+          <li><strong>Retención Eficiente de Bases Leales (Sostenimiento):</strong> Aunque estas zonas lideran en afinidad nacional (27,9%), su aporte al volumen total es marginal (5,5%). Una aproximación razonable consiste en sostener estos apoyos mediante mecanismos de bajo costo y alta eficiencia operativa, apoyándose en canales cercanos y estructuras locales, de modo que se preserve el respaldo existente sin comprometer los recursos que demandan las áreas de mayor proyección.</li>
+          <li><strong>Focalización estratégica para la expansión (Persuasibles):</strong> Este segmento concentra una proporción significativa del caudal electoral (44,2%), caracterizado por una afinidad media y niveles elevados de abstención (57,6%). En consecuencia, representa un espacio con alto potencial de crecimiento, donde una intervención bien orientada puede traducirse en incrementos sustanciales de votación.</li>
+          <li><strong>Priorización y eficiencia en la asignación de recursos (Descarte):</strong> La evidencia muestra que cerca del 47% de los puestos aporta apenas el 5,2% de los votos totales del CD, lo que sugiere una contribución marginal al resultado agregado. Bajo este panorama, resulta razonable adoptar criterios estrictos de eficiencia en el gasto y limitar la inversión logística o publicitaria en territorios con baja rentabilidad electoral, priorizando aquellos con mayor capacidad de incidencia.</li>
+        </ul>
+      </div>
+
+      <div class="cuerpo-texto" style="margin-top:36px;">
+        <p>A partir de esta priorización por cuadrantes—donde se evidencia que el volumen se concentra en Bastión y Persuasible—, la curva de Pareto permite cuantificar la concentración de la votación y, por tanto, evaluar qué tan viable es una focalización intensa sin perder volumen. En el agregado, el patrón 80/20 se cumple de manera clara para el Centro Democrático: <strong>20% de los puestos de votación concentra el 77,4% de los votos del partido</strong>. En términos de eficiencia, esto respalda una asignación de recursos basada en rendimiento electoral: concentrar despliegue, tiempo y capacidad operativa en un subconjunto reducido de puestos de alto aporte permite maximizar votos por unidad de esfuerzo y reducir inversión en puestos con contribución baja.</p>
+        <p>Algo importante es que, al desagregar la curva de Pareto por cuadrante, la regla 80/20 deja de cumplirse a nivel de las categorías. El Pareto del agregado se ve tan pronunciado porque combinas cuadrantes con pesos muy diferentes: Descarte incorpora muchos puestos con aporte bajo, mientras que Bastión y Persuasible concentran la mayor parte del volumen. Por eso, el uso correcto del Pareto no es recortar mecánicamente al “top 20%” dentro de cada cuadrante, sino aplicarlo en dos niveles: primero, para justificar que la prioridad debe estar en Bastión y Persuasible, y segundo, para dimensionar cuánta cobertura interna se requiere en los cuadrantes prioritarios, dado que allí el volumen está distribuido en más puestos de lo que sugiere el agregado.</p>
+        <p>En Bastión, por ejemplo, la concentración interna es baja: el 20% de sus puestos concentra el 47,2% de los votos del cuadrante, y para alcanzar el 80% se requiere cubrir el 54,7% de los puestos (547 de 1.000). Esto indica que el voto fuerte no se explica por unos pocos puestos de gran volumen, sino por una distribución relativamente amplia dentro del cuadrante; por tanto, el rendimiento en Bastión depende de profundidad organizativa y ejecución consistente sobre una base extensa de puestos relevantes. En Persuasible se observa un comportamiento similar: el 20% de puestos concentra el 50,2% de los votos y para capturar el 80% es necesario cubrir el 44,4% de los puestos (1.767 de 3.976). Dado que este cuadrante concentra el mayor espacio de crecimiento neto, la expansión se favorece con cobertura efectiva y repetición en un conjunto amplio de puestos con contribución material, más que con una intervención limitada a un segmento reducido del cuadrante.</p>
+        <p>Sostenimiento, por su parte, presenta una concentración moderada: el 20% de sus puestos concentra el 60,2% de los votos. Esto permite priorizar con eficiencia los puestos de mayor aporte sin exigir cobertura total, cuidando no recortar en exceso el cuadrante y comprometer volumen agregado. Finalmente, Descarte muestra una concentración interna cercana a un Pareto clásico: el 20% de los puestos concentra el 81,6% de los votos y basta con cubrir 1.043 puestos para alcanzar el 80% de los votos. No obstante, su lectura estratégica es de eficiencia de portafolio: dado su bajo aporte al total nacional, la intervención en Descarte—de hacerse—debe ser altamente selectiva y subordinada al costo de oportunidad frente a los puestos clasificados en los otros cuadrantes.</p>
+    </div>
+
+      <div class="separador"></div>
+
+      <!-- GRÁFICA 04 -->
+      <div class="grafica-bloque">
+        <div class="grafica-header">
+          <p class="grafica-titulo">Curva de Pareto: Concentración de Votos CD por Cuadrante Estratégico</p>
+        </div>
+        <div class="iframe-contenedor" style="min-height:420px;">
+          <iframe id="iframe-04" src="01_Puestos_Pareto/02_curva_pareto_cd.html" title="Curva de Pareto: Concentración de Votos Centro Democrático por Cuadrante Estratégico" loading="lazy" allowfullscreen></iframe>
+          <button class="btn-expandir" onclick="abrirLightbox('iframe-04', 'Curva de Pareto: Concentración de Votos CD por Cuadrante Estratégico')" aria-label="Ver gráfica en grande">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+        <div class="grafica-footer">
+          <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <p class="insight-box-titulo">Insights Estratégicos</p>
+        <ul>
+          <li><strong>Priorización por concentración del rendimiento (Pareto agregado):</strong> La distribución nacional confirma alta concentración del resultado: con un subconjunto reducido de puestos se captura una fracción mayoritaria del total (20% de puestos → 77,4% de votos). Esto respalda una asignación de recursos por rendimiento y reduce la necesidad de cobertura homogénea.</li>
+          <li><strong>Focalización diferenciada por portafolio (no "top 20%" uniforme):</strong> El 20/80 no se replica dentro de cada cuadrante porque el Pareto agregado está explicado por la combinación de categorías con pesos distintos (Descarte aporta poco volumen; Bastión y Persuasible concentran el grueso). En consecuencia, la priorización debe aplicarse en dos etapas: primero por cuadrantes y luego por cobertura interna mínima dentro de los cuadrantes prioritarios.</li>
+          <li><strong>Umbrales operativos de cobertura para capturar volumen (Bastión y Persuasible):</strong> En Bastión, para llegar al 80% de los votos se requiere 54,7% de cobertura (547 puestos en total); en Persuasible, exige una cobertura del 44,4% de los puestos (1.767 puestos). Esto indica que el volumen en los cuadrantes clave es relativamente capilar/distribuido y requiere escala de cobertura para no dejar por fuera una porción material del caudal de votos.</li>
+        </ul>
+      </div>
+
+      <div class="cuerpo-texto" style="margin-top:36px;">
+        <p>Para complementar el análisis de la curva de Pareto con una dimensión territorial, se georreferenciaron los puestos de votación clasificados por cuadrante, lo que permite un enfoque espacial orientado a identificar dónde se concentra el mayor rendimiento electoral (Bastión y Persuasible), dónde se sostiene (Sostenimiento) y dónde la contribución es marginal (Descarte), así como la forma en que cada categoría se distribuye geográficamente. En esta lectura se observan diferencias claras de concentración territorial: en Bastión, el volumen se apoya en pocos departamentos —Antioquia y Bogotá D.C., que son los dos territorios que más votos del partido aportan dentro de este cuadrante— y, en conjunto, concentran 59,4% de la votación de Bastión; al ampliar a los cinco principales departamentos, la concentración de votos asciende a 72,9%. En Persuasible, en cambio, la distribución es más diversificada: los dos departamentos de mayor aporte —Bogotá D.C. y Valle— reúnen 31,7% de los votos del cuadrante, y los cinco principales departamentos reúnen el 50,5%, consistente con una lógica espacial de múltiples nodos relevantes.</p>
+        <p>Desde el punto de vista territorial, los puestos clasificados como Descarte tienden a agruparse en extensiones geográficas continuas con presencia sistemáticamente baja del partido. En el mapa, este patrón se aprecia con baja intercalación respecto a los polos de Bastión: más que alternarse de forma fragmentada con áreas de alto rendimiento, Descarte se configura como bloques territoriales de baja contribución, lo cual sugiere que el desempeño reducido en estos espacios es persistente y homogéneo, y no el resultado de variaciones puntuales o coyunturales.</p>
+        <p>El contraste territorial se refuerza al incorporar el perfil sociodemográfico del entorno, especialmente en la composición por estratos (bajo 1–2, medio 3–4 y alto 5–6). En promedio, ponderando por el volumen de votos, los Bastiones se ubican en áreas con una mayor presencia relativa de estrato medio y alto: 39,9% de las viviendas cerca a los puestos son estrato 3–4 y 16,7% son estrato 5–6, frente a 28,0% de estrato 1–2. Persuasible se asocia con un perfil más medio–popular: el estrato 1–2 representa el 50,0%, el estrato 3–4 representa el 35,1% y el estrato 5–6 apenas el 0,9%. En Descarte, la composición es marcadamente de estrato bajo: 70,3% se concentran en estratos 1–2, 10,9% en estratos 3–4 y apenas 0,3% en estratos 5–6. Sostenimiento presenta un perfil intermedio, pero más cercano al estrato bajo (54,4% en 1–2; 15,9% en 3–4; 3,6% en 5–6). De forma consistente, el capital educativo (educación superior + posgrado) es mayor en Bastión (37,9%) que en Persuasible (26,3%) y se reduce en Sostenimiento (16,8%) y Descarte (15,7%).</p>
+        <p>En conjunto, el aporte clave de la lectura territorial es doble. Primero, confirma que la contribución electoral se estructura en polos (Bastión) y en una red más distribuida (Persuasible), lo que complementa la interpretación de concentración ya observada en el análisis de Pareto. Segundo, muestra que los cuadrantes no se distribuyen aleatoriamente: tienden a alinearse con gradientes socioeconómicos (mayor peso de estratos medio–alto y mayor capital educativo en Bastión; predominio de estrato bajo en Descarte). Esta evidencia refuerza la utilidad del modelo de cuadrantes como herramienta de priorización: permite sustentar, con criterios observables, la concentración potencial de la votación, así como filtrar aquellas áreas con una contribución marginal de manera sistemática.</p>
+    </div>
+
+      <div class="separador"></div>
+
+      <!-- GRÁFICA 05 -->
+      <div class="grafica-bloque">
+        <div class="grafica-header">
+          <p class="grafica-titulo">Distribución Espacial de los Puestos de Votación por Cuadrante Estratégico</p>
+        </div>
+        <div class="iframe-contenedor" style="min-height:460px;">
+          <iframe id="iframe-05" src="01_Puestos_Pareto/02_mapa_cuadrantes_CD.html" title="Distribución Espacial de los Puestos de Votación por Cuadrante Estratégico" loading="lazy" allowfullscreen></iframe>
+          <button class="btn-expandir" onclick="abrirLightbox('iframe-05', 'Distribución Espacial de los Puestos de Votación por Cuadrante Estratégico')" aria-label="Ver gráfica en grande">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+        <div class="grafica-footer">
+          <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <p class="insight-box-titulo">Insights Estratégicos</p>
+        <ul>
+          <li><strong>Rendimiento concentrado en Bastiones:</strong> La ejecución debe pensarse por nodos críticos, no como cobertura homogénea. La concentración departamental (Antioquia y Bogotá D.C. = 59,4%; top 5 = 72,9%) indica que una fracción sustancial del volumen Bastión depende de pocos centros de alta densidad electoral, donde la contribución marginal de la capacidad operativa es especialmente alta</li>
+          <li><strong>Rendimiento distribuido en Persuasibles:</strong> El volumen se captura sumando múltiples nodos medianos, no apostando a un único centro. La menor concentración (Bogotá D.C. y Valle del Cauca = 31,7%; top 5 = 50,5%) sugiere que el cuadrante se define por una arquitectura distribuida; por tanto, el diseño de cobertura debe asegurar presencia en varios nodos regionales relevantes para capturar el grueso del caudal.</li>
+          <li><strong>Perfil socioeconómico:</strong> Existe una diferencia clara en el retorno esperado por cuadrante que está asociado a la composición sociodemográfica de la población. Bastión se asocia a entornos de estrato medio–alto, mientras Persuasible se ubica en un perfil medio–bajo y Descarte se concentra en estrato bajo. Este gradiente sugiere que la priorización territorial puede sustentarse en diferencias de base del entorno, no solo en resultados coyunturales.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECCIÓN 2 – SOLIDEZ COMPETITIVA
+         ============================================================ -->
+    <section id="seccion-2" class="seccion">
+      <div class="seccion-header">
+        <p class="seccion-numero">Sección 2</p>
+        <h2 class="seccion-titulo">Análisis de Solidez Competitiva por Puesto de Votación</h2>
+      </div>
+
+      <div class="cuerpo-texto">
+        <p>Un análisis integral electoral no puede limitarse exclusivamente a la medición del volumen de votos aportados por cada puesto o cuadrante; resulta importante evaluar la capacidad de retención de dicho caudal frente a la competencia interpartidista. En este contexto, el análisis del nivel de competencia entre partidos emerge como una herramienta estratégica fundamental para las elecciones. Este modelo permite cuantificar no solo la posición de liderazgo de la campaña en el territorio, sino también el nivel de riesgo asociado a cada estructura local. Su importancia radica en que facilita una asignación de recursos defensiva y ofensiva mucho más eficiente: permite identificar con precisión dónde el capital político está más fuerte y dónde es susceptible de ser capturado por adversarios directos, optimizando así los esfuerzos de contención y evitando la pérdida de terreno en zonas vitales.</p>
+        <p>Como punto de partida del análisis de solidez, se revisa la posición relativa del Centro Democrático en cada puesto de votación durante la elección de Senado en 2022. Esta evaluación del ranking sirve como un primer diagnóstico del nivel de competencia directa, permitiendo dimensionar la proporción del caudal electoral que cuenta con un liderazgo consolidado y el porcentaje que se encuentra en un entorno de alta competencia frente a otras agrupaciones políticas. Al observar el consolidado que agrupa la totalidad de los cuadrantes, los datos revelan una distribución muy particular en el portafolio electoral. El partido logró ubicarse en el primer lugar en apenas el 8,06% del total de los puestos de votación evaluados (973 puestos). Sin embargo, este reducido segmento es altamente representativo, aportando el 30,86% del volumen total de votos del CD (583.023 votos). Este patrón subraya una característica estructural del comportamiento electoral del partido: el mayor rendimiento electoral se encuentra estrechamente relacionado a los puestos de votación de alta afinidad (en promedio 36%).</p>
+        <p>Al revisar específicamente los puestos clasificados como Bastión, se observa con mayor claridad la base del partido, así como sus áreas de riesgo latente. En este segmento, que agrupa la mayor intención de voto, el partido ostenta un claro liderazgo: es la primera fuerza política en el 47,8% de los puestos (478 en total), lo que le permite asegurar el 63,38% de los votos de esta categoría (537.797 votos), respaldado por un índice de afinidad del 30,41%. Estos puestos constituyen el soporte principal de la votación y representan el escenario donde se materializa la categoría de puestos “sólidos”. No obstante, el análisis revela un nivel de vulnerabilidad importante: incluso dentro de este grupo de máxima prioridad, el partido ocupó el segundo lugar en el 36,9% de los puestos (369 en total), un bloque que agrupa el 26,26% de la votación del cuadrante (222.820 votos). En estas ubicaciones, la afinidad promedio es de 19,29%, evidenciando un entorno mucho más disputado. Adicionalmente, en un 14,1% de los puestos de votación (82.166 votos) el partido obtuvo el tercer lugar.</p>
+        <p>Desde una perspectiva analítica, figurar como segunda (o tercera) opción en puestos clasificados como Bastión plantea un reto estratégico significativo: evidencia la presencia de competidores con alta capacidad de obtener votos donde el partido tiene fortaleza electoral. Este diagnóstico sugiere dos frentes de acción. Primero, en los 478 puestos donde se obtiene el primer lugar, el reto principal radica en la retención y protección del electorado. Segundo, los 369 puestos donde se ocupa el segundo puesto representan el principal espacio de oportunidad y de recuperación en el corto plazo; dado que aún conservan niveles de afinidad considerables.</p>
+        <p>El análisis del posicionamiento se complementa al observar el comportamiento interpartidista en los demás cuadrantes. En el caso del cuadrante Persuasible, el partido logra el primer lugar en apenas un puesto. En contraste, concentra su presencia predominantemente en terceras y cuartas posiciones—las cuales agrupan 238.139 y 225.557 votos, respectivamente. Por su parte, el cuadrante de Sostenimiento presenta un posicionamiento mixto, donde se intercalan posiciones de liderazgo (493 puestos en primer lugar que aseguran 44.900 votos) con segundos lugares (648 puestos con 40.035 votos), reflejando un panorama estable pero que requiere mantenimiento orgánico para no ceder terreno ante otras fuerzas. Finalmente, en el cuadrante Descarte, la ubicación del partido cae de manera generalizada hacia el fondo del ranking (quinto lugar o resto de posiciones), el voto del partido es marginal y está tan disperso que cualquier esfuerzo de recuperación tiende a tener bajo retorno, lo que justifica asignarlos como de baja prioridad operativa.</p>
+     </div>
+
+      <!-- GRÁFICA 06 -->
+      <div class="grafica-bloque">
+        <div class="grafica-header">
+          <p class="grafica-titulo">Ranking del Centro Democrático por Votación – Senado 2022</p>
+        </div>
+        <div class="iframe-contenedor" style="min-height:300px;">
+          <iframe id="iframe-06" src="02_Solidez/02_tabla_posicion_cd.html" title="Ranking del Centro Democrático por Votación – Senado 2022" loading="lazy" allowfullscreen></iframe>
+          <button class="btn-expandir" onclick="abrirLightbox('iframe-06', 'Ranking del Centro Democrático por Votación – Senado 2022')" aria-label="Ver gráfica en grande">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+        <div class="grafica-footer">
+          <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <p class="insight-box-titulo">Insights Estratégicos</p>
+        <ul>
+          <li><strong>Dominio consolidado en fortalezas:</strong> Donde el partido lidera con holgura (especialmente en Bastiones), la ventaja actúa como barrera competitiva. La prioridad operativa es asegurar retención y ejecución el día de elecciones, evitando sobreinversión en territorios donde el resultado es relativamente estable.</li>
+          <li><strong>Disputa cerrada y alta sensibilidad:</strong> : En Sostenimiento y Persuasibles, el partido compite con brechas reducidas (frecuentemente desde posiciones de escolta), lo que convierte estos puestos en escenarios de alta volatilidad. Aquí, el retorno marginal de una intervención bien enfocada es mayor, porque movimientos pequeños pueden traducirse en cambios de posición.</li>
+          <li><strong>Baja densidad y retorno marginal:</strong> En Descarte, el desempeño se concentra en posiciones rezagadas y con votación dispersa. La lectura de eficiencia es clara: aplicar criterios estrictos de priorización y evitar asignar recursos relevantes donde la probabilidad de incidencia es baja frente al costo de oportunidad.</li>
+        </ul>
+      </div>
+
+      <div class="cuerpo-texto" style="margin-top:36px;">
+        <p>El análisis de posicionamiento demostró previamente que el partido logró asegurar el primer lugar en 973 puestos de votación. Sin embargo, ocupar el primer lugar en el ranking no equivale a poseer un dominio absoluto en dichos puestos de votación. Para evaluar la calidad de esta ventaja, es fundamental medir la solidez de la victoria, la cual se calcula analizando el margen relativo frente a la segunda fuerza política en esos mismos puestos. Este diagnóstico permite determinar si el partido cuenta con una ventaja estructural consolidada o si, por el contrario, la diferencia de votos es estrecha, lo que sitúa a estos puestos en un nivel de alto riesgo competitivo.</p>
+        <p>La solidez de un puesto de votación se calculada a través del <strong>margen de victoria relativo</strong>, es decir, la diferencia porcentual entre el volumen de votos del partido y su competidor más cercano, dividido por el total de votos válidos. A partir de esta métrica, el modelo clasifica el escenario competitivo en tres categorías de riesgo que dictan la urgencia de la intervención operativa:</p>
+        
+        <ul>
+          <li><strong>Sólido (Margen relativo &gt; 20%):</strong> Representa zonas de dominio amplio. Son los puestos de consolidación del partido, lo que indica un bajo riesgo de captura.</li>
+          <li><strong>Vulnerable (Margen entre 5% y 20%):</strong> Indica escenarios donde existe una ventaja probada, pero el entorno es altamente competido. Su implicación es de alerta temprana: requiere un esquema para evitar la fuga de votantes hacia segundas fuerzas en crecimiento.</li>
+          <li><strong>Crítico (Margen &lt; 5%):</strong> Expone victorias muy estrechas. Son zonas de máximo riesgo operativo donde la alta volatilidad del electorado puede conllevar a importantes reducciones en el número de votos recibidos.</li>
+        </ul>
+        <p>Al observar el consolidado global de estos 973 puestos de liderazgo, los datos revelan un escenario de fragilidad latente. Apenas una tercera parte de estas posiciones (31,35%, que agrupan 305 puestos y 196.146 votos) logra consolidarse como un liderazgo “sólido”, respaldado por una afinidad excepcionalmente alta (54,07%). En contraste, la gran mayoría de las victorias operan en zonas de riesgo: el 40,8% de los puestos (252.683 votos) se categoriza como “vulnerable” y un 27,85% adicional (134.194 votos) registra un margen “crítico”. </p>
+        <p>Esta vulnerabilidad se hace aún más evidente al profundizar en el cuadrante Bastión, el cual concentra 478 de estas posiciones de liderazgo y representa la base histórica del partido. Contrario a lo esperado en los puestos de mayor concentración de votos, el dominio absoluto no es el patrón predominante. Solo el 21,34% de estos puestos bastión (102 en total) alcanzan la categoría de “sólido”. La mayoría de la votación se encuentra sometida a un alto nivel de competencia, con un 47,28% de los puestos operando en nivel “vulnerable” (235.648 votos) y un alarmante 31,38% con un margen “crítico” (122.627 votos). Este comportamiento estadístico sugiere que otros partidos han logrado penetrar el núcleo duro del CD y están reduciendo drásticamente los márgenes de victoria en los puestos donde el partido debería registrar sus mayores brechas relativas.</p>
+        <p>Por su parte, el análisis de los demás cuadrantes complementa este diagnóstico. El cuadrante de Sostenimiento (que alberga 493 de los primeros lugares) se comporta como un estabilizador clave, absorbiendo una parte importante de las posiciones “sólidas” y “vulnerables” con métricas de afinidad que le permiten al partido mantener márgenes de victoria viables. En contraste, en los espacios de alta dispersión como Persuasible y Descarte, los excepcionales y aislados casos donde se logra el primer lugar (un puesto en cada cuadrante, sumando menos de 330 votos en conjunto) están directamente clasificados en la categoría de “crítico”, confirmando empíricamente que en estos puestos de votación el liderazgo carece de bases estructurales, presenta un margen mínimo de separación y constituye una simple anomalía estadística.</p>
+      </div>
+
+      <div class="separador"></div>
+
+      <!-- GRÁFICA 07 -->
+      <div class="grafica-bloque">
+        <div class="grafica-header">
+          <p class="grafica-titulo">Solidez del Centro Democrático en Puestos Ganados</p>
+        </div>
+        <div class="iframe-contenedor" style="min-height:260px;">
+          <iframe id="iframe-07" src="02_Solidez/02_tabla_solidez_ganados_cd.html" title="Solidez del Centro Democrático en Puestos Ganados" loading="lazy" allowfullscreen></iframe>
+          <button class="btn-expandir" onclick="abrirLightbox('iframe-07', 'Solidez del Centro Democrático en Puestos Ganados')" aria-label="Ver gráfica en grande">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+        <div class="grafica-footer">
+          <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+          <p class="grafica-nota"><strong>Nota:</strong> El margen de victoria se calculó como la proporción del margen absoluto sobre el total de votos válidos emitidos en cada puesto de votación. A su vez, el margen absoluto corresponde a la diferencia matemática entre los votos obtenidos por el partido (ubicado en el primer lugar) y los votos alcanzados por la segunda fuerza política. A partir de este cálculo porcentual, se establecieron las siguientes categorías de solidez para clasificar el nivel de riesgo competitivo: Sólido (puestos con un margen de victoria superior al 20%), Vulnerable (puestos con un margen entre el 5% y el 20%) y Crítico (puestos con un margen inferior al 5%).</p>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <p class="insight-box-titulo">Insights Estratégicos</p>
+        <ul>
+          <li><strong>Fragilidad estructural del liderazgo:</strong> El hecho de que cerca del 70% de los puestos donde el partido ocupa el primer lugar presenten márgenes vulnerables o críticos cuestiona una lectura de control territorial “automático”. La directriz operativa es pasar de una retención pasiva a una gestión activa del margen, priorizando acciones que reduzcan la exposición competitiva en estos puntos de alto valor.</li>
+          <li><strong>Estrés competitivo en Bastiones:</strong> Que solo el 21,34% de los Bastiones liderados se clasifique como sólido indica que la base histórica opera, en su mayoría, con ventajas estrechas. Esto exige una estrategia de protección y contención en fortalezas: evitar complacencia organizativa y concentrar capacidad operativa donde el liderazgo existe, pero es sensible a variaciones en la intención de voto.</li>
+        </ul>
+      </div>
+
+      <div class="cuerpo-texto" style="margin-top:36px;">
+        <p>Tras evaluar el margen de victoria en los puestos de votación donde el partido obtuvo el primer lugar, el análisis se orienta a identificar con quiénes se compite directamente en dichos espacios. Para ello, se examinan los partidos políticos que ocuparon el segundo lugar en los puestos liderados por el Centro Democrático y se calcula el <strong>volumen de votos en riesgo</strong>. Esta métrica cuantifica el caudal electoral propio que se encuentra bajo una amenaza latente frente a esos adversarios inmediatos, permitiendo dimensionar el nivel de exposición real ante cada agrupación política.</p>
+        <p>Al evaluar el panorama general de estos puestos, los datos evidencian que el riesgo competitivo no se distribuye equitativamente, sino que está fuertemente concentrado en un actor principal. La competencia directa, al menos duranta la elección de 2022, estuvo liderada por la Coalición Alianza Verde y Centro Esperanza, la cual se ubicó como segunda fuerza en 269 puestos, poniendo en riesgo 293.931 votos del CD. A gran distancia de este competidor, se consolida un bloque secundario de retadores compuesto por el Partido Conservador (187 puestos y 74.542 votos en riesgo), el Pacto Histórico (85 puestos y 64.341 votos) y el Partido Liberal (168 puestos y 63.721 votos). </p>
+        <p>Esta dinámica de riesgo se vuelve aún más crítica al focalizar el análisis en el cuadrante Bastión, el núcleo de mayor concentración y prioridad electoral. En estos espacios, la presencia de la Coalición Alianza Verde y Centro Esperanza es estructural: actúa como competidor directo en 187 puestos, amenazando 279.748 votos. Esto significa que más del 95% de la presión competitiva que ejerce esta coalición a nivel general ocurre precisamente dentro de la base principal del partido. Simultáneamente, competidores como el Partido Conservador y el Pacto Histórico también logran posicionarse en el segundo lugar en estos puestos prioritarios (presionando 68.015 y 62.807 votos, respectivamente). Lo anterior confirma que el núcleo electoral del partido está siendo disputado activamente desde múltiples frentes del espectro político.</p>
+        <p>Finalmente, el comportamiento de las amenazas en los cuadrantes de alta dispersión refleja la misma anomalía estadística evidenciada en análisis anteriores. Los únicos y excepcionales primeros lugares obtenidos en las zonas Persuasible y Descarte registran una competencia directa por parte del Partido Liberal y la Coalición Alianza Verde y Centro Esperanza, respectivamente. Dado lo marginal de estas cifras, su impacto en la balanza de riesgo global pierde relevancia.</p>
+      </div>
+
+      <div class="separador"></div>
+
+      <!-- GRÁFICA 08 -->
+      <div class="grafica-bloque">
+        <div class="grafica-header">
+          <p class="grafica-titulo">Competencia en Puestos Ganados por el Centro Democrático</p>
+        </div>
+        <div class="iframe-contenedor" style="min-height:300px;">
+          <iframe id="iframe-08" src="02_Solidez/02_tabla_amenazas_cd.html" title="Competencia en Puestos Ganados por el Centro Democrático" loading="lazy" allowfullscreen></iframe>
+          <button class="btn-expandir" onclick="abrirLightbox('iframe-08', 'Competencia en Puestos Ganados por Centro Democrático')" aria-label="Ver gráfica en grande">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+        <div class="grafica-footer">
+          <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <p class="insight-box-titulo">Insights Estratégicos</p>
+        <ul>
+          <li><strong>Concentración del riesgo:</strong> La evidencia de que la Coalición Alianza Verde y Centro Esperanza concentra por sí sola la mayor cantidad de votos en riesgo sugiere la presencia de un competidor predominante en los escenarios más sensibles. En términos analíticos, esto indica que una parte significativa de la presión competitiva proviene de esa coalición, por lo que cualquier lectura de vulnerabilidad y contención debe considerar su peso relativo como principal receptor potencial del voto en disputa.</li>
+          <li><strong>Presión multidireccional en el núcleo (Bastiones):</strong> El hecho de que en los puestos de votación de mayor prioridad el partido deba defender su primer lugar frente a competidores ideológicamente tan diversos como la Coalición Alianza Verde, el Partido Conservador y el Pacto Histórico, demuestra una fragmentación en la competencia local; operativamente, esto requiere descartar el uso de mensajes masivos estandarizados y migrar hacia una estrategia de retención segmentada, ajustando la narrativa de contención según la fuerza política específica que ocupe el segundo lugar en cada puesto.</li>
+        </ul>
+      </div>
+
+      <div class="cuerpo-texto" style="margin-top:36px;">
+        <p>Analizar el margen de derrota en los puestos de votación donde el partido ocupa posiciones secundarias permite identificar oportunidades claras para enfocar esfuerzos y recuperar votos. Cuantificar esta desventaja frente a la primera fuerza política es clave para separar los casos donde la recuperación es viable, de aquellos escenarios donde el margen de derrota impone una distancia inalcanzable.</p>
+        <p>Al evaluar el panorama general de estas posiciones, los datos revelan que la gran mayoría presenta una desventaja marcada. El 70,4% de los puestos (7.815 en total) clasifica en la categoría “cedido”, lo que indica que el partido líder supera al CD por un margen superior al 20%. No obstante, se identifica un segmento de alta concentración de oportunidad: 419 puestos de votación registran un margen “recuperable” (una diferencia inferior al 5% frente al primero) y 2.867 puestos se encuentran en estado “disputado”. Destaca el hecho de que, aunque los puestos “recuperables” representan apenas el 3,77% del volumen total de este universo, agrupan el 12,76% de los votos del partido (166.683 votos), lo que evidencia una alta densidad electoral en estas franjas de estrecha competencia.</p>
+        <p>Esta dinámica de distancias mínimas adquiere su máxima expresión al profundizar en el cuadrante Bastión. A diferencia de la tendencia global, en la base principal del partido la derrota no es definitiva. En los Bastiones donde no lidera el CD, el 36,21% de los puestos (189 en total, que concentran 126.148 votos) opera bajo la categoría de “recuperable”, y un 54,98% adicional (287 puestos) se clasifica como “disputado”. Apenas 46 puestos en este cuadrante (8,81%) se consideran “cedidos”. Este comportamiento estadístico confirma que, cuando el partido es desplazado al segundo o tercer lugar dentro de su núcleo de mayor tracción, las distancias relativas son bajas y operan dentro del margen de reversibilidad matemática.</p>
+        <p>Por su parte, el análisis de los cuadrantes de alta dispersión muestra realidades estadísticamente inviables. En el cuadrante Persuasible, si bien existe un volumen de puestos en estado “disputado” (1.831 puestos), más de la mitad de estos (2.070 puestos) ya se encuentra clasificado como “cedido”. En estos casos, la estrategia tiene que estar enfocada a cerrar las brechas con los partidos que ostentan el primer lugar. Finalmente, en el cuadrante Descarte, la métrica confirma de forma contundente una brecha insuperable: el 94,52% de los puestos (5.362) se clasifican como “cedidos”.</p>
+      </div>
+
+      <div class="separador"></div>
+
+      <!-- GRÁFICA 09 -->
+      <div class="grafica-bloque">
+        <div class="grafica-header">
+          <p class="grafica-titulo">Margen de Derrota del Centro Democrático</p>
+        </div>
+        <div class="iframe-contenedor" style="min-height:220px;">
+          <iframe id="iframe-09" src="02_Solidez/02_tabla_solidez_perdidos_cd.html" title="Margen de Derrota del Centro Democrático" loading="lazy" allowfullscreen></iframe>
+          <button class="btn-expandir" onclick="abrirLightbox('iframe-09', 'Margen de Derrota del Centro Democrático')" aria-label="Ver gráfica en grande">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+        <div class="grafica-footer">
+          <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+          <p class="grafica-nota"><strong>Nota:</strong> El margen de derrota se calculó como la proporción del margen absoluto sobre el total de votos válidos emitidos en cada puesto de votación. A su vez, el margen absoluto corresponde a la diferencia matemática entre los votos obtenidos por la fuerza política que ocupa el primer lugar y los votos alcanzados por el partido (ubicado en posiciones secundarias). A partir de este cálculo porcentual, se establecieron las siguientes categorías para clasificar la viabilidad competitiva de alcanzar el liderazgo: Recuperable (puestos con un margen de derrota inferior al 5%), Disputado (puestos con un margen entre el 5% y el 20%) y Cedido (puestos con un margen superior al 20%).</p>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <p class="insight-box-titulo">Insights Estratégicos</p>
+        <ul>
+          <li><strong>Focalización estratégica en puestos recuperables:</strong> El hecho de que la mayoría de las posiciones secundarias se clasifiquen como “cedido” indica que una expansión generalizada tendría un menor retorno frente a aquellos que aparecen clasificados como “recuperables”.  En todo caso, la estrategia debe buscar cerrar las brechas existentes para maximizar el número total de votos obtenidos.</li>
+          <li><strong>Alta reversibilidad en el núcleo (Bastiones):</strong> Que la gran mayoría de los puestos secundarios en Bastión se ubiquen en categorías “recuperable” o “disputado” sugiere que, en la base histórica, la competencia sigue siendo cerrada y reversible. Esto identifica un conjunto acotado de puestos donde cerrar brechas pequeñas, en un entorno de alta afinidad, ofrece una ruta especialmente eficiente para convertir segundos lugares en victorias.</li>
+          <li><strong>Validación de baja prioridad en zonas de dispersión (Descarte):</strong> En Descarte predomina de forma abrumadora la categoría “cedido”, lo que confirma una desventaja amplia y persistente frente a la primera fuerza política. En términos de eficiencia electoral, estos espacios tienden a ofrecer retornos marginales, por lo que la priorización debe ser altamente restrictiva frente al costo de oportunidad de intervenir en territorios competitivos.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECCIÓN 3 – VULNERABILIDAD Y FRAGMENTACIÓN
+         ============================================================ -->
+    <section id="seccion-3" class="seccion">
+      <div class="seccion-header">
+        <p class="seccion-numero">Sección 3</p>
+        <h2 class="seccion-titulo">Análisis de Vulnerabilidad y Fragmentación Electoral</h2>
+      </div>
+
+      <!-- 3.1 -->
+      <div id="s3-1" class="subseccion">
+        <h3 class="subseccion-titulo">3.1 Vulnerabilidad Temporal: Elecciones al Senado 2018 vs. 2022</h3>
+
+        <div class="cuerpo-texto">
+          <p>El diagnóstico de posicionamiento y solidez ofrece una radiografía estática del estado actual del partido frente a sus competidores. Sin embargo, para estructurar una estrategia de campaña integral, es imperativo evaluar la trayectoria del respaldo ciudadano en el tiempo e identificar con precisión dónde el Centro Democrático está perdiendo terreno o presenta un alto riesgo de fuga de votos. Medir estas vulnerabilidades permite anticipar el desgaste territorial y focalizar los esfuerzos de retención antes de que la pérdida de caudal se vuelva irreversible.</p>
+          <p>Rastrear el comportamiento del electorado entre ciclos electorales consecutivos es un indicador clave para evaluar la salud estructural del partido. Medir si el apoyo se contrae o se expande frente a elecciones pasadas permite a la gerencia de campaña distinguir entre caídas coyunturales y procesos de erosión sistemática en sus bases de apoyo, facilitando la intervención oportuna en los puestos de votación que muestran signos de fatiga.</p>
+          <p>Para realizar este análisis, se comparó el desempeño del partido en la elección de Senado de 2022 frente a los resultados obtenidos en 2018. Con el fin de garantizar la rigurosidad estadística, el estudio se concentró exclusivamente en los puestos de votación que reportaron actividad en ambos comicios, consolidando un universo total de 9.303 puestos.</p>
+          <p>La evaluación se basa en la medición del cambio relativo en la votación, calculado como la diferencia porcentual neta (delta) entre la proporción de votos que obtuvo el partido en 2022 y la alcanzada en 2018 dentro de cada puesto. A partir de esta variación, el nivel de vulnerabilidad territorial se clasificó en tres categorías estratégicas:</p>
+          
+          <ul>
+            <li><strong>Vulnerable:</strong> Puestos de votación que registran una contracción superior a 5 puntos porcentuales (delta < -5%). Esta categoría emite una clara señal de alerta sobre una pérdida de terreno acelerada en dichos puestos de votación.</li>
+            <li><strong>Estable:</strong> Puestos donde la variación porcentual oscila en una franja de contención entre el -5% y el +5%. En estos espacios no se evidencia ni una ganancia sustancial ni una pérdida significativa que altere dramáticamente la base de apoyo o comprometa los resultados locales.</li>
+            <li><strong>En Crecimiento:</strong> Puestos que experimentan una expansión superior a 5 puntos porcentuales (delta > +5%), consolidándose como puestos de tracción positiva y ganancia efectiva frente al ciclo electoral anterior.</li>
+          </ul>
+
+          <p>La evaluación segmentada por cuadrantes revela dinámicas de retención y desgaste territorial altamente diferenciadas. Al focalizar el diagnóstico en las áreas de mayor relevancia estratégica, se evidencia que la pérdida de caudal electoral no es un fenómeno uniforme, sino que obedece principalmente a una erosión estructural concentrada en los núcleos de mayor afinidad histórica del partido. Esta radiografía permite identificar las fortalezas en riesgo y las oportunidades reales de expansión, lo que exige un abordaje táctico específico según el nivel de prioridad de cada zona.</p>
+          <p>El análisis de los puestos de votación del cuadrante Bastión expone el nivel de riesgo más crítico para la viabilidad electoral del partido. De los 855 puestos que conforman este cuadrante (teniendo en cuenta solo aquellos puestos que aparecen en los dos años), 364 se clasifican en estado “vulnerable”. El peso de este hallazgo no radica únicamente en el volumen de puestos, sino en la densidad electoral que comprometen: estos 364 puestos concentran 346.124 votos actuales de la base del partido, pero registran una contracción de 168.340 votos frente a las elecciones de 2018. Analíticamente, esto indica un proceso de erosión profunda en los puntos de mayor afinidad ideológica. Al tratarse del núcleo duro de la campaña, esta caída sistemática se perfila como un síntoma de desgaste en el respaldo tradicional, convirtiendo la estabilización de estos 364 puestos en un punto importante antes de proyectar cualquier meta de expansión.</p>
+          <p>En el cuadrante Persuasible, el comportamiento de los datos describe un escenario caracterizado por una alta volatilidad. Por un lado, se identifica una contracción significativa en 1.445 puestos “vulnerables”, los cuales acumulan una pérdida temporal de 347.128 votos. Sin embargo, este mismo cuadrante alberga 317 puestos en estado “en crecimiento”, aportando un incremento neto de 31.249 votos. Esta dualidad sugiere que, en estos puestos, el comportamiento del voto podría estar respondiendo a dinámicas competitivas más intensas que en otros segmentos, al tiempo que persiste un margen de oportunidad para consolidar apoyos adicionales. </p>
+          <p>En el cuadrante de Sostenimiento se muestra que 620 puestos se encuentran “en crecimiento”, aportando 24.751 votos adicionales frente a 2018. Esto indica focos de consolidación que, aunque pertenezcan a un nivel de prioridad secundario, están compensando parcialmente el déficit de los Bastiones. Finalmente, en el cuadrante Descarte, la vasta mayoría de los puestos oscila entre el estancamiento (2.795puestos “estables”) y el declive (1.126 puestos “vulnerables”), confirmando la incompatibilidad estructural de estos espacios de votación con la oferta electoral del partido.</p>
+        </div>
+
+        <!-- GRÁFICA 10 -->
+        <div class="grafica-bloque">
+          <div class="grafica-header">
+            <p class="grafica-titulo">Vulnerabilidad por Cuadrante Estratégico</p>
+          </div>
+          <div class="iframe-contenedor" style="min-height:240px;">
+            <iframe id="iframe-10" src="03_Vulnerabilidades/01_tabla_cruce_cuadrante_vulnerabilidad.html" title="Vulnerabilidad por Cuadrante Estratégico" loading="lazy" allowfullscreen></iframe>
+            <button class="btn-expandir" onclick="abrirLightbox('iframe-10', 'Vulnerabilidad por Cuadrante Estratégico')" aria-label="Ver gráfica en grande">
+              <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            </button>
+          </div>
+          <div class="grafica-footer">
+            <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+          </div>
+        </div>
+
+        <div class="insight-box">
+          <p class="insight-box-titulo">Insights Estratégicos</p>
+          <ul>
+            <li><strong>Estabilización como prerrequisito operativo (Bastiones):</strong> La contracción observada en los puestos vulnerables de mayor afinidad histórica concentra un riesgo relevante para el desempeño del partido, en tanto impacta directamente su base más consistente. En términos analíticos, este comportamiento sugiere que la capacidad de sostener el resultado global depende, en primera instancia, de contener el deterioro en estos puntos, antes de esperar que la expansión en otros segmentos compense plenamente la pérdida.</li>
+            <li><strong>Abordaje asimétrico frente a la volatilidad (Persuasibles):</strong> La coexistencia de focos con contracción marcada y otros con tracción positiva indica que el cuadrante no se comporta de manera uniforme y que la variabilidad interna es alta. Esta evidencia favorece una lectura diferenciada del segmento: separar los puntos donde predomina el desgaste de aquellos donde ya se observa crecimiento, y ajustar la priorización operativa en consecuencia, en lugar de aplicar un tratamiento homogéneo.</li>
+            <li><strong>Potenciación del reemplazo electoral (Sostenimiento):</strong> La presencia de un número amplio de puestos en crecimiento sostenido sugiere que este cuadrante está compensando parcialmente las pérdidas en otros frentes. Desde una perspectiva de eficiencia, estos focos de consolidación orgánica aparecen como una vía relativamente costo-efectiva para acumular incrementos netos y fortalecer una base recurrente, especialmente cuando se busca estabilizar el balance general del partido.</li>
+          </ul>
+        </div>
+
+        <div class="cuerpo-texto" style="margin-top:36px;">
+          <p>Dentro del análisis de vulnerabilidad temporal, resulta indispensable examinar el comportamiento de las fuerzas políticas competidoras en aquellos puestos de votación donde el partido registró una disminución de votos frente a las elecciones de 2018. El propósito de este análisis es aproximar si las pérdidas electorales propias se traducen en ganancias directas para otros partidos políticos. Identificar a los competidores que están capitalizando este desgaste es fundamental para comprender la dinámica de retención y formular estrategias de contención precisas frente a las estructuras que realmente están absorbiendo a los votantes del partido.</p>
+          <p>Para cuantificar este fenómeno de transferencia, se calculó el coeficiente de correlación entre la variación de los votos de cada partido político competidor y la variación de los votos del Centro Democrático. La interpretación de este coeficiente, particularmente de su signo, es la clave metodológica del ejercicio: una correlación negativa indica una relación inversa, es decir, a medida que el partido pierde votos, el competidor los gana, lo que sugiere una fuga o transferencia directa del electorado. Por el contrario, una correlación positiva señala que ambas fuerzas políticas ganaron o perdieron votos de forma simultánea, descartando un fenómeno de captura directa.</p>
+          <p>El ejercicio sugiere que una parte importante de la reducción del capital electoral del partido coincide con el crecimiento de la Coalición Pacto Histórico, siendo esta la única fuerza que registra una correlación negativa frente al partido en el panorama nacional. Más allá de este resultado, el aspecto más relevante radica en el volumen: en los puestos donde se presenta esta relación inversa, el partido concentra su mayor pérdida absoluta de votos (más de 770.000). Esta aproximación preliminar sugiere que el desgaste de la votación propia podría estar asociado a una transferencia de apoyos hacia dicho proyecto político, marcando una tendencia a monitorear.</p>
+          <p>Sin embargo, al focalizar el análisis en el cuadrante Bastión, la dinámica presenta variaciones. En este segmento, las correlaciones negativas más pronunciadas no se orientan hacia la izquierda, sino frente a otras agrupaciones políticas tradicionales. El Partido Cambio Radical exhibe la correlación inversa más fuerte, seguido por el Movimiento Alternativo Indígena y Social (MAIS). Aunque la cantidad de votos perdidos en estos puestos específicos es menor en comparación con el consolidado nacional, la magnitud de estas correlaciones plantea la posibilidad de que, en estas zonas de alta concentración, una fracción de los votantes esté optando por alternativas distintas, constituyendo una hipótesis de redistribución del voto que convendría validar con mayor profundidad.</p>
+          <p>Al observar los cuadrantes complementarios, el comportamiento en Sostenimiento resulta llamativo. En este segmento se registran algunas de las correlaciones negativas más extremas del análisis. La relación inversa con partidos como el de la U y Cambio Radical alcanzan un nivel de correlación fuertes. Esto sugiere como aproximación que la volatilidad en las zonas de crecimiento incipiente podría estar siendo canalizada simultáneamente por múltiples frentes. Por su parte, en el cuadrante Descarte, la principal correlación negativa se da con el Pacto Histórico, lo que resulta coherente con la configuración de esta periferia, donde las disminuciones del partido coinciden con los incrementos de la izquierda.</p>
+        
+        </div>
+
+        <div class="separador"></div>
+
+        <!-- GRÁFICA 11 -->
+        <div class="grafica-bloque">
+          <div class="grafica-header">
+            <p class="grafica-titulo">¿Quién ganó lo que Centro Democrático perdió? — Senado 2018 vs. 2022</p>
+          </div>
+          <div class="iframe-contenedor" style="min-height:360px;">
+            <iframe id="iframe-11" src="03_Vulnerabilidades/01_tabla_fragmentacion_competencia_interna.html" title="¿Quién ganó lo que Cento Democrático perdió? — Senado 2018 vs. 2022" loading="lazy" allowfullscreen></iframe>
+            <button class="btn-expandir" onclick="abrirLightbox('iframe-11', '¿Quién ganó lo que CD perdió? — Senado 2018 vs. 2022')" aria-label="Ver gráfica en grande">
+              <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            </button>
+          </div>
+          <div class="grafica-footer">
+            <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+          </div>
+        </div>
+
+        <div class="insight-box">
+          <p class="insight-box-titulo">Insights Estratégicos</p>
+          <ul>
+            <li><strong>Competencia interna como principal presión en Bastiones:</strong> Las correlaciones negativas más marcadas en el núcleo duro frente a partidos tradicionales (ej. Cambio Radical y Partido de la U) sugieren que una parte de la erosión no proviene únicamente de la polarización izquierda–derecha, sino de redistribución del voto dentro del mismo espectro. Esto indica que, en Bastiones, la retención depende en buena medida de diferenciar la oferta del partido frente a competidores “cercanos”.</li>
+            <li><strong>Riesgo de transferencia neta hacia el opositor principal:</strong> La relación inversa observada con la izquierda a nivel agregado, donde además se concentra el mayor volumen absoluto de votos perdidos, es consistente con un escenario en el que parte de la contracción propia coincide con el crecimiento del principal opositor. Este patrón ayuda a identificar puestos donde la pérdida no es solo fragmentación, sino posible traslado hacia una fuerza dominante</li>
+            <li><strong>Sostenimiento como cuadrante de vulnerabilidad multi-frente:</strong> La volatilidad del cuadrante, reflejada en correlaciones negativas simultáneas con fuerzas de izquierda y con maquinarias tradicionales, sugiere exposición a capturas por múltiples vías. En términos operativos, el mensaje clave es que Sostenimiento no enfrenta un único adversario, sino un entorno competitivo diversificado, por lo que la contención requiere criterios más finos de segmentación que un enfoque uniforme</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 3.2 -->
+      <div id="s3-2" class="subseccion">
+        <h3 class="subseccion-titulo">3.2 Vulnerabilidad por Fragmentación (Competencia Interna Derecha)</h3>
+
+        <div class="cuerpo-texto">
+          <p>El análisis del desempeño histórico permite cuantificar el desgaste directo, pero la evaluación integral del riesgo electoral requiere medir la vulnerabilidad por fragmentación. Este fenómeno se presenta cuando la pluralidad de opciones dentro de un mismo espectro ideológico divide el caudal de sufragios, un escenario particularmente crítico si el competidor del espectro opuesto logra concentrar a su electorado en torno a una candidatura única. Cuantificar esta vulnerabilidad es fundamental para identificar la brecha existente entre el total de ciudadanos que rechazan el proyecto político de izquierda y aquellos que efectivamente mantienen una lealtad comprobada hacia el partido.</p>
+          <p>Medir este grado de fragmentación le proporciona a la campaña una lectura precisa sobre la volatilidad de sus votantes potenciales. Identificar los puestos de votación donde el electorado afín a la derecha supera ampliamente la base cautiva del partido revela espacios de alta oportunidad para el crecimiento, pero simultáneamente expone un riesgo estructural: en esos lugares, el votante es leal a una postura ideológica, lo que facilita la fuga de votos hacia otros candidatos del mismo sector si no se unifica la narrativa. Esto es relevante tanto para la Gran Consulta por Colombia como para un escenario de primera vuelta donde se compite de manera directa con Abelardo de la Espriella para pasar a una segunda vuelta.</p>
+          <p>Para calcular este <strong>índice de fragmentación</strong>, se utilizaron los resultados de las elecciones presidenciales de segunda vuelta de 2022 en conjunto con los datos de las elecciones al Senado del mismo año. Inicialmente, se determinó la proporción de votos obtenida por el candidato Rodolfo Hernández en cada puesto de votación, utilizándola como indicador del “techo” de votantes contrarios al candidato de la izquierda (voto anti-Petro). Consecuentemente, se midió la proporción de votos alcanzada por el Centro Democrático en los comicios legislativos dentro de esos mismos puestos, lo que representa el “piso” de votantes leales.</p>
+          <p>A partir de estos dos valores, se calculó un ratio dividiendo la proporción del voto presidencial sobre la proporción del voto legislativo. Si el ratio es superior a 1, indica que la base de rechazo a la izquierda es mayor que la base del partido, evidenciando un segmento de electores disponibles pero no fidelizados con el Centro Democrático. Con base en este cálculo, el riesgo de fragmentación en cada puesto de votación se clasifica en cuatro niveles:</p>
+          <ul>
+            <li><strong>Muy Alto (Ratio &gt; 2):</strong>La proporción del voto anti-izquierda duplica o supera ampliamente la base del partido. En estos puestos, la lealtad partidista es mínima frente al volumen de electores ideológicamente afines, lo que representa un riesgo inminente de división del voto si surgen múltiples candidatos en la derecha.</li>
+            <li><strong>Alto (Ratio entre 1,5 y 2):</strong>Existe un volumen considerable de votantes no fidelizados. El caudal anti-izquierda es entre un 50% y un 100% más grande que el respaldo legislativo del partido, dejando un margen amplio para la competencia interna.</li>
+            <li><strong>Medio (Ratio entre 1 y 1,5):</strong> La diferencia entre el techo y la base del partido es moderada. Aunque hay espacio para capturar nuevos electores, la mayor parte del voto de derecha en este puesto ya se encuentra consolidado alrededor del partido.</li>
+            <li><strong>Bajo (Ratio &lt; 1):</strong>La base legislativa del partido es igual o superior al voto presidencial anti-izquierda de 2022. En estos puestos de votación, el riesgo de fragmentación es estadísticamente muy bajo, ya que el partido ejerce un dominio total sobre su espectro ideológico local.</li>
+          </ul>
+          
+          <p>Este análisis revela un panorama estructural donde la afinidad ideológica tiende a prevalecer sobre el respaldo institucional, exponiendo al partido a un riesgo significativo frente a competidores del mismo espectro. A nivel general, se evidencia que una inmensa mayoría de los puestos de votación presenta un nivel de fragmentación crítico. De los más de 10.800 puestos evaluados, 9.802 se ubican en la categoría de riesgo “Muy Alto”. En estos puntos, el número de votantes potenciales (votos adicionales anti-izquierda) supera los 8.1 millones, pero simultáneamente, más de 132.000 votos actuales del partido se encuentran en riesgo de fuga. Esta asimetría sugiere que el rechazo a la izquierda representa un factor de movilización más amplio que el arraigo al partido.</p>
+          <p>Al focalizar el diagnóstico en los cuadrantes de mayor relevancia, el comportamiento de los puestos clasificados como Bastión arroja el hallazgo más crítico para la estrategia de campaña. Aunque este segmento representa el núcleo duro del partido, su respuesta electoral frente a la fragmentación es altamente vulnerable. De los puestos evaluados en este cuadrante, 815 se clasifican con un riesgo de fragmentación “Muy Alto”. En estos puntos, el partido cuenta con una base de 615.913 votos consolidados; sin embargo, se identifican a 51.175 de esos votantes en riesgo directo de migrar hacia otras candidaturas de derecha. Simultáneamente, estos mismos 815 puestos concentran un volumen de 1.940.620 votos adicionales, correspondientes a electores que apoyaron la opción anti-izquierda en las presidenciales, pero no al partido en las legislativas. Esto sugiere que los Bastiones no son fortines de lealtad exclusiva, sino epicentros de alta concentración ideológica de derecha, donde el electorado vota estratégicamente contra la izquierda, pero mantiene el potencial de dividir su apoyo ante una oferta ampliada de candidatos afines.</p>
+          <p>Por su parte, al revisar los segmentos de menor prioridad, el cuadrante Descarte presenta un patrón estadístico que requiere una lectura rigurosa para evitar errores en la asignación de recursos. En este segmento, 4.215 puestos de votación registran un riesgo “Muy Alto”, albergando un volumen de votos adicionales anti-izquierda que supera el millón de sufragios (1.092.897). Aunque a simple vista podría interpretarse como un escenario propicio para la expansión, la base legislativa del partido en estos mismos puestos es de apenas 96.606 votos. Una dinámica similar se observa en el cuadrante de Sostenimiento, el cual concentra 951 puestos en riesgo “Muy Alto”, con una base de 74.863 votos y más de 288.000 votos adicionales disponibles, lo que reafirma la tendencia nacional de fragmentación.</p>
+          
+        </div>
+
+        <!-- GRÁFICA 12 -->
+        <div class="grafica-bloque">
+          <div class="grafica-header">
+            <p class="grafica-titulo">Riesgo por Competencia Interna</p>
+          </div>
+          <div class="iframe-contenedor" style="min-height:260px;">
+            <iframe id="iframe-12" src="03_Vulnerabilidades/01_tabla_fragmentacion_competencia_interna.html" title="Riesgo por competencia interna" loading="lazy" allowfullscreen></iframe>
+            <button class="btn-expandir" onclick="abrirLightbox('iframe-12', 'Riesgo por Competencia Interna')" aria-label="Ver gráfica en grande">
+              <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+            </button>
+          </div>
+          <div class="grafica-footer">
+            <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+            <p class="grafica-nota"><strong>Nota:</strong> Los "votos adicionales" se calcularon como la diferencia neta entre los votos obtenidos por el candidato Rodolfo Hernández en la segunda vuelta presidencial y los votos alcanzados por el partido en las elecciones al Senado. Por su parte, para la estimación de los "votos en riesgo", se calculó inicialmente el coeficiente de correlación entre ambas votaciones por puesto. Dicho coeficiente se interpreta como el grado de alineación o fidelidad estructural del electorado hacia el partido. Al calcular el complemento de esta proporción (restando el coeficiente de 1), se obtiene el factor de volatilidad. Finalmente, este factor se multiplicó por la base de votos actuales del partido, determinando así la cantidad matemática de votos propios que son susceptibles de migrar hacia otros competidores del mismo espectro ideológico.</p>
+          </div>
+        </div>
+
+        <div class="insight-box">
+          <p class="insight-box-titulo">Insights Estratégicos</p>
+          <ul>
+            <li><strong>Priorización de la retención en el núcleo duro:</strong> La presencia de un volumen significativo de votos en riesgo dentro de los Bastiones con fragmentación “Muy Alta” sugiere que una parte del caudal del partido está expuesta a dispersión interna antes que a pérdida hacia espectros opuestos. En términos analíticos, esto indica que la estabilidad del resultado depende en gran medida de consolidar primero la base existente en estos puestos, donde el costo electoral de la división del voto es más alto.</li>
+            <li><strong>Cierre de la brecha entre afinidad ideológica y lealtad al partido:</strong> El alto potencial adicional identificado en Bastiones apunta a que, en varios territorios, existe alineación ideológica (especialmente anti-izquierda) sin una traducción automática en respaldo directo al partido. Este descalce sugiere que el principal reto no es “crear afinidad”, sino convertir afinidad existente en preferencia efectiva por la lista/candidatura, reduciendo el espacio de fragmentación entre alternativas cercanas</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECCIÓN 4 – EFECTO ARRASTRE CONGRESO
+         ============================================================ -->
+    <section id="seccion-4" class="seccion">
+      <div class="seccion-header">
+        <p class="seccion-numero">Sección 4</p>
+        <h2 class="seccion-titulo">Efecto Arrastre Congreso</h2>
+      </div>
+
+      <div class="cuerpo-texto">
+        <p>Resulta fundamental evaluar la capacidad de transferencia electoral entre las elecciones al Congreso y la candidatura presidencial, fenómeno conocido como efecto de arrastre. El propósito es determinar si la votación obtenida por el partido en la elección de Senado impacta de forma directa el desempeño del candidato a la Presidencia, especialmente en casos donde existe una consulta interpartidista en la misma fecha de la elección al Congreso. Identificar los lugares donde las estructuras legislativas tienen el potencial de impulsar la votación presidencial—o se encuentra rezagada—permite comprender la dinámica de tracción y focalizar esfuerzos para que los candidatos al Congreso fortalezcan efectivamente el proyecto presidencial principal.</p>
+        <p>Para construir este análisis, se tomaron como referencia los datos oficiales de la consulta interpartidista a la presidencia “Equipo por Colombia” en 2022, en la cual resultó ganador Federico Gutiérrez—candidato respaldado oficialmente por el CD. Esta información se cruza con los resultados obtenidos por la lista al Senado del Centro Democrático durante el mismo certamen electoral. Este contraste permite observar el comportamiento del electorado frente a una figura presidencial afín versus el voto institucional dirigido hacia el Congreso.</p>
+        <p>Este análisis se construye tomando la proporción de los votos válidos obtenidos por ambas opciones a nivel de puesto de votación. Se calculó un indicador (ratio) dividiendo el porcentaje de votos del candidato presidencial en la consulta entre el porcentaje de votos obtenidos por el partido en el Senado en cada puesto. Con base en este indicador, se clasificaron los puestos según el tipo de arrastre:</p>
+        
+        <ul>
+          <li><strong>Consulta arrastra (ratio &gt; 1,2):</strong> Indica que el candidato presidencial fue, por lo menos, un 20% más fuerte que el partido. Su interpretación sugiere que el candidato tuvo un atractivo personal que superó el umbral de la colectividad y logró agregar votos de otros sectores independientes o afines.</li>
+          <li><strong>Balanceado (ratio 0,8 – 1,2):</strong> Indica una alta alineación entre el voto legislativo y el presidencial. Se interpreta como un electorado consistente y fiel, que vota en bloque sin presentar desviaciones significativas.</li>
+          <li><strong>Senado arrastra (ratio &lt; 0,8):</strong> Demuestra que el partido fue más fuerte que el candidato presidencial en ese puesto específico. Se interpreta como un escenario donde la colectividad posee una alta fortaleza a nivel local, impulsada por candidatos al Congreso que cuentan con tracción propia y capacidad operativa para arrastrar votos.</li>
+        </ul>
+        <p>Finalmente, se procedió a calcular los percentiles correspondientes a los votos del candidato en la consulta y los votos del partido en el Senado. Estas dos variables se visualizan en un diagrama de dispersión en el que cada punto representa un puesto de votación y se distingue según la categoría de arrastre calculada, lo que facilita la identificación de patrones de concentración y permite observar de manera estructurada cómo interactúa el voto para elecciones legislativas y presidenciales.</p>
+        <p>El análisis del gráfico a continuación evidencia una relación directamente proporcional: en la medida que crecen los votos legislativos del partido, también aumentan los de la consulta presidencial. Sin embargo, en los puestos con menor volumen electoral (por debajo del percentil 50 en ambos ejes), el coeficiente de variación es mayor, indicando la ausencia de un patrón de arrastre claro y una baja eficiencia operativa para concentrar esfuerzos allí. Por el contrario, en los puestos de mayor volumen (por encima del percentil 50 en ambos ejes), la tendencia se agrupa y consolida. En esta zona predomina el arrastre por parte del candidato presidencial en la Consulta—una mayor concentración de puestos en color rojo, lo que indica que el atractivo de la figura presidencial en la consulta logró un alcance adicional que complementó la base institucional del partido. Esto sugiere que la campaña no puede depender exclusivamente del apoyo local del partido; es importante construir un atractivo personal y una narrativa sólida para captar a este electorado independiente.</p>
+        <p>De manera complementaria, el gráfico aísla una oportunidad táctica en la zona inferior a la línea de 45 grados, particularmente donde los votos del Senado superan el percentil 50, pero la consulta se queda rezagada. En estos puestos, correspondientes a la categoría “Senado Arrastra”, la estructura legislativa local mostró una fuerza superior que no se transfirió automáticamente en votos para la consulta a la presidencia. El análisis de este comportamiento sugiere que un escenario favorable en estos territorios implicaría buscar la alineación de los candidatos al Congreso y la dirigencia local, con el objetivo de facilitar que esa base ya consolidada se transfiera de manera efectiva hacia la actual candidatura. </p>
+    
+    </div>
+      <!-- GRÁFICA 13 -->
+      <div class="grafica-bloque">
+        <div class="grafica-header">
+          <p class="grafica-titulo">Votos de Federico en la Consulta vs. Centro Democrático Senado 2022</p>
+        </div>
+        <div class="iframe-contenedor" style="min-height:460px;">
+          <iframe id="iframe-13" src="04_Efecto_Arrastre/01_Scatter_Percentiles_votos_fico_cd.html" title="Votos Federico consulta vs CD Senado 2022" loading="lazy" allowfullscreen></iframe>
+          <button class="btn-expandir" onclick="abrirLightbox('iframe-13', 'Votos de Federico en la Consulta vs. Centro Democrático Senado 2022')" aria-label="Ver gráfica en grande">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+        <div class="grafica-footer">
+          <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <p class="insight-box-titulo">Insights Estratégicos</p>
+        <ul>
+          <li><strong>Activación táctica de la estructura legislativa:</strong> En los territorios identificados bajo la categoría "Senado Arrastra" (especialmente aquellos por encima del percentil 50 en la votación del partido), existe un capital político consolidado que no se transfiere directamente en la elección a la presidencia. El rendimiento presidencial en estos puntos tiende a depender del grado de articulación efectiva con liderazgos y estructuras del congreso ya posicionadas.</li>
+          <li><strong>Fidelización eficiente en zonas de equilibrio:</strong> En los puestos con comportamiento “Balanceado”, donde la relación entre desempeño legislativo y presidencial se mantiene relativamente estable, los datos apuntan a un electorado con mayor disciplina y consistencia. Esto sugiere que el mayor valor táctico está en sostener condiciones de estabilidad y continuidad, con intervenciones proporcionales, evitando sobreinversión donde el comportamiento ya es predecible.</li>
+          <li><strong>Optimización de recursos en zonas de alta dispersión:</strong> En los puestos de menor volumen (por debajo del percentil 50) donde no se observa un patrón de arrastre claro, el retorno esperado de una intervención intensa tiende a ser limitado. Estos puntos funcionan como “larga cola” de baja contribución y alta variabilidad, por lo que su tratamiento más eficiente suele ser selectivo y subordinado al costo de oportunidad frente a zonas con mayor volumen y señales más consistentes</li>
+        </ul>
+      </div>
+
+      <div class="cuerpo-texto" style="margin-top:36px;">
+        <p>Al proyectar territorialmente el fenómeno de “Senado Arrastra”, el análisis revela una concentración altamente focalizada en la región Caribe, destacándose de manera crítica en los departamentos de Atlántico, Magdalena, Sucre y Córdoba, un patrón que también se presenta, en menor medida, en departamentos como Boyacá y Santander. En estos territorios, la estructura legislativa y las bases locales del partido demostraron una afinidad robusta y una alta capacidad de movilización que no logró transferirse de forma simétrica hacia Federico Gutiérrez en la consulta. </p>
+        <p>Este rezago indica que existe un voto altamente localizado que aún no se conecta orgánicamente con el proyecto presidencial. Esta concentración focalizada en estos departamentos representa la oportunidad de crecimiento más eficiente (y de menor costo) para la campaña, ya que se trata de electores que ya están fidelizados por el partido. No obstante, esta dinámica activa una señal de alerta, ya que en las elecciones legislativas podrían operar estructuras locales alineadas con el partido que, posteriormente, no respalden la aspiración presidencial e, incluso, se inclinen hacia candidatos de izquierda. Cabe mencionar que, particularmente en el Atlántico, esta asimetría estuvo fuertemente condicionada por la tracción de liderazgos hegemónicos de fuerte arraigo regional que compitieron dentro de la misma coalición —caso de Alex Char en 2022.</p>
+      
+    </div>
+
+      <div class="separador"></div>
+
+      <!-- GRÁFICA 14 -->
+    <div class="grafica-bloque">
+      <div class="grafica-header">
+        <p class="grafica-titulo">Distribución Geográfica de los Puestos de Votación Según Efecto Arrastre</p>
+      </div>
+      <div class="iframe-contenedor" style="min-height:500px;">
+        <iframe id="iframe-14" src="04_Efecto_Arrastre/01_mapa_arrastre.html" title="Mapa efecto arrastre" loading="lazy" allowfullscreen></iframe>
+        <button class="btn-expandir" onclick="abrirLightbox('iframe-14', 'Distribución Geográfica de los Puestos de Votación Según Efecto Arrastre')" aria-label="Ver gráfica en grande">
+          <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+        </button>
+      </div>
+      <div class="grafica-footer">
+        <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+      </div>
+    </div>
+
+      <div class="insight-box">
+        <p class="insight-box-titulo">Insights Estratégicos</p>
+        <ul>
+          <li><strong>Maximización de la eficiencia operativa:</strong>Los puestos clasificados como “Senado Arrastra” concentran un segmento electoral altamente eficiente para los objetivos de la campaña. Considerando que este grupo de votantes ya participó activamente en la jornada electoral respaldando la lista al Senado, la barrera inicial de abstención o apatía ya ha sido superada. En este escenario, el esfuerzo estratégico transita de la necesidad de estimular la participación ciudadana, hacia el objetivo táctico de asegurar que esa intención de voto, ya materializada a nivel del congreso, se transfiera íntegramente hacia la candidatura presidencial.</li>
+          <li><strong>Apalancamiento de la confianza local:</strong> La asimetría en los resultados sugiere que, en estas zonas, la decisión del elector está fuertemente mediada por la afinidad directa con el liderazgo político regional, por encima de una adhesión automática al proyecto nacional de la colectividad. Frente a esta dinámica, surge la oportunidad de vincular el perfil presidencial con el capital político consolidado en la región Caribe, Boyacá y Santander. Adoptar una narrativa de campaña articulada, donde se promueva implícitamente la fórmula conjunta, funcionaría como un mecanismo para que la legitimidad y confianza que el electorado ya deposita en su candidato al Senado fluya de manera orgánica hacia la candidatura presidencial.</li>
+        </ul>
+      </div>
+
+      <div class="cuerpo-texto" style="margin-top:36px;">
+        <p>Como paso siguiente en el análisis, resulta clave proyectar las oportunidades de crecimiento a nivel departamental. El propósito de este ejercicio es identificar y cuantificar las zonas específicas donde el apoyo legislativo del partido superó el alcance de la pasada consulta presidencial, estableciendo así metas de expansión para la campaña actual.</p>
+        <p>Para ello, primero se calcula la diferencia directa entre el porcentaje de votación obtenido por la lista al Senado y el alcanzado por la candidatura presidencial en dicha consulta. Posteriormente, esta diferencia porcentual se proyecta en “votos potenciales” multiplicándola por el censo electoral estimado para 2026 y ajustando el resultado según la tasa de participación en el puesto de votación. Este cálculo permite dimensionar, en números absolutos, el volumen de electores adicionales que la candidatura podría sumar si logra alinear e integrar completamente el apoyo local del partido en cada región.</p>
+    </div>
+
+      <div class="separador"></div>
+
+      <!-- GRÁFICA 15 -->
+      <div class="grafica-bloque">
+        <div class="grafica-header">
+          <p class="grafica-titulo">Puestos con Brecha Positiva y Votos Potenciales por Departamentos</p>
+        </div>
+        <div class="iframe-contenedor" style="min-height:400px;">
+          <iframe id="iframe-15" src="04_Efecto_Arrastre/01_distribución_depto_brecha_Votos_pot.html" title="Brecha positiva y votos potenciales por departamento" loading="lazy" allowfullscreen></iframe>
+          <button class="btn-expandir" onclick="abrirLightbox('iframe-15', 'Puestos con Brecha Positiva y Votos Potenciales por Departamentos')" aria-label="Ver gráfica en grande">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+        <div class="grafica-footer">
+          <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         SECCIÓN 5 – ANÁLISIS CONSULTA Y PRIMERA VUELTA
+         ============================================================ -->
+    <section id="seccion-5" class="seccion">
+      <div class="seccion-header">
+        <p class="seccion-numero">Sección 5</p>
+        <h2 class="seccion-titulo">Análisis Consulta y Primera Vuelta</h2>
+      </div>
+
+      <div class="cuerpo-texto">
+        <p>El objetivo central en este análisis es proyectar los escenarios electorales e identificar con precisión los puestos de votación críticos que pueden definir el resultado final de la contienda. En un entorno electoral competitivo, es importante optimizar la ejecución del del presupuesto de manera uniforme sobre el territorio. Es imperativo saber exactamente dónde se pueden conseguir mejores rendimientos electorales. La identificación de estos puntos críticos permite que el equipo de campaña pase de un despliegue territorial genérico a una estrategia de focalización táctica.</p>
+        <p>Para llevar a cabo esta proyección, se utilizan los resultados de la primera vuelta presidencial de 2022 entre Federico Gutiérrez y Rodolfo Hernández como una aproximación a un escenario de competencia directa entre Paloma Valencia y Abelardo De La Espriella, incluso, para mirar áreas donde otros candidatos de la Gran Consulta por Colombia pueden substraerle votos a Paloma Valencia—ej. Vicky Dávila o Juan Carlos Pinzón. Esta es una excelente referencia porque las características de ambas duplas guardan fuertes similitudes estructurales: representa el choque entre una derecha institucional, con estructura de partido (Federico/Paloma), frente a figuras de derecha alternativa enfocados en el voto de opinión (Rodolfo/Abelardo/Vicky). Entender cómo se fracturó y comportó el electorado en 2022 nos da el mapa de ruta exacto para esta nueva contienda.</p>
+        <p>El primer paso consiste en medir la competitividad histórica de cada puesto de votación. Para ello, calculamos la diferencia directa entre el porcentaje de votos obtenidos por Federico Gutiérrez y el porcentaje de Rodolfo Hernández. Por simple lógica matemática, un margen positivo indica que en ese puesto ganó el candidato institucional (Fico), mientras que un margen negativo evidencia la victoria del perfil disruptivo (Rodolfo).</p>
+        <p>A partir de estos márgenes, segmentamos el mapa electoral en cinco categorías de competitividad:</p>
+        <ul>
+          <li><strong>Seguro - Fico:</strong> Margen mayor a +10%</li>
+          <li><strong>Competido - Fico:</strong> Margen entre +5% y +10%</li>
+          <li><strong>Bisagra (SWING):</strong> Margen entre -5% y +5% — el núcleo estratégico de la contienda</li>
+          <li><strong>Competido - Rodolfo:</strong> Margen entre -10% y -5%</li>
+          <li><strong>Perdido - Rodolfo:</strong> Margen menor a -10%</li>
+        </ul>
+
+        <p>Dentro de esta clasificación, la categoría de puesto Bisagra (SWING) adquiere una relevancia estratégica fundamental, ya que agrupa los puestos de votación donde el margen de diferencia fue inferior a 5 puntos porcentuales. Se trata de puestos con un escenario electoral altamente competitivo y una distribución de preferencias entre candidatos de manera simétrica. Desde una perspectiva analítica, estos puntos representan el núcleo de intervención de la campaña: áreas caracterizadas por una alta volatilidad y la ausencia de una lealtad partidista consolidada, en las cuales las estrategias de persuasión segmentada presentan el mayor retorno de inversión, dado que un volumen reducido de votos puede alterar directamente el resultado de la elección.</p>
+        <p>El análisis espacial de competitividad revela una marcada polarización territorial en la consolidación de los apoyos electorales. Por un lado, la fuerza de tracción institucional, agrupada en la categoría “Seguro - Fico”, tiene su concentración en Antioquia con 743 puestos de votación, complementado por un sólido bloque en la región Caribe que incluye a Bolívar (317), Sucre (291), Córdoba (247), Magdalena (182) y Atlántico (115). En abierto contraste, los puestos clasificados como “Seguro - Rodolfo”, ejerce un dominio contundente en la región central del país, concentrando una masiva cantidad de puestos perdidos por amplios márgenes en Santander (637), Cundinamarca (381), Boyacá (350), Bogotá D.C. (330) y Norte de Santander (320). Esta dicotomía no solo demarca los territorios de dominio partidista tradicional frente a las zonas de alta resistencia estructural, sino que evidencia cómo en corredores como Cundinamarca y Boyacá —receptivos a la derecha institucional— el voto de estructura cede ante un electorado altamente permeable al voto de opinión y dispuesto a decantarse por figuras alternativas.</p>
+        <p>Al evaluar la categoría “Bisagra”—el núcleo estratégico de la contienda por su alta volatilidad—, los datos revelan oportunidades de expansión territorial altamente eficientes. Si bien existen focos independientes de intensa disputa en el Valle del Cauca (441 puestos), Cauca (361), Nariño (360) y Bogotá D.C. (186), el hallazgo estratégico más relevante es la superposición de estos escenarios reñidos con las áreas de hegemonía institucional, como se observa en Córdoba (91 puestos Bisagra), Antioquia (76) y Atlántico (59). Esta configuración espacial demuestra que una proporción sustancial de los puestos donde la elección se define por márgenes mínimos se encuentra inmersa en zonas donde el partido ya dispone de una sólida infraestructura política y logística. En consecuencia, la campaña posee la ventaja competitiva de irradiar influencia desde sus puestos de votación seguros hacia estos puestos adyacentes, optimizando la persuasión y maximizando el retorno de inversión electoral.</p>
+      </div>
+
+      <!-- GRÁFICA 16 -->
+      <div class="grafica-bloque">
+        <div class="grafica-header">
+          <p class="grafica-titulo">Distribución Geográfica de los Puestos de Votación por Competitividad</p>
+        </div>
+        <div class="iframe-contenedor" style="min-height:520px;">
+          <iframe id="iframe-16" src="05_Consulta_Primera_Vuelta/01_mapa_competitividad_puestos.html" title="Distribución geográfica por competitividad" loading="lazy" allowfullscreen></iframe>
+          <button class="btn-expandir" onclick="abrirLightbox('iframe-16', 'Distribución Geográfica de los Puestos por Competitividad')" aria-label="Ver gráfica en grande">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+        <div class="grafica-footer">
+          <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <p class="insight-box-titulo">Insights Estratégicos</p>
+        <ul>
+          <li><strong>Fricción territorial en el centro del país:</strong> La aglomeración masiva de puestos "Seguro Rodolfo" en Cundinamarca, Boyacá y Bogotá D.C. evidencia una barrera frente al perfil partidista de Federico. Esto sugiere que cualquier intento de penetración territorial tradicional en este bloque geográfico enfrentará una alta resistencia, lo que se traduce en un elevado costo operativo con una baja probabilidad de retorno electoral.</li>
+          <li><strong>Alta eficiencia en el traslape estratégico:</strong> El hallazgo más valioso del análisis espacial es la coexistencia de un volumen crítico de puestos "Bisagra" dentro de los principales puestos donde Federico gana (Antioquia, Córdoba y Atlántico). Las estructuras políticas ya instaladas en estos territorios tienen la capacidad natural de irradiar influencia hacia los puestos colindantes altamente disputados, facilitando una transferencia de votos sin necesidad de construir nuevas redes logísticas.</li>
+          <li><strong>La dualidad táctica de Bogotá y los territorios atípicos:</strong> Zonas como Bogotá D.C. y Cauca presentan un volumen alto de puestos "Bisagra", operando como ecosistemas de alta volatilidad pura. A diferencia del Caribe o Antioquia, lo que sugiere que la inclinación de la balanza dependerá fundamentalmente del voto de opinión, el clima comunicacional (estrategia de aire) y la capacidad de captar al electorado indeciso.</li>
+        </ul>
+      </div>
+
+      <div class="cuerpo-texto" style="margin-top:36px;">
+        <p>Siguiendo con el análisis, en el agregado (11.633 puestos, 20,7 millones de votos), los puestos de “Seguro - Fico” dominan el 25,7% (2.990 puestos) con márgenes de 28 puntos porcentuales (pp) y 2,3 millones de votos para el perfil institucional, contrastando con “Seguro - Rodolfo” en el 37,7% (4.384 puestos) y márgenes de 39,84 pp que reflejan una amplia brecha con 3,6 millones de votos perdidos; los puestos “Bisagra” (21,3%, 2.474 puestos) ofrecen una volatilidad clave con márgenes de 0,28 pp a favor de Federico y 4,1 millones de votos totales, donde un <em>flipping</em> estratégico del 5-10% podría capturar 200-400 mil votos, permitiendo a la campaña optimizar la rentabilidad electoral mediante una focalización de recursos para movilizar y convencer votantes en estos puestos “Bisagras”.</p>
+        <p>Al profundizar el análisis en los cuadrantes estratégicos, emerge un patrón crítico que explica el desbalance electoral de 2022: la marcada asimetría en la profundidad de las victorias. Mientras que el perfil institucional logra triunfos sólidos en sus zonas de seguridad (con márgenes promedio a favor que oscilan entre los 23 y 33 pp), el perfil alternativo materializado en Rodolfo Hernández gana con márgenes muy amplios que van desde los 35 hasta casi 53 puntos de diferencia. Esta desproporción revela que el problema central no radica únicamente en el número de puestos ganados o perdidos, sino en que el volumen de votos acumulado en los puestos ganados termina siendo neutralizado por las masivas derrotas en las zonas peor desempeño.</p>
+        <p>Esta asimetría se hace especialmente severa en las zonas de Sostenimiento, donde el margen de victoria promedia 32,6 pp, pero las derrotas frente al perfil alternativo se amplían hasta un abrumador 52,9 pp. Un desbalance similar, aunque ligeramente menos drástico, castiga a los Bastiones (32,7 pp a favor frente a un 41,6 pp en contra). Sin embargo, al observar la categoría de Persuasibles los márgenes se comportan de forma más acotada Esta relativa convergencia sugiere que, en los lugares donde el voto no está estrictamente atado a la tradición partidista, el voto de opinión tampoco logra un dominio tan marcado, presentando un escenario de competencia menos hostil.</p>
+        <p>Frente a este escenario, es importante enfocar esfuerzos orientados a cerrar la brecha en las regiones que impulsan el voto de opinión. Solo mitigando estos déficits y evitando que las figuras alternativas ganen por ventajas desproporcionadas, será posible que el volumen de votos asegurado en las zonas consolidadas (Bastiones) se traduzca en una victoria general. Simultáneamente, los puestos “Bisagra”—particularmente en los Persuasibles, donde la diferencia es inferior a un punto porcentual (0,23 pp)—emergen como el escenario decisivo, ya que representa la oportunidad más eficiente.</p>
+      </div>
+
+      <div class="separador"></div>
+
+      <!-- GRÁFICA 17 -->
+      <div class="grafica-bloque">
+        <div class="grafica-header">
+          <p class="grafica-titulo">Competitividad por Puesto: Federico Gutiérrez vs. Rodolfo Hernández</p>
+        </div>
+        <div class="iframe-contenedor" style="min-height:320px;">
+          <iframe id="iframe-17" src="05_Consulta_Primera_Vuelta/01_tabla_competitividad_fico_rodolfo.html" title="Competitividad Federico vs Rodolfo" loading="lazy" allowfullscreen></iframe>
+          <button class="btn-expandir" onclick="abrirLightbox('iframe-17', 'Competitividad por Puesto: Federico Gutiérrez vs. Rodolfo Hernández')" aria-label="Ver gráfica en grande">
+            <svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+        <div class="grafica-footer">
+          <p class="grafica-fuente"><strong>Fuente:</strong> Cálculos propios con base en información de la Registraduría Nacional del Estado Civil.</p>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <p class="insight-box-titulo">Insights Estratégicos</p>
+        <ul>
+          <li><strong>Estrategia de "contención de daños" ante el voto de opinión:</strong> El hallazgo más crítico es que los márgenes de victoria del candidato del partidoidl no alcanzan para compensar el márgen de derrota en los puestos donde el desempeño fue mejor para el candidato "outsider” (márgenes en contra de hasta 53 pp). Por lo tanto, resulta estratégico diseñar acciones de contención en las zonas de mejor desempeño de la fuerza disruptiva. El objetivo en estos territorios no es necesariamente ganar, sino acortar la brecha para evitar que los votos de opinión neutralicen la base electoral consolidada en los Bastiones.</li>
+          <li><strong>Priorización táctica en escenarios de alta volatilidad (puestos bisagras):</strong> Con más de 4,1 millones de votos concentrados en zonas de alta volatilidad y márgenes de victoria pequeños (0,28 pp a nivel global y 0,23 pp en Persuasibles), estos puestos representan el terreno más eficiente para la campaña. Ejecutar tácticas de persuasión y movilización quirúrgica para lograr un pequeño desplazamiento (flipping del 5% al 10%) permitiría capturar entre 200 mil y 400 mil votos vitales con un esfuerzo logístico altamente optimizado.</li>
+        </ul>
+      </div>
+    </section>
+
+  </div><!-- /secciones-wrapper -->
+
+  <!-- PIE DE PÁGINA – AVISO LEGAL -->
+  <footer id="footer-legal">
+    <p>
+      <span class="footer-brand">InsightPlace · Confidential</span>
+      El presente documento es propiedad de InsightPlace. La información aquí contenida no debe ser divulgada ni reproducida parcial o totalmente sin la aprobación por escrito por parte de InsightPlace.
+    </p>
+  </footer>
+
+</main>
+
+<!-- ================================================================
+     BOTÓN FLOTANTE (FAB) – ESQUINA INFERIOR DERECHA
+     ================================================================ -->
+<a id="fab-flotante" href="#portada" aria-label="Volver al inicio" title="Volver al inicio">
+  <!-- ============================================================
+       LOGO DEL FAB – INSTRUCCIÓN PARA INSERTAR TU LOGO:
+       Reemplaza el texto "IP" dentro de #fab-logo con:
+       <img src="assets/img/logo-icon.png" alt="InsightPlace" />
+
+       Requisitos de la imagen:
+       · Formato PNG con fondo transparente
+       · Tamaño mínimo recomendado: 72 × 72 px
+       · El div ya tiene border-radius:50%, la imagen se recorta en círculo
+       ============================================================ -->
+  <div id="fab-logo"><img src="00_Logos/Symbol_resize.png" alt="InsightPlace" /></div>
+</a>
+
+<!-- ================================================================
+     LIGHTBOX – MODAL DE EXPANSIÓN DE GRÁFICAS
+     Se abre al hacer clic en el botón "Ver en grande" de cada iframe.
+     ================================================================ -->
+<div id="lightbox-overlay" role="dialog" aria-modal="true" aria-labelledby="lightbox-titulo">
+  <div id="lightbox-modal">
+
+    <!-- Barra superior del modal: título + pista ESC + botón cerrar -->
+    <div id="lightbox-header">
+      <span id="lightbox-titulo">Gráfica</span>
+      <span id="lightbox-esc-hint">Presiona ESC para cerrar</span>
+      <!-- Botón cerrar: clic en ✕ o en el fondo oscuro cierra el modal -->
+      <button id="lightbox-cerrar" onclick="cerrarLightbox()" aria-label="Cerrar">✕</button>
+    </div>
+
+    <!-- Iframe grande dentro del modal -->
+    <!-- El src se asigna dinámicamente desde JS al abrir el modal -->
+    <iframe id="lightbox-iframe" title="Gráfica ampliada" allowfullscreen></iframe>
+
+  </div>
+</div>
+
+<!-- ================================================================
+     JAVASCRIPT – COMPORTAMIENTO INTERACTIVO
+     ================================================================ -->
+<script>
+  /* ==============================================================
+     1. TOGGLE DEL SIDEBAR
+     ============================================================== */
+  const sidebar   = document.getElementById('sidebar');
+  const btnMenu   = document.getElementById('btn-menu');
+  const contenido = document.getElementById('contenido-principal');
+  const overlay   = document.getElementById('sidebar-overlay');
+
+  let sidebarAbierto = window.innerWidth > 768;
+
+  function toggleSidebar() {
+    sidebarAbierto = !sidebarAbierto;
+    actualizarSidebar();
+  }
+
+  function actualizarSidebar() {
+    if (sidebarAbierto) {
+      sidebar.classList.remove('colapsado');
+      sidebar.classList.add('abierto');
+      btnMenu.classList.remove('sidebar-colapsado');
+      btnMenu.classList.add('abierto');
+      btnMenu.setAttribute('aria-expanded', 'true');
+      contenido.classList.remove('expandido');
+      if (window.innerWidth <= 768) {
+        overlay.classList.add('activo');
+        overlay.style.display = 'block';
+      }
+    } else {
+      sidebar.classList.add('colapsado');
+      sidebar.classList.remove('abierto');
+      btnMenu.classList.add('sidebar-colapsado');
+      btnMenu.classList.remove('abierto');
+      btnMenu.setAttribute('aria-expanded', 'false');
+      contenido.classList.add('expandido');
+      overlay.classList.remove('activo');
+      setTimeout(() => { if (!sidebarAbierto) overlay.style.display = 'none'; }, 350);
+    }
+  }
+
+  if (window.innerWidth <= 768) {
+    sidebarAbierto = false;
+    actualizarSidebar();
+  }
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+      overlay.style.display = 'none';
+      overlay.classList.remove('activo');
+    }
+  });
+
+  /* ==============================================================
+     2. BARRA DE PROGRESO DE LECTURA
+     ============================================================== */
+  const barraProgreso = document.getElementById('barra-progreso');
+
+  window.addEventListener('scroll', () => {
+    const scrollTotal  = document.documentElement.scrollHeight - window.innerHeight;
+    const progreso     = scrollTotal > 0 ? (window.scrollY / scrollTotal) * 100 : 0;
+    barraProgreso.style.width = progreso + '%';
+  });
+
+  /* ==============================================================
+     3. RESALTAR SECCIÓN ACTIVA EN EL MENÚ LATERAL
+     ============================================================== */
+  const navEnlaces = document.querySelectorAll('.nav-enlace');
+
+  const mapaEnlaces = {};
+  navEnlaces.forEach(enlace => {
+    const href = enlace.getAttribute('href');
+    if (href && href.startsWith('#')) mapaEnlaces[href.slice(1)] = enlace;
+  });
+
+  const observadorNav = new IntersectionObserver((entradas) => {
+    entradas.forEach(entrada => {
+      if (entrada.isIntersecting && mapaEnlaces[entrada.target.id]) {
+        navEnlaces.forEach(e => e.classList.remove('activo'));
+        mapaEnlaces[entrada.target.id].classList.add('activo');
+        mapaEnlaces[entrada.target.id].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    });
+  }, { rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+
+  document.querySelectorAll('section[id], .subseccion[id]').forEach(sec => observadorNav.observe(sec));
+
+  /* ==============================================================
+     4. LIGHTBOX – ABRIR Y CERRAR MODAL DE GRÁFICAS
+     
+     Cómo funciona:
+     - abrirLightbox(iframeId, titulo): lee el src del iframe original
+       en la página y lo copia al iframe grande del modal. Así no
+       recarga ni descarga nada innecesariamente.
+     - cerrarLightbox(): vacía el src del iframe grande (para que
+       no consuma memoria) y cierra el modal.
+     - Se puede cerrar con: clic en ✕, clic en el fondo oscuro,
+       o presionando la tecla Escape.
+     ============================================================== */
+
+  const lightboxOverlay = document.getElementById('lightbox-overlay');
+  const lightboxIframe  = document.getElementById('lightbox-iframe');
+  const lightboxTitulo  = document.getElementById('lightbox-titulo');
+
+  /**
+   * Abre el lightbox con el iframe indicado.
+   * @param {string} iframeId  - ID del iframe en la página (ej. 'iframe-01')
+   * @param {string} titulo    - Texto del título a mostrar en el modal
+   */
+  function abrirLightbox(iframeId, titulo) {
+    const iframeOrigen = document.getElementById(iframeId);
+    if (!iframeOrigen) return;
+
+    // Copiar el src del iframe original al iframe del modal
+    const src = iframeOrigen.getAttribute('src') || '';
+    lightboxIframe.setAttribute('src', src);
+    lightboxTitulo.textContent = titulo || 'Gráfica';
+
+    // Mostrar el overlay y animar
+    lightboxOverlay.classList.add('visible');
+
+    // Bloquear scroll del body mientras el modal está abierto
+    document.body.style.overflow = 'hidden';
+
+    // Poner foco en el botón cerrar (accesibilidad)
+    setTimeout(() => document.getElementById('lightbox-cerrar').focus(), 350);
+  }
+
+  /**
+   * Cierra el lightbox y libera el iframe.
+   */
+  function cerrarLightbox() {
+    lightboxOverlay.classList.remove('visible');
+    document.body.style.overflow = '';
+
+    // Vaciar el src después de que termine la animación de cierre (300ms)
+    // para evitar que el iframe siga consumiendo recursos
+    setTimeout(() => {
+      lightboxIframe.setAttribute('src', '');
+    }, 320);
+  }
+
+  // Cerrar al hacer clic en el fondo oscuro (overlay), pero NO en el modal
+  lightboxOverlay.addEventListener('click', (e) => {
+    if (e.target === lightboxOverlay) cerrarLightbox();
+  });
+
+  // Cerrar con la tecla Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lightboxOverlay.classList.contains('visible')) {
+      cerrarLightbox();
+    }
+  });
+
+  /* ==============================================================
+     5. ANIMACIONES DE ENTRADA AL HACER SCROLL
+     ============================================================== */
+  const elementosAnimados = document.querySelectorAll('.grafica-bloque, .insight-box');
+  elementosAnimados.forEach(el => {
+    el.style.animationPlayState = 'paused';
+    el.style.opacity = '0';
+  });
+
+  const observadorAnim = new IntersectionObserver((entradas) => {
+    entradas.forEach((entrada, i) => {
+      if (entrada.isIntersecting) {
+        setTimeout(() => {
+          entrada.target.style.opacity = '1';
+          entrada.target.style.animationPlayState = 'running';
+        }, i * 60);
+        observadorAnim.unobserve(entrada.target);
+      }
+    });
+  }, { threshold: 0.05 });
+
+  elementosAnimados.forEach(el => observadorAnim.observe(el));
+
+</script>
+
+</body>
+</html>
