@@ -297,7 +297,11 @@ async def download_report(
     file_path: Optional[str] = None,
     db: AsyncIOMotorDatabase = Depends(get_database)
 ):
-    """Download report file or supporting file"""
+    """Download report as ZIP archive"""
+    import zipfile
+    import io
+    import re
+    
     # Admin can access all reports, clients only their company's
     if current_user.role == 'admin':
         report = await db.reports.find_one({
@@ -324,24 +328,58 @@ async def download_report(
             detail="Download not allowed for this report"
         )
     
-    # Determine which file to download
-    target_file = file_path if file_path else report["main_file"]
+    # Get the main file path and its parent directory
+    main_file_path = Path(report["main_file"])
+    report_dir = UPLOAD_DIR / main_file_path.parent
     
-    # Verify file is part of this report
-    allowed_files = [report["main_file"]] + report.get("supporting_files", [])
-    if target_file not in allowed_files:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="File access not allowed"
-        )
-    
-    full_path = UPLOAD_DIR / target_file
-    
-    if not full_path.exists():
+    if not report_dir.exists():
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="File not found"
+            detail="Report directory not found"
         )
+    
+    # Look for an existing ZIP file in the parent directory first
+    parent_dir = report_dir.parent
+    existing_zips = list(parent_dir.glob("*.zip"))
+    
+    if existing_zips:
+        # Use the first found ZIP file
+        zip_path = existing_zips[0]
+        
+        # Increment download count
+        await db.reports.update_one(
+            {"id": report_id},
+            {"$inc": {"download_count": 1}}
+        )
+        
+        # Log activity
+        await log_activity(
+            db, current_user.id, current_user.email, ActivityType.REPORT_DOWNLOAD,
+            f"Downloaded report archive: {report['title']}",
+            get_client_ip(request),
+            metadata={"report_id": report_id, "file": zip_path.name}
+        )
+        
+        # Create a safe filename
+        safe_title = re.sub(r'[^\w\s\-\(\)]', '', report['title']).strip()
+        download_filename = f"{safe_title}.zip"
+        
+        return FileResponse(
+            zip_path,
+            filename=download_filename,
+            media_type="application/zip",
+            headers={"Content-Disposition": f"attachment; filename=\"{download_filename}\""}
+        )
+    
+    # No existing ZIP found, create one on-the-fly
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+        for file_path_item in report_dir.rglob('*'):
+            if file_path_item.is_file():
+                arcname = file_path_item.relative_to(report_dir)
+                zip_file.write(file_path_item, arcname)
+    
+    zip_buffer.seek(0)
     
     # Increment download count
     await db.reports.update_one(
@@ -352,15 +390,19 @@ async def download_report(
     # Log activity
     await log_activity(
         db, current_user.id, current_user.email, ActivityType.REPORT_DOWNLOAD,
-        f"Downloaded file: {target_file} from report: {report['title']}",
+        f"Downloaded report archive: {report['title']}",
         get_client_ip(request),
-        metadata={"report_id": report_id, "file": target_file}
+        metadata={"report_id": report_id}
     )
     
-    return FileResponse(
-        full_path,
-        filename=full_path.name,
-        headers={"Content-Disposition": f"attachment; filename={full_path.name}"}
+    # Create a safe filename
+    safe_title = re.sub(r'[^\w\s\-\(\)]', '', report['title']).strip()
+    download_filename = f"{safe_title}.zip"
+    
+    return StreamingResponse(
+        zip_buffer,
+        media_type="application/zip",
+        headers={"Content-Disposition": f"attachment; filename=\"{download_filename}\""}
     )
 
 @router.get("/company", response_model=Company)
