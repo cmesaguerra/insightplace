@@ -54,7 +54,7 @@ async def send_email_bulk(
         results.append({"email": email, **result})
     return results
 
-def get_welcome_email_html(user_name: str, user_email: str, password: str, portal_url: str) -> str:
+def get_welcome_email_html(user_name: str, user_email: str, password: str, company_name: str, portal_url: str) -> str:
     """Generate welcome email HTML for new users"""
     return f"""
     <!DOCTYPE html>
@@ -71,9 +71,12 @@ def get_welcome_email_html(user_name: str, user_email: str, password: str, porta
         <div style="background-color: #f9fafb; padding: 30px; border: 1px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px;">
             <h2 style="color: #1f2937; margin-top: 0;">¡Bienvenido/a, {user_name}!</h2>
             
-            <p>Se ha creado tu cuenta en el Portal de Clientes de InsightPlace. A continuación encontrarás tus credenciales de acceso:</p>
+            <p>Se ha creado tu cuenta en el <strong>Portal de Clientes de InsightPlace</strong> para la empresa <strong>{company_name}</strong>.</p>
+            
+            <p>A través de este portal podrás acceder a los reportes y análisis confidenciales preparados exclusivamente para tu organización.</p>
             
             <div style="background-color: white; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; margin: 20px 0;">
+                <h3 style="margin-top: 0; color: #1f2937;">Tus credenciales de acceso:</h3>
                 <p style="margin: 5px 0;"><strong>Correo electrónico:</strong> {user_email}</p>
                 <p style="margin: 5px 0;"><strong>Contraseña:</strong> {password}</p>
             </div>
