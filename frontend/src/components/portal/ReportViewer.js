@@ -11,15 +11,23 @@ const ReportViewer = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // Redirect to login if not authenticated
-    if (!isAuthenticated) {
-      navigate('/login');
-      return;
-    }
+    // Wait for auth to initialize before checking
+    // In a new tab, localStorage might take a moment to be read
+    const checkAuth = async () => {
+      // Small delay to ensure localStorage is read
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      if (!isAuthenticated) {
+        navigate('/login');
+        return;
+      }
+      
+      if (reportId && token) {
+        fetchReportDetails();
+      }
+    };
     
-    if (reportId && token) {
-      fetchReportDetails();
-    }
+    checkAuth();
   }, [reportId, token, isAuthenticated, navigate]);
 
   const fetchReportDetails = async () => {
