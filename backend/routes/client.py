@@ -442,6 +442,20 @@ async def get_report_relative_asset(
             nfc_path = report_dir / unicodedata.normalize('NFC', file_path)
             if nfc_path.exists():
                 asset_path = nfc_path
+            else:
+                # Last resort: scan directory for matching filename
+                # This handles cases where stored filename differs from request
+                target_dir = report_dir / Path(file_path).parent
+                target_name_nfc = unicodedata.normalize('NFC', Path(file_path).name)
+                target_name_nfd = unicodedata.normalize('NFD', Path(file_path).name)
+                
+                if target_dir.exists():
+                    for f in target_dir.iterdir():
+                        f_name_nfc = unicodedata.normalize('NFC', f.name)
+                        f_name_nfd = unicodedata.normalize('NFD', f.name)
+                        if f_name_nfc == target_name_nfc or f_name_nfd == target_name_nfd or f_name_nfc == target_name_nfd or f_name_nfd == target_name_nfc:
+                            asset_path = f
+                            break
     
     # Security: ensure the asset is within the report directory
     try:
