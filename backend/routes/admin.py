@@ -368,7 +368,7 @@ async def upload_report(
     # Send notifications to company users if requested
     notifications_sent = 0
     if notify_users_bool:
-        company_users = await db.users.find({"company_id": company_id}).to_list(length=None)
+        company_users = await db.users.find({"company_id": company_id}, {"email": 1, "full_name": 1}).limit(500).to_list(length=500)
         for user in company_users:
             html_content = get_new_report_email_html(
                 user_name=user.get("full_name", "Usuario"),
