@@ -700,8 +700,39 @@ const AdminPanel = () => {
                           {report.download_count} descargas
                         </td>
                         <td className="px-6 py-4 text-sm space-x-2">
-                          <button className="text-blue-600 hover:text-blue-900">Vista Previa</button>
-                          <button className="text-red-600 hover:text-red-900">Descargar</button>
+                          <button 
+                            onClick={() => window.open(`/portal/report/${report.id}`, '_blank')}
+                            className="text-blue-600 hover:text-blue-900"
+                          >
+                            Vista Previa
+                          </button>
+                          <button 
+                            onClick={async () => {
+                              try {
+                                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/client/reports/${report.id}/download`, {
+                                  headers: { 'Authorization': `Bearer ${token}` }
+                                });
+                                if (response.ok) {
+                                  const blob = await response.blob();
+                                  const url = window.URL.createObjectURL(blob);
+                                  const a = document.createElement('a');
+                                  a.href = url;
+                                  a.download = report.title + '.zip';
+                                  document.body.appendChild(a);
+                                  a.click();
+                                  window.URL.revokeObjectURL(url);
+                                  document.body.removeChild(a);
+                                } else {
+                                  alert('Error al descargar el reporte');
+                                }
+                              } catch (err) {
+                                alert('Error al descargar el reporte');
+                              }
+                            }}
+                            className="text-red-600 hover:text-red-900"
+                          >
+                            Descargar
+                          </button>
                         </td>
                       </tr>
                     );
